@@ -8,7 +8,7 @@ public class App {
         return "Hello World!";
     }
     
-    public void print(String text) {
+    public void println(String text) {
         System.out.println(text);
     }
 

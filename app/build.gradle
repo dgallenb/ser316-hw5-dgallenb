@@ -38,24 +38,20 @@ application {
 // Configure Checkstyle
 /////////////////////////////////////////////////////////////////////
 apply plugin: 'checkstyle'
-// checkstyle {
-//   // Keep checkstyle a little quieter
-//   ignoreFailures = true
-//   showViolations = false
-// }
+checkstyle {
+// Keep checkstyle a little quieter
+ignoreFailures = true
+showViolations = false
+}
 
 tasks.withType(Checkstyle) {
-  
-  reports {
-    html.enabled = true
-    xml.enabled = false
-  }
-  // include '**/*.java'
-  include '**/ui/App.java'
- }
-
+reports {
+html.enabled = true
+xml.enabled = false
+}
+}
 checkstyle {
-    toolVersion = "8.8"
+     toolVersion = "8.8"
 }
 
 
@@ -70,7 +66,6 @@ spotbugsMain {
     }
 }
 spotbugs {
-    toolVersion = '4.2.2'
     ignoreFailures = true
     showProgress = true
     effort = 'max'

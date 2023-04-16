@@ -1,0 +1,1 @@
+Gradle should just be runnable from the root folder. The build.gradle file is in the app folder for reasons I can't explain, but it still seems to work just fine.

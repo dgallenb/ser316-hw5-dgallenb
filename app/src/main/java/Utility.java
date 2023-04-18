@@ -160,5 +160,64 @@ public class Utility {
         };
         return damageMatrix[type.getTypeNum()][weather.getTypeNum()];
     }
+    
+    /**
+     * Rolls type-specific probability of hp, atk, def, and spd increases.
+     * If a probability is over 1, then the value always increases by at least the
+     * whole number. 
+     * @param type of the mon.
+     * @param scalarMods. Some evolved pokemon will increase odds of stat increases.
+     * @return
+     */
+    public static int[] getLevelUpBonus(MonType type, double[] scalarMods) {
+        int[] totals = {0, 0, 0, 0};
+        double[][] statChance = {
+                new double[] {2.5, 0.7, 0.5, 0.2}, 
+                new double[] {2.5, 0.7, 0.5, 0.35}, 
+                new double[] {2.5, 0.7, 0.5, 0.35}, 
+                new double[] {2.5, 0.7, 0.5, 0.35}, 
+                new double[] {2.5, 0.7, 0.5, 0.35}, 
+                new double[] {2.5, 0.7, 0.5, 0.35}, 
+                new double[] {2.5, 0.7, 0.5, 1.1}
+        };
+        
+        for(int i = 0; i < totals.length; ++ i) {
+            double rng = Math.random();
+            double stat = statChance[type.getTypeNum()][i];
+            double chance = stat;
+            if(stat >= 1) {
+                chance = stat - ((int) stat);
+                totals[i] = ((int) stat);
+            }
+            totals[i] += rng < chance ? 1 : 0;
+        }
+        
+        return totals;
+        
+    }
+    
+    public static int[] getLevelUpBonus(MonType type) {
+        return getLevelUpBonus(type, new double[] {0, 0, 0, 0});
+    }
+    
+ // clear beats eclipse, everything else beats clear
+    // cloudy beats rainy, stormy
+    // rainy beats windy, snowy,
+    // windy beats stormy, cloudy
+    // stormy beats snowy, rainy
+    // snowy beats cloudy, windy
+    public static int typeMod(int damage, MonType defType, MonType atkType) {
+        double[][] modMatrix = {
+                new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
+                new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
+                new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
+                new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
+                new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
+                new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
+                new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
+        };
+        double scalar = modMatrix[atkType.getTypeNum()][defType.getTypeNum()];
+        return (int) (damage * scalar);
+    }
 }
 

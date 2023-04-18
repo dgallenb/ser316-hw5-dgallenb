@@ -15,7 +15,7 @@ public class CodemonFactory {
     
     public Codemon generateCodemonWithT1Moves(int monType, 
             int baseHP, int baseAtk, int baseDef, int baseSpd, 
-            int movesKnown) {
+            int movesKnown, int exp) {
         Move[] moves = new Move[6];
         for(int i = 0; i < movesKnown; ++i) {
             if(i >= moves.length) {
@@ -24,6 +24,6 @@ public class CodemonFactory {
             moves[i] = MoveFactory.getInstance().generateMove(1, monType);
         }
         return new Codemon(new MonType(monType), 
-                baseHP, baseAtk, baseDef, baseSpd, moves);
+                baseHP, baseAtk, baseDef, baseSpd, moves, exp);
     }
 }

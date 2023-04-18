@@ -10,6 +10,8 @@ public class Codemon {
     protected int spd;
     protected int exp;
     protected int lvl;
+    
+    protected double[] bonusStatChance;
 
     protected int currentHP;
     
@@ -22,17 +24,23 @@ public class Codemon {
         this.setSpd(5);
         this.setCurrentHP(this.getHp());
         this.type = new MonType(0);
+        bonusStatChance = new double[] {0, 0, 0, 0};
+        this.lvl = 1;
+        this.exp = 0;
     }
     
-    public Codemon(MonType type, int hp, int atk, int def, int spd, Move[] moves) {
+    public Codemon(MonType type, int hp, int atk, int def, int spd, Move[] moves, int exp) {
         this.setHp(hp);
         this.setAtk(atk);
         this.setDef(def);
         this.setSpd(spd);
         this.setCurrentHP(this.getHp());
         this.setType(type);
+        this.setExp(exp);
+        this.levelUp();
         
         this.moves = moves;
+        bonusStatChance = new double[] {0, 0, 0, 0};
     }
     
     public Move[] getMoves() {
@@ -97,7 +105,27 @@ public class Codemon {
         this.lvl = lvl;
     }
     
+    public boolean levelUp() {
+        int expectedLevel = Utility.getLvlFromExp(this.getLvl());
+        if(expectedLevel > this.getLvl()) {
+            performLevelUp();
+            levelUp();
+            return true;
+        }
+        return false;
+    }
     
+    public void performLevelUp() {
+        Utility.getLevelUpBonus(type, bonusStatChance);
+    }
+
+    public double[] getBonusStatChance() {
+        return bonusStatChance;
+    }
+
+    public void setBonusStatChance(double[] bonusStatChance) {
+        this.bonusStatChance = bonusStatChance;
+    }
 
     public int getHp() {
         return hp;
@@ -174,7 +202,7 @@ public class Codemon {
      */
     public int receiveDamage(int dbDamage, MonType atkType) {
         int damageAfterBlock = dbDamage - getDef();
-        int typeModDamage = typeMod(damageAfterBlock, type, atkType);
+        int typeModDamage = Utility.typeMod(damageAfterBlock, type, atkType);
         if(typeModDamage > currentHP) {
             return currentHP;
         }
@@ -205,23 +233,5 @@ public class Codemon {
         return getCurrentHP();
     }
     
- // clear beats eclipse, everything else beats clear
-    // cloudy beats rainy, stormy
-    // rainy beats windy, snowy,
-    // windy beats stormy, cloudy
-    // stormy beats snowy, rainy
-    // snowy beats cloudy, windy
-    public static int typeMod(int damage, MonType defType, MonType atkType) {
-        double[][] modMatrix = {
-                new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
-                new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
-                new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
-                new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
-                new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
-                new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
-                new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
-        };
-        double scalar = modMatrix[atkType.getTypeNum()][defType.getTypeNum()];
-        return (int) (damage * scalar);
-    }
+    
 }

@@ -167,6 +167,27 @@ public class Codemon {
         this.currentHP = currentHP;
     }
     
+    /**
+     * Heal the mon by X (or to full, if given no argument).
+     * @param healValue
+     * @return The actual amount healed. No overhealing!
+     */
+    public int heal(int healValue) {
+        if((healValue + this.getCurrentHP()) > this.getHp()) {
+            int healed = this.getHp() - this.getCurrentHP();
+            this.setCurrentHP(this.getHp());
+            return healed;
+        }
+        this.setCurrentHP(this.getCurrentHP() + healValue);
+        return healValue;
+    }
+    
+    public int heal() {
+        int healed = this.getHp() - this.getCurrentHP();
+        this.setCurrentHP(this.getHp());
+        return healed;
+    }
+    
     public int attack(int index, Weather weather) {
         try {
             int db = moves[index].use();

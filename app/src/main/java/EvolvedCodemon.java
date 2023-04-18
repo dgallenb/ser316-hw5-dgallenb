@@ -1,4 +1,8 @@
-
+/**
+ * I might include dual-type functionality, but we'll see if I have time for that.
+ * @author DJ
+ *
+ */
 public class EvolvedCodemon extends Codemon {
     private Codemon mon;
     

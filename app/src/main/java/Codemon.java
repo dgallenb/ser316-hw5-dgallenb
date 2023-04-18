@@ -206,6 +206,12 @@ public class Codemon {
         return healed;
     }
     
+    /**
+     * 
+     * @param index of the codemon's move.
+     * @param weather
+     * @return Damage to be dealt. 
+     */
     public int attack(int index, Weather weather) {
         try {
             int db = moves[index].use();
@@ -259,6 +265,19 @@ public class Codemon {
         for(int i = 0; i < moves.length; ++i) {
             moves[i].refresh();
         }
+    }
+    
+    /**
+     * Gets the move at the specified index. Note: Returns null if there's no move 
+     * in that index.
+     * @param index
+     * @return
+     */
+    public Move getMove(int index) {
+        if((index < 0) || (index >= moves.length)){
+            return null;
+        }
+        return moves[index];
     }
     
     /**

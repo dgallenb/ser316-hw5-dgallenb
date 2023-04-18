@@ -8,10 +8,12 @@ public class BattleMove {
     private Move move;
     private Codemon mon;
     private Weather weather;
+    private int movePosition;
     
-    public BattleMove(Codemon mon, Move move, Weather weather) {
+    public BattleMove(Codemon mon, Move move, int index, Weather weather) {
         this.mon = mon;
         this.move = move;
+        this.movePosition = index;
         this.weather = weather;
     }
 
@@ -37,5 +39,13 @@ public class BattleMove {
 
     public void setWeather(Weather weather) {
         this.weather = weather;
+    }
+
+    public int getMovePosition() {
+        return movePosition;
+    }
+
+    public void setMovePosition(int movePosition) {
+        this.movePosition = movePosition;
     }
 }

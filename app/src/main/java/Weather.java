@@ -25,6 +25,8 @@ public class Weather {
             case "sunny":
             case "SUN":
             case "sun":
+            case "CLEAR":
+            case "clear":
                 type = 0;
                 break;
             case "CLOUDY":
@@ -76,13 +78,15 @@ public class Weather {
         case 0:
             return "clear";
         case 1:
-            return "EOT";
+            return "cloudy";
         case 2: 
-            return "SCENE";
+            return "rainy";
         case 3:
-            return "DAILY";
+            return "windy";
         case 4:
+            return "stormy";
         case 5:
+            return "snowy";
         case 6:
             return "eclipse";
         default:
@@ -94,6 +98,10 @@ public class Weather {
         return new Weather(type);
     }
     
+    /**
+     * Randomly changes the weather to the next state, as dictated by the table below.
+     * @return The string name for the new weather.
+     */
     public String transition() {
         double rng = Math.random();
         
@@ -106,14 +114,8 @@ public class Weather {
                 new double[] {0.05, 0.15, 0.3, 0, 0.05, 0.44, 0.01}, // snowy
                 new double[] {0.15, 0, 0, 0, 0, 0, 0.85} // eclipse
         };
-        double sum = 0;
-        for(int i = 0; i < transitionMatrix[type].length; ++i) {
-            sum += transitionMatrix[type][i];
-            if(rng < sum) {
-                type = i;
-                return this.toString();
-            }
-        }
-        return this.toString(); // should never reach here as long as each row sums to 1.
+        
+        type = Utility.rollOnTable(transitionMatrix[type]);
+        return this.toString();
     }
 }

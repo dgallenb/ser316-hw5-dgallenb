@@ -7,17 +7,19 @@ public class Move {
     protected int db;
     protected Frequency frequency;
     protected boolean available;
+    protected MonType type;
     
     public Move() {
     
     }
     
-    public Move(String name, String description, int db, Frequency frequency) {
+    public Move(String name, String description, int db, Frequency frequency, MonType type) {
         this.name = name;
         this.description = description;
         this.db = db;
         this.frequency = frequency.copy();
         this.available = true;
+        this.type = type.copy();
     }
 
     public String getName() {
@@ -55,6 +57,18 @@ public class Move {
     public void setFrequency(Frequency frequency) {
         this.frequency = frequency;
     }
+    
+    public MonType getType() {
+        return this.type;
+    }
+    
+    /**
+     * Warning: unlike the constructor, this will not make a copy of the type given
+     * @param t a MonType to set the move to.
+     */
+    public void setType(MonType t) {
+        this.type = t;
+    }
 
     public boolean isAvailable() {
         return available;
@@ -74,8 +88,17 @@ public class Move {
         return db;
     }
     
-    public void refresh() {
+    public boolean refresh() {
         this.available = true;
+        return true;
+    }
+    
+    public boolean refreshScene() {
+        if(frequency.getTypeNum() != 3) {
+            this.available = true;
+            return true;
+        }
+        return false;
     }
 }
 

@@ -43,6 +43,24 @@ public class Codemon {
         bonusStatChance = new double[] {0, 0, 0, 0};
     }
     
+    public Codemon(Codemon basemon) {
+        this.setHp(basemon.getHp());
+        this.setAtk(basemon.getAtk());
+        this.setDef(basemon.getDef());
+        this.setSpd(basemon.getSpd());
+        this.setCurrentHP(basemon.getCurrentHP());
+        this.setType(basemon.getType());
+        this.setExp(basemon.getExp());
+        this.setLvl(basemon.getLvl());
+        this.moves = basemon.getMoves();
+        bonusStatChance = new double[] {0, 0, 0, 0};
+        
+        double[] baseStatChance = basemon.getBonusStatChance();
+        for(int i = 0; i < baseStatChance.length; ++i) {
+            this.bonusStatChance[i] = baseStatChance[i];
+        }
+    }
+    
     public Move[] getMoves() {
         return moves;
     }
@@ -254,5 +272,33 @@ public class Codemon {
         return getCurrentHP();
     }
     
+    public String getDescription() {
+        String output = "";
+        output += this.getName() + ": a lvl. " + this.getLvl() + " " + 
+        this.getType().toString() + "codemon.";
+        
+        return output;
+    }
     
+    public String getStatDesc() { 
+        String output = "";
+        output += "HP:  " + this.getCurrentHP() + "/" + this.getHp() +
+                "\nATK: " + this.getAtk() + "\nDEF" + this.getDef() + 
+                "\nSPD: " + this.getSpd();
+        return output;
+    }
+    
+    public String getMoveDesc() {
+        String output = "";
+        for(int i = 0; i < moves.length; ++i) {
+            if(moves[i] != null) {
+                output += moves[i].getDescription() + "\n";
+            }
+        }
+        return output;
+    }
+    
+    public EvolvedCodemon evolve(double[] statBoosts) {
+        
+    }
 }

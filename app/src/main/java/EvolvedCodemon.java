@@ -5,6 +5,17 @@ public class EvolvedCodemon extends Codemon {
     protected int hpBoost;
     protected int atkBoost;
     protected int defBoost;
+    protected int spdBoost;
+    
+    @Override 
+    public EvolvedCodemon(Codemon basemon) {
+        this.mon = basemon;
+        this.setHpBoost(20);
+        this.setAtkBoost(10);
+        this.setDefBoost(10);
+        this.setSpdBoost(3);
+    }
+    
     @Override
     public int getHp() {
         // TODO Auto-generated method stub
@@ -27,12 +38,6 @@ public class EvolvedCodemon extends Codemon {
     public int getSpd() {
         // TODO Auto-generated method stub
         return super.getSpd() + spdBoost;
-    }
-
-    protected int spdBoost;
-    
-    public EvolvedCodemon(Codemon m) {
-        this.mon = m;
     }
 
     public int getHpBoost() {

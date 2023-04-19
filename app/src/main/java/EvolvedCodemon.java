@@ -20,6 +20,14 @@ public class EvolvedCodemon extends Codemon {
         this.setSpdBoost(3);
     }
     
+    public EvolvedCodemon(Codemon basemon, int[] statBoosts) {
+        this.mon = basemon;
+        this.setHpBoost(statBoosts[0]);
+        this.setAtkBoost(statBoosts[1]);
+        this.setDefBoost(statBoosts[2]);
+        this.setSpdBoost(statBoosts[3]);
+    }
+    
     @Override
     public int getHp() {
         // TODO Auto-generated method stub

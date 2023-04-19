@@ -8,12 +8,25 @@ public class Move {
     protected Frequency frequency;
     protected boolean available;
     protected MonType type;
+    protected int ac;
     
+    public static final Move struggle = new Move(
+            "Struggle", "Default move", 4, new Frequency(0), new MonType(0));
+    
+    public int getAc() {
+        return ac;
+    }
+
+    public void setAc(int ac) {
+        this.ac = ac;
+    }
+
     public Move() {
     
     }
     
-    public Move(String name, String description, int db, Frequency frequency, MonType type) {
+    public Move(String name, String description, int db, 
+            Frequency frequency, MonType type) {
         this.name = name;
         this.description = description;
         this.db = db;

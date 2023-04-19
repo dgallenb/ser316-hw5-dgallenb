@@ -245,8 +245,9 @@ public class Codemon {
      * @param atkType
      * @return
      */
-    public int receiveDamage(int dbDamage, MonType atkType) {
+    public int receiveDamage(int dbDamage, MonType atkType, boolean crit) {
         int damageAfterBlock = dbDamage - getDef();
+        damageAfterBlock *= (crit? 2 : 1);
         int typeModDamage = Utility.typeMod(damageAfterBlock, type, atkType);
         if(typeModDamage > currentHP) {
             return currentHP;
@@ -317,7 +318,37 @@ public class Codemon {
         return output;
     }
     
-    public EvolvedCodemon evolve(double[] statBoosts) {
-        
+    public int[] getAvailableMoveIndices() {
+        int sum = 0;
+        for(int i = 0; i < moves.length; ++i) {
+            if(moves[i] != null) {
+                if(moves[i].isAvailable()) {
+                    ++sum;
+                }
+            }
+        }
+        int[] output = new int[sum];
+        int index = 0;
+        for(int i = 0; i < moves.length; ++i) {
+            if(moves[i].isAvailable()) {
+                output[index] = i;
+                ++index;
+            }
+        }
+        return output;
+    }
+    
+    public int predictDB(int index) {
+        return computeDB(index, getType());
+    }
+    
+    public EvolvedCodemon evolve(int[] statBoosts) {
+        return new EvolvedCodemon(this, statBoosts);
+    }
+    
+    public int computeEvade() {
+        int spdEvade = this.getSpd() / 5;
+        int defEvade = this.getSpd() / 5;
+        return Math.max(spdEvade, defEvade);
     }
 }

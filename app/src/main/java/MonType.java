@@ -1,7 +1,7 @@
 
 public class MonType {
     // types: quartz, agate, sapphire, topaz, opal, peridot, onyx
-    private int type;
+    protected int type;
     
     public MonType(int i) {
         setType(i);

@@ -34,13 +34,23 @@ public class BattleState implements GameState {
      * @param player2
      */
     
-    private void handleTurn(Trainer player1, Trainer player2) {
-     // determine the faster mon, faster mon attacks. 
-        // if the slower mon isn't dead, the slower mon attacks back.
-        // 
+    private String handleTurn(TrainerEntity player1, TrainerEntity player2) {
+        return "";
     }
     
-    private void facepunchPhase(BattleMove playerMove, BattleMove opponentMove) {
+    
+    /**
+     * status indicators
+     * 0: battle continues
+     * 1: P1 has a KO'd mon, call out another mon
+     * 2: P2 has a KO'd mon, call out another mon
+     * 3: P1 has no mons left, end battle
+     * 4: P2 has no mons left, end battle
+     * @param playerMove
+     * @param opponentMove
+     * @return
+     */
+    private int conductFacepunch(BattleMove playerMove, BattleMove opponentMove) {
         BattleMove[] battleMoves = new BattleMove[2];
         int pSpd = playerMove.getMon().getSpd();
         int oSpd = opponentMove.getMon().getSpd();
@@ -64,18 +74,70 @@ public class BattleState implements GameState {
             int damageSent = battleMoves[i].getMon().attack(index, weather);
             Move move = battleMoves[i].getMon().getMove(index);
             if(move == null) {
-                continue;
+                move = Move.struggle;
             }
             MonType atkType = battleMoves[i].getMon().getMove(index).getType();
+            boolean crit = Math.random() > 0.95;
             int damageReceived = battleMoves[1 - i].getMon().
-                    receiveDamage(damageSent, atkType);
+                    receiveDamage(damageSent, atkType, crit);
             battleMoves[1 - i].getMon().takeDamage(damageReceived);
             
             // Dead check
             if(battleMoves[1 - i].getMon().getCurrentHP() <= 0) {
-                
+                if(battleMoves[1 - i].getTrainer().countLiveMons() > 0) {
+                    if(battleMoves[1-i].equals(playerMove)) {
+                        return 1;
+                    }
+                    else { // opponent is out a mon
+                        return 2;
+                    }
+                }
+                else {
+                    if(battleMoves[1-i].equals(playerMove)) {
+                        return 3;
+                    }
+                    else { // opponent is out
+                        return 4;
+                    }
+                }
+                // does the trainer have more mons?
+                // If yes, prompt player to switch in a mon.
             }
         }
+        return 0;
     }
+    
+    /**
+     * 1. Check if the trainers want to switch mons. 
+     * 2. If yes, switch the mons around. 
+     * @param t1
+     * @param t2
+     * @return codes to be determined.
+     */
+    private int[] switchPhase(TrainerEntity t1, TrainerEntity t2) {
+        int switch1 = t1.decideSwitch();
+        int switch2 = t2.decideSwitch();
+        
+        t1.getTrainer().switchMons(0, switch1);
+        t2.getTrainer().switchMons(0, switch2);
+        return new int[] {switch1, switch2};
+    }
+    
+    private int[] itemPhase(TrainerEntity t1, TrainerEntity t2) {
+        int item1 = t1.decideItem();
+        int item2 = t2.decideItem();
+        
+        if((item1 >= 0) && (item1 < t1.getTrainer().countItems())) {
+            t1.getTrainer().getItem(item1).use(t1.getTrainer().getMons()[0]);
+        }
+        
+        if((item2 >= 0) && (item2 < t2.getTrainer().countItems())) {
+            t2.getTrainer().getItem(item2).use(t2.getTrainer().getMons()[0]);
+        }
+        
+        return new int[] {item1, item2};
+    }
+    
+    
     
 }

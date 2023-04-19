@@ -5,24 +5,24 @@
  *
  */
 public class BattleMove {
-    private Move move;
+    private Trainer trainer;
     private Codemon mon;
     private Weather weather;
     private int movePosition;
     
-    public BattleMove(Codemon mon, Move move, int index, Weather weather) {
+    public BattleMove(Codemon mon, Trainer t, int index, Weather weather) {
         this.mon = mon;
-        this.move = move;
+        this.trainer = t;
         this.movePosition = index;
         this.weather = weather;
     }
 
-    public Move getMove() {
-        return move;
+    public Trainer getTrainer() {
+        return trainer;
     }
 
-    public void setMove(Move move) {
-        this.move = move;
+    public void setTrainer(Trainer trainer) {
+        this.trainer = trainer;
     }
 
     public Codemon getMon() {

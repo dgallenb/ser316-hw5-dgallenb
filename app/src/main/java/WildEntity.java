@@ -13,7 +13,25 @@ public class WildEntity extends TrainerEntity {
         return decideSwitch();
     }
 
-    public int decideAttack() {
+    @Override
+    public int decideInput(int phase) {
+        switch(phase) {
+        case 0:
+            return decideBeginning();
+        case 1:
+            return decideBattle();
+        case 2: 
+            return 0;
+        case 3:
+            return 0;
+        default:
+            return 0;
+        }
+        
+    }
+
+    @Override
+    public int decideBattle() {
         Codemon mon = trainer.getMons()[0];
         int[] movesAvailable = mon.getAvailableMoveIndices();
         if(movesAvailable.length < 1) {
@@ -24,21 +42,31 @@ public class WildEntity extends TrainerEntity {
         return index;
     }
 
+    /**
+     * Not needed because wild codemons don't make decisions here.
+     */
     @Override
-    public int decideInput(int phase) {
-        switch(phase) {
-        case 0:
-            return decideBeginning();
-        case 1:
-            return decideAttack();
-        case 2: 
-            return 0;
-        case 3:
-            return 0;
-        default:
-            return 0;
-        }
-        
+    public int decideEnd() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * Not needed because wild codemons don't make decisions here.
+     */
+    @Override
+    public int decideCleanup() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * Not needed because wild codemons don't make decisions here.
+     */
+    @Override
+    protected int forceSwitch() {
+        // TODO Auto-generated method stub
+        return 0;
     }
      
 

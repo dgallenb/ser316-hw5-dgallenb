@@ -14,7 +14,7 @@ public class Codemon extends Acquirable {
         // hp changes should probably not be a thing for mid-battle stuff.
     protected int exp;
     protected int lvl;
-    
+    protected boolean evolve;
     protected double[] bonusStatChance;
 
     protected int currentHP;
@@ -31,6 +31,7 @@ public class Codemon extends Acquirable {
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.lvl = 1;
         this.exp = 0;
+        this.evolve = false;
         tempStats = new int[8];
     }
     
@@ -52,7 +53,7 @@ public class Codemon extends Acquirable {
         this.setExp(exp);
         this.levelUp();
         tempStats = new int[8];
-        
+        this.evolve = false;
         this.moves = moves;
         bonusStatChance = new double[] {0, 0, 0, 0};
     }
@@ -100,7 +101,14 @@ public class Codemon extends Acquirable {
         moves[index] = moveToAdd;
         return true;
     }
+    
+    public boolean canEvolve() {
+        return evolve;
+    }
 
+    public void setEvolve(boolean canEvolve) {
+        this.evolve = canEvolve;
+    }
 
     public MonType getType() {
         return type;
@@ -149,7 +157,16 @@ public class Codemon extends Acquirable {
     }
     
     public void performLevelUp() {
-        Utility.getLevelUpBonus(type, bonusStatChance);
+        if(lvl % 15 == 0) {
+            evolve = true;
+        }
+        ++lvl;
+        int[] levelUpBonuses = Utility.getLevelUpBonus(type, bonusStatChance);
+        this.setHp(this.getHp() + levelUpBonuses[0]);
+        this.heal(levelUpBonuses[0]);
+        this.setAtk(this.getAtk() + levelUpBonuses[1]);
+        this.setDef(this.getDef() + levelUpBonuses[2]);
+        this.setSpd(this.getSpd() + levelUpBonuses[3]);
     }
 
     public double[] getBonusStatChance() {
@@ -203,6 +220,8 @@ public class Codemon extends Acquirable {
     public void setCurrentHP(int currentHP) {
         this.currentHP = currentHP;
     }
+    
+    
     
     /**
      * Heal the mon by X (or to full, if given no argument).
@@ -410,5 +429,10 @@ public class Codemon extends Acquirable {
         else {
             return false;
         }
+    }
+    
+    public EvolvedCodemon evolve() {
+        this.setEvolve(false);
+        return new EvolvedCodemon(this);
     }
 }

@@ -4,6 +4,7 @@ public class Trainer {
     protected Codemon[] mons;
     protected String name;
     protected int monCount;
+    protected int money;
     protected ArrayList<Item> items;
     
     public Trainer() {
@@ -28,6 +29,18 @@ public class Trainer {
     public void setMons(Codemon[] mons) {
         this.mons = mons;
     }
+    
+    public int getMonCount() {
+        return monCount;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 
     public String getName() {
         return name;
@@ -35,6 +48,10 @@ public class Trainer {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public void addItem(Item i) {
+        items.add(i);
     }
     
     public Item getItem(int index) {

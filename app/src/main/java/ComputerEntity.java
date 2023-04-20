@@ -47,12 +47,22 @@ public class ComputerEntity extends TrainerEntity {
         }
     }
 
-    public int decideAttack() {
-        int[] moves = trainer.getMons()[0].getAvailableMoveIndices();
+    @Override
+    public int decideInput(int phase) {
+        switch(phase) {
+        case 0: // beginning phase
+            return decideBeginning();  
+        }
+        return 0;
+    }
+
+    @Override
+    public int decideBattle() {
+        int[] moves = getFrontMon().getAvailableMoveIndices();
         int moveChoice = -1;
         int maxDB = 0;
         for(int i : moves) {
-            if(trainer.getMons()[0].predictDB(i) > maxDB) {
+            if(getFrontMon().predictDB(i) > maxDB) {
                 moveChoice = i;
             }
         }
@@ -61,12 +71,29 @@ public class ComputerEntity extends TrainerEntity {
     }
 
     @Override
-    public int decideInput(int phase) {
-        switch(phase) {
-        case 0: // beginning phase
-            return decideBeginning();  
-        }
+    public int decideEnd() {
+        // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public int decideCleanup() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    protected int forceSwitch() {
+        int[] liveIndices = new int[trainer.countLiveMons()];
+        int count = 0;
+        for(int i = 1; i < trainer.getMons().length; ++i) {
+            if(trainer.getMons()[i].getCurrentHP() > 0) {
+                liveIndices[count] = i;
+                ++count;
+            }
+        }
+        
+        return Utility.d(liveIndices.length) - 1;
     }
 
 }

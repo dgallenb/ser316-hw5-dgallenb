@@ -11,7 +11,6 @@ public class EvolvedCodemon extends Codemon {
     protected int defBoost;
     protected int spdBoost;
     
-    @Override 
     public EvolvedCodemon(Codemon basemon) {
         this.mon = basemon;
         this.setHpBoost(20);

@@ -5,8 +5,9 @@ public class BeginningPhase implements AbstractPhase {
     protected UI ui;
     protected int nextPhase;
     protected ArrayList<Acquirable> acquired;
+    protected Weather weather;
     
-    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui) {
+    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w) {
         this.trainers = new TrainerEntity[2];
         this.trainers[0] = t1;
         this.trainers[1] = t2;
@@ -14,7 +15,7 @@ public class BeginningPhase implements AbstractPhase {
         acquired = new ArrayList<Acquirable>();
     }
     
-    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, 
+    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
             ArrayList<Acquirable>a) {
         this.trainers = new TrainerEntity[2];
         this.trainers[0] = t1;
@@ -107,7 +108,7 @@ public class BeginningPhase implements AbstractPhase {
         case 10:
             s += "used a potion.\n";
             int healed = t.getFrontMon().heal(20);
-            s += t.getFrontMon().getName() + "healed by " + healed + ".\n";
+            s += t.getFrontMon().getName() + " healed by " + healed + ".\n";
             break;
         case 11:
             s += "used a capture stone.\n";
@@ -150,15 +151,15 @@ public class BeginningPhase implements AbstractPhase {
     public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
         switch(nextPhase) {
         case 0:
-            return new BeginningPhase(trainers[0], trainers[1], ui, acquired);
+            return new BeginningPhase(trainers[0], trainers[1], ui, weather, acquired);
         case 1:
-            return new BattlePhase(trainers[0], trainers[1], ui, acquired);
+            return new BattlePhase(trainers[0], trainers[1], ui, weather, acquired);
         case 2:
-            return new EndPhase(trainers[0], trainers[1], ui, acquired);
+            return new EndPhase(trainers[0], trainers[1], ui, weather, acquired);
         case 3:
-            return new CleanupPhase(trainers[0], trainers[1], ui, acquired);
+            return new CleanupPhase(trainers[0], trainers[1], ui, weather, acquired);
         default:
-            return new BattlePhase(trainers[0], trainers[1], ui, acquired);
+            return new BattlePhase(trainers[0], trainers[1], ui, weather, acquired);
         }
         
     }

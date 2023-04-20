@@ -49,4 +49,6 @@ public abstract class TrainerEntity {
         return this.getTrainer().getMons()[0];
     }
 
+    protected abstract int forceSwitch();
+
 }

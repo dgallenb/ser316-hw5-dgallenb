@@ -5,5 +5,12 @@ public class Money extends Acquirable {
     public Money(int value) {
         this.total = value;
     }
+    
+    public int getTotal() {
+        return this.total;
+    }
 
+    public String toString() {
+        return "$" + total;
+    }
 }

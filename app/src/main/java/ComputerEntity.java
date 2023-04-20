@@ -10,7 +10,6 @@ public class ComputerEntity extends TrainerEntity {
      * If the front liner has under half HP, check a random slot.
      * If that slot has more HP, swap. Otherwise, don't bother.
      */
-    @Override
     public int decideSwitch() {
         
         if(trainer.countLiveMons() > 1) {
@@ -27,8 +26,27 @@ public class ComputerEntity extends TrainerEntity {
         }
         return 0;
     }
+    
+    public int decideTraining() {
+        return Utility.d(4) - 1;
+    }
+    
+    /** options are: 0. No training. no switching. No item. wild only
+     *  1-5. switch with index 1-5. 
+     *  6-9. Apply training.
+     *  10+. use item.
+     * @return decision indicator.
+     */
+    public int decideBeginning() {
+        int switchDecision = decideSwitch();
+        if(switchDecision == 0) {
+            return decideTraining();
+        }
+        else {
+            return switchDecision;
+        }
+    }
 
-    @Override
     public int decideAttack() {
         int[] moves = trainer.getMons()[0].getAvailableMoveIndices();
         int moveChoice = -1;
@@ -40,6 +58,15 @@ public class ComputerEntity extends TrainerEntity {
         }
         // TODO Auto-generated method stub
         return moveChoice;
+    }
+
+    @Override
+    public int decideInput(int phase) {
+        switch(phase) {
+        case 0: // beginning phase
+            return decideBeginning();  
+        }
+        return 0;
     }
 
 }

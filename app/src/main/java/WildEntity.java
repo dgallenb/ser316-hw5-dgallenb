@@ -5,12 +5,14 @@ public class WildEntity extends TrainerEntity {
         super(t);
     }
 
-    @Override
     public int decideSwitch() {
         return 0;
     }
+    
+    public int decideBeginning() {
+        return decideSwitch();
+    }
 
-    @Override
     public int decideAttack() {
         Codemon mon = trainer.getMons()[0];
         int[] movesAvailable = mon.getAvailableMoveIndices();
@@ -21,6 +23,23 @@ public class WildEntity extends TrainerEntity {
 
         return index;
     }
-    
+
+    @Override
+    public int decideInput(int phase) {
+        switch(phase) {
+        case 0:
+            return decideBeginning();
+        case 1:
+            return decideAttack();
+        case 2: 
+            return 0;
+        case 3:
+            return 0;
+        default:
+            return 0;
+        }
+        
+    }
+     
 
 }

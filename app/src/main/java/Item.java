@@ -1,5 +1,5 @@
 
-public class Item {
+public class Item extends Acquirable {
     protected int quantity;
     protected String name;
     protected String description;

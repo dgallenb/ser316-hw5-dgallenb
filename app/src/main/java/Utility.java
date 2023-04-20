@@ -219,5 +219,14 @@ public class Utility {
         double scalar = modMatrix[atkType.getTypeNum()][defType.getTypeNum()];
         return (int) (damage * scalar);
     }
+    
+    public static int computeExp(TrainerEntity t) {
+        int expTotal = 0;
+        for(Codemon mon : t.getTrainer().getMons()) {
+            expTotal += mon.getLvl();
+        }
+        
+        return expTotal;
+    }
 }
 

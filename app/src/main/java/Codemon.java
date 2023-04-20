@@ -1,5 +1,5 @@
 
-public class Codemon {
+public class Codemon extends Acquirable {
     protected Move[] moves;
     protected MonType type;
     protected String name;
@@ -10,7 +10,7 @@ public class Codemon {
     protected int spd;
     
     protected int[] tempStats; // holds one-battle-only buffs/debuffs.
-        // hp, atk, def, spd, evade, initiative, accuracy
+        // hp, atk, def, spd, evade, initiative, accuracy, crit range bonus
         // hp changes should probably not be a thing for mid-battle stuff.
     protected int exp;
     protected int lvl;
@@ -31,7 +31,7 @@ public class Codemon {
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.lvl = 1;
         this.exp = 0;
-        tempStats = new int[7];
+        tempStats = new int[8];
     }
     
     public int[] getTempStats() {
@@ -51,7 +51,7 @@ public class Codemon {
         this.setType(type);
         this.setExp(exp);
         this.levelUp();
-        tempStats = new int[7];
+        tempStats = new int[8];
         
         this.moves = moves;
         bonusStatChance = new double[] {0, 0, 0, 0};
@@ -68,7 +68,7 @@ public class Codemon {
         this.setLvl(basemon.getLvl());
         this.moves = basemon.getMoves();
         bonusStatChance = new double[] {0, 0, 0, 0};
-        tempStats = new int[7];
+        tempStats = new int[8];
         
         double[] baseStatChance = basemon.getBonusStatChance();
         for(int i = 0; i < baseStatChance.length; ++i) {
@@ -394,6 +394,21 @@ public class Codemon {
                 return true;
             default:
                 return false;
+        }
+    }
+    
+    public boolean attemptCapture() {
+        if(this.getCurrentHP() < 1) {
+            return false;
+        }
+        
+        int hpLost = this.getHp() - this.getCurrentHP();
+        int diceRoll = Utility.d(this.getHp());
+        if((diceRoll + hpLost) >= this.getHp()) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }

@@ -1,7 +1,8 @@
 
 public interface GameState {
-    void process();
-    String promptUser();
-    void receiveInput(String input);
+    public void processState();
+    public void moveState();
+    public String displayMenu();
+    public void executeMenuOption(int option);
     
 }

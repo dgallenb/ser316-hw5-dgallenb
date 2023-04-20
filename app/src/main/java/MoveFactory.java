@@ -14,8 +14,8 @@ public class MoveFactory {
     }
     
     public Move generateMove(String name, String description, 
-            int moveType, int db, int frequency) {
-        return new Move(name, description, db,
+            int moveType, int db, int ac, int frequency) {
+        return new Move(name, description, db, ac,
                 new Frequency(frequency), new MonType(moveType));
     }
     

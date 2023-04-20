@@ -11,7 +11,7 @@ public class Move {
     protected int ac;
     
     public static final Move struggle = new Move(
-            "Struggle", "Default move", 4, new Frequency(0), new MonType(0));
+            "Struggle", "Default move", 4, 4, new Frequency(0), new MonType(0));
     
     public int getAc() {
         return ac;
@@ -22,14 +22,15 @@ public class Move {
     }
 
     public Move() {
-    
+        
     }
     
-    public Move(String name, String description, int db, 
+    public Move(String name, String description, int db, int ac,
             Frequency frequency, MonType type) {
         this.name = name;
         this.description = description;
         this.db = db;
+        this.ac = ac;
         this.frequency = frequency.copy();
         this.available = true;
         this.type = type.copy();

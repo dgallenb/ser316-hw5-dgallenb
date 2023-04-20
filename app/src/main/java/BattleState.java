@@ -52,19 +52,19 @@ public class BattleState implements GameState {
      */
     private int conductFacepunch(BattleMove playerMove, BattleMove opponentMove) {
         BattleMove[] battleMoves = new BattleMove[2];
-        int pSpd = playerMove.getMon().getSpd();
-        int oSpd = opponentMove.getMon().getSpd();
-        if(pSpd == oSpd) {
+        int pInit = playerMove.getMon().getInitiative();
+        int oInit = opponentMove.getMon().getInitiative();
+        if(pInit == oInit) {
             double coinFlip = Math.random();
             int pIndex = coinFlip >= 0.5 ? 0 : 1;
             battleMoves[pIndex] = playerMove;
             battleMoves[1 - pIndex] = opponentMove;
         }
-        else if(pSpd > oSpd) {
+        else if(pInit > oInit) {
             battleMoves[0] = playerMove;
             battleMoves[1] = opponentMove;
         }
-        else { // pSpd < oSpd
+        else { // pInit < oInit
             battleMoves[0] = opponentMove;
             battleMoves[1] = playerMove;
         }
@@ -73,35 +73,51 @@ public class BattleState implements GameState {
             Weather weather = battleMoves[i].getWeather();
             int damageSent = battleMoves[i].getMon().attack(index, weather);
             Move move = battleMoves[i].getMon().getMove(index);
+            MonType atkType = new MonType(0);
             if(move == null) {
                 move = Move.struggle;
+            } 
+            else {
+                atkType = battleMoves[i].getMon().getMove(index).getType();
             }
-            MonType atkType = battleMoves[i].getMon().getMove(index).getType();
-            boolean crit = Math.random() > 0.95;
-            int damageReceived = battleMoves[1 - i].getMon().
-                    receiveDamage(damageSent, atkType, crit);
-            battleMoves[1 - i].getMon().takeDamage(damageReceived);
             
-            // Dead check
-            if(battleMoves[1 - i].getMon().getCurrentHP() <= 0) {
-                if(battleMoves[1 - i].getTrainer().countLiveMons() > 0) {
-                    if(battleMoves[1-i].equals(playerMove)) {
-                        return 1;
-                    }
-                    else { // opponent is out a mon
-                        return 2;
-                    }
+            // check if the attack hit.
+            int toHit = move.getAc() + battleMoves[1 - i].getMon().computeEvade();
+            int roll = Utility.d(20) + battleMoves[i].getMon().getTempStats()[6];
+            
+            if(roll >= toHit) {
+                if(move.getDb() < 1) { // status move, does no damage. Status moves
+                    // handle stat changes themselves, no need to do anything.
+                    
                 }
                 else {
-                    if(battleMoves[1-i].equals(playerMove)) {
-                        return 3;
-                    }
-                    else { // opponent is out
-                        return 4;
+                    boolean crit = Math.random() > 0.95;
+                    int damageReceived = battleMoves[1 - i].getMon().
+                            receiveDamage(damageSent, atkType, crit);
+                    battleMoves[1 - i].getMon().takeDamage(damageReceived);
+                    
+                    // Dead check
+                    if(battleMoves[1 - i].getMon().getCurrentHP() <= 0) {
+                        if(battleMoves[1 - i].getTrainer().countLiveMons() > 0) {
+                            if(battleMoves[1-i].equals(playerMove)) {
+                                return 1;
+                            }
+                            else { // opponent is out a mon
+                                return 2;
+                            }
+                        }
+                        else {
+                            if(battleMoves[1-i].equals(playerMove)) {
+                                return 3;
+                            }
+                            else { // opponent is out
+                                return 4;
+                            }
+                        }
+                        // does the trainer have more mons?
+                        // If yes, prompt player to switch in a mon.
                     }
                 }
-                // does the trainer have more mons?
-                // If yes, prompt player to switch in a mon.
             }
         }
         return 0;

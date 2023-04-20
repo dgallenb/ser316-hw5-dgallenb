@@ -8,6 +8,10 @@ public class Codemon {
     protected int atk;
     protected int def;
     protected int spd;
+    
+    protected int[] tempStats; // holds one-battle-only buffs/debuffs.
+        // hp, atk, def, spd, evade, initiative, accuracy
+        // hp changes should probably not be a thing for mid-battle stuff.
     protected int exp;
     protected int lvl;
     
@@ -27,8 +31,17 @@ public class Codemon {
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.lvl = 1;
         this.exp = 0;
+        tempStats = new int[7];
     }
     
+    public int[] getTempStats() {
+        return tempStats;
+    }
+
+    public void setTempStats(int[] tempStats) {
+        this.tempStats = tempStats;
+    }
+
     public Codemon(MonType type, int hp, int atk, int def, int spd, Move[] moves, int exp) {
         this.setHp(hp);
         this.setAtk(atk);
@@ -38,6 +51,7 @@ public class Codemon {
         this.setType(type);
         this.setExp(exp);
         this.levelUp();
+        tempStats = new int[7];
         
         this.moves = moves;
         bonusStatChance = new double[] {0, 0, 0, 0};
@@ -54,6 +68,7 @@ public class Codemon {
         this.setLvl(basemon.getLvl());
         this.moves = basemon.getMoves();
         bonusStatChance = new double[] {0, 0, 0, 0};
+        tempStats = new int[7];
         
         double[] baseStatChance = basemon.getBonusStatChance();
         for(int i = 0; i < baseStatChance.length; ++i) {
@@ -171,6 +186,10 @@ public class Codemon {
 
     public int getSpd() {
         return spd;
+    }
+    
+    public int getInitiative() {
+        return this.getSpd() + tempStats[5];
     }
 
     public void setSpd(int spd) {
@@ -349,6 +368,32 @@ public class Codemon {
     public int computeEvade() {
         int spdEvade = this.getSpd() / 5;
         int defEvade = this.getSpd() / 5;
-        return Math.max(spdEvade, defEvade);
+        return Math.max(spdEvade, defEvade) + tempStats[5];
+    }
+    
+    public boolean applyStatChange(int[] changes) {
+        if(changes.length != tempStats.length) {
+            return false;
+        }
+        for(int i = 0; i < tempStats.length; ++i) {
+            tempStats[i] += changes[i];
+        }
+        return true;
+    }
+    
+    public boolean applyCombatStage(int index) {
+        switch(index) { 
+            case 1: // Atk
+                tempStats[1] += Math.max(this.getAtk() / 5, 1);
+                return true;
+            case 2: // Def
+                tempStats[2] += Math.max(this.getDef() / 5, 1);
+                return true;
+            case 3: // Spd
+                tempStats[2] += Math.max(this.getSpd() / 5, 1);
+                return true;
+            default:
+                return false;
+        }
     }
 }

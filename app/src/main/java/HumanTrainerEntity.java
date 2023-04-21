@@ -37,13 +37,19 @@ public class HumanTrainerEntity extends TrainerEntity {
     public void handleSwitchMenu() {
         String s = "";
         s += "Choose a Codemon: \n";
+        int count = 0;
         for(int i = 0; i < getTrainer().getMons().length; ++i) {
             if(getTrainer().getMons()[i] != null) {
                 s += "" + (i + 1) + ". " + getTrainer().getMons()[i].getName() + "\n";
+                ++count;
             }
         }
+        s += "" + (count + 1) + ". Back\n";
         ui.display(s);
-        int choice1 = ui.getInt(1, getTrainer().getMonCount());
+        int choice1 = ui.getInt(1, count + 1);
+        if(choice1 == (count + 1)) {
+            return;
+        }
         if(getTrainer().getMons()[choice1 - 1] == null) {
             ui.display("Error: ghost codemon detected!");
             handleSwitchMenu();
@@ -51,7 +57,10 @@ public class HumanTrainerEntity extends TrainerEntity {
         }
         else {
             ui.display("Choose another Codemon:");
-            int choice2 = ui.getInt(1, getTrainer().getMonCount());
+            int choice2 = ui.getInt(1, count + 1);
+            if(choice2 == (count + 1)) {
+                return;
+            }
             while(true) {
                 if((choice2 != choice1) && 
                         (getTrainer().getMons()[choice2 - 1] != null)) {
@@ -59,11 +68,11 @@ public class HumanTrainerEntity extends TrainerEntity {
                 }
                 else {
                     ui.display("Invalid selection! Choose another Codemon:");
-                    choice2 = ui.getInt(1, getTrainer().getMonCount());
+                    choice2 = ui.getInt(1, count + 1);
                 }
             
             }
-            getTrainer().switchMons(choice1, choice2);
+            getTrainer().switchMons(choice1 - 1, choice2 - 1);
         }
     }
     
@@ -115,20 +124,64 @@ public class HumanTrainerEntity extends TrainerEntity {
         }
         else {
             boolean result =  getTrainer().getItem(index).
-                    use( getTrainer().getMons()[choice]);
+                    use( getTrainer().getMons()[choice - 1]);
             if(result) {
-                 getTrainer().getItem(index).consume();
+                getTrainer().getItem(index).consume();
                 if( getTrainer().getItem(index).getQuantity() < 1) {
                      getTrainer().removeItem(index);
                 }
                 ui.display("Used " +  getTrainer().getItem(index) + " on " + 
-                         getTrainer().getMons()[choice]);                
+                         getTrainer().getMons()[choice - 1]);                
             }
             else {
-                ui.display("You can't use " +  getTrainer().getItem(index) + " on " + 
-                         getTrainer().getMons()[choice]);
+                if(getTrainer().getItem(index) instanceof MoveItem) {
+                    overwriteMoveMenu(getTrainer().getMons()[choice - 1], 
+                            (MoveItem) getTrainer().getItem(index));
+                    
+                }
+                else {
+                    ui.display("You can't use " +  getTrainer().getItem(index) + 
+                            " on " + getTrainer().getMons()[choice]);
+                }
+                
             }
             handleItemsMenu();
+        }
+    }
+    
+    public boolean overwriteMoveMenu(Codemon c, MoveItem item) {
+        ui.display("That codemon can't learn another move. " +
+                "Would you like to erase a move?\n1. Yes\n2. No.");
+        int choice = ui.getInt(1, 2);
+        if(choice == 1) {
+            String s = "";
+            s += "Select a move to overwrite.\n";
+            int count = 0;
+            for(int i = 0; i < c.getMoves().length; ++i) {
+                Move m = c.getMove(i);
+                if(m != null) {
+                    s += "" + (i + 1) + ". " + m.getName() + "\n";
+                    ++count;
+                }
+            }
+            s += "" + (count + 1) + ". Cancel\n";
+            ui.display(s);
+            int moveSelection = ui.getInt(1, count + 1);
+            if(moveSelection == (count + 1)) {
+                return false;
+            }
+            else {
+                c.overrideMove(item.getMove(), moveSelection - 1);
+                item.consume();
+                if( item.getQuantity() < 1) {
+                     getTrainer().removeItem(item);
+                }
+                ui.display("Move overwritten");
+                return true;
+            }
+        }
+        else {
+            return false;
         }
     }
 
@@ -161,7 +214,7 @@ public class HumanTrainerEntity extends TrainerEntity {
             
         } 
         ui.display(s);
-        int index = ui.getInt(1, moveIndices[moveIndices.length - 1]);
+        int index = ui.getInt(1, moveIndices[moveIndices.length - 1] + 1);
         int modifiedIndex = index - 1;
         while(!getFrontMon().getMove(modifiedIndex).isAvailable()) {
             ui.display("Move unavailable!\n");
@@ -188,8 +241,10 @@ public class HumanTrainerEntity extends TrainerEntity {
         String s = "";
         s += "Switch to a new Codemon: \n";
         for(int i = 1; i < trainer.getMons().length; ++i) {
-            if(trainer.getMons()[i].getCurrentHP() > 0) {
-                s += "" + i + ". " + trainer.getMons()[i].getName() + "\n";
+            if(trainer.getMons()[i] != null) {
+                if(trainer.getMons()[i].getCurrentHP() > 0) {
+                    s += "" + i + ". " + trainer.getMons()[i].getName() + "\n";
+                }
             }
         }
         ui.display(s);

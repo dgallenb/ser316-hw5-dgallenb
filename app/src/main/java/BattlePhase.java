@@ -12,7 +12,7 @@ public class BattlePhase implements AbstractPhase {
         this.trainers[0] = t1;
         this.trainers[1] = t2;
         this.ui = ui;
-        this.nextPhase = 1;
+        this.nextPhase = 2;
         this.weather = w;
         acquired = new ArrayList<Acquirable>();
     }
@@ -23,7 +23,7 @@ public class BattlePhase implements AbstractPhase {
         this.trainers[0] = t1;
         this.trainers[1] = t2;
         this.ui = ui;
-        this.nextPhase = 1;
+        this.nextPhase = 2;
         this.weather = w;
         acquired = a;
     }
@@ -84,6 +84,12 @@ public class BattlePhase implements AbstractPhase {
             int toHit = move.getAc() + battleMoves[1 - i].getMon().computeEvade();
             int roll = Utility.d(20) + battleMoves[i].getMon().getTempStats()[6];
             
+            if(battleMoves[i].getTrainer().getName().contains("Wild")) {
+                s += "Wild ";
+            }
+            else {
+                s += battleMoves[i].getTrainer().getName() + "'s ";
+            }
             s += battleMoves[i].getMon().getName() + " used " + move.getName() + ".\n";
             if(roll >= toHit) {
                 if(move.getDb() < 1) { // status move, does no damage. Status moves
@@ -145,7 +151,8 @@ public class BattlePhase implements AbstractPhase {
         // and that there's only one player out of the two.
         BattleMove[] battleMoves = new BattleMove[choices.length];
         for(int i = 0; i < choices.length; ++i) {
-            battleMoves[i] = new BattleMove(trainers[i].getFrontMon(),choices[i],weather);
+            battleMoves[i] = new BattleMove(trainers[i].getFrontMon(),
+                    trainers[i].getTrainer(), choices[i],weather);
         }
         String output = this.conductFacepunch(battleMoves[0], battleMoves[1]);
         ui.display(output);

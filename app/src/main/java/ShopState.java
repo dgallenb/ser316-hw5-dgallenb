@@ -35,7 +35,7 @@ public class ShopState implements GameState {
         s += "1. Potion ($200)\n" + "2. Capture Stone ($200)\n" + "3. XAttack ($2000)\n";
         s += "4. XDefend ($2000)\n" + "5. XSpeed ($2000)\n" + "6. Leave\n";
         ui.display(s);
-        int choice = ui.getInt(1, 6);
+        int choice = ui.getInt(1, 9);
         Item item;
         int itemCost = 0;
         switch(choice) {
@@ -60,8 +60,21 @@ public class ShopState implements GameState {
             itemCost = 2000;
             break;
         case 6:
+            item = new Item("Move Stone", "Teaches a codemon a new move.", 1);
+            itemCost = 500;
+            break;
+        case 7:
+            item = new Item("Mighty Move Stone", "Teaches a codemon a stronger move.", 1);
+            itemCost = 2000;
+            break;
+        case 8:
+            item = new Item("Epic Move Stone", "Teaches a codemon a powerful move.", 1);
+            itemCost = 5000;
+            break;
+        case 9:
             ui.display("You leave, knowing you'll return sooner or later.");
             return;
+
         default:
             item = new Item("Mysterious Berry", "It probably does something. Who knows?", 1);
             itemCost = 200;

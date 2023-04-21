@@ -103,7 +103,7 @@ public class MenuState implements GameState {
                         player.getTrainer().getMons()[i].getName() + "\n";
             }
         }
-        s += "" + (player.getTrainer().getMonCount() + 1) + "\n";
+        s += "" + (player.getTrainer().getMonCount() + 1) + ". Back\n";
         ui.display(s);
         int choice = ui.getInt(1, player.getTrainer().getMonCount() + 1);
         if(choice == (player.getTrainer().getMonCount() + 1)) {
@@ -126,7 +126,7 @@ public class MenuState implements GameState {
         s += mon.getDescription() + "\n" + mon.getStatDesc() + "\n" + mon.getMoveDesc() + "\n";
         s += "Options: \n" + "1. Pat\n" + "2. Back\n";
         ui.display(s);
-        int choice = ui.getInt(1, player.getTrainer().getMonCount());
+        int choice = ui.getInt(1, 2);
         switch(choice) {
         case 1:
             pat(index); // does nothing of note, then moves to the handleMonMenu.

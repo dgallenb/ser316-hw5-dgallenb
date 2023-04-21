@@ -53,7 +53,7 @@ public class ExploreState implements GameState {
     public int exploreMenu() {   
         String s = "";
         String dayString = weather.isDay() ? "today" : "tonight";
-        s += "The weather " + dayString + "  is " + weather.toString() + "\n";
+        s += "The weather " + dayString + " is " + weather.toString() + "\n";
         s += "Choose an area to explore:\n";
         s += "1. Forest\n" + "2. Mountain\n" + "3. City\n" + "4. Rest\n" + "5. Back\n";
         ui.display(s);

@@ -86,13 +86,15 @@ public class ComputerEntity extends TrainerEntity {
         int[] liveIndices = new int[trainer.countLiveMons()];
         int count = 0;
         for(int i = 1; i < trainer.getMons().length; ++i) {
-            if(trainer.getMons()[i].getCurrentHP() > 0) {
-                liveIndices[count] = i;
-                ++count;
+            if(trainer.getMons()[i] != null) {
+                if(trainer.getMons()[i].getCurrentHP() > 0) {
+                    liveIndices[count] = i;
+                    ++count;
+                }
             }
         }
         
-        return Utility.d(liveIndices.length) - 1;
+        return liveIndices[Utility.d(liveIndices.length) - 1];
     }
 
 }

@@ -3,7 +3,11 @@ public class WildEntity extends TrainerEntity {
 
     public WildEntity(Trainer t) {
         super(t);
-        this.trainer.setName("");
+        // assume the trainer has a pokemon set to it
+        if(this.trainer.getMons().length > 0) {
+            this.trainer.setName("Wild " + getFrontMon().getName());
+        }
+        
     }
 
     public int decideSwitch() {

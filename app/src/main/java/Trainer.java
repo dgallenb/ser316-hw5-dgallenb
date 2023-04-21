@@ -135,7 +135,10 @@ public class Trainer {
     
     public void healAll() {
         for(Codemon mon : mons) {
-            mon.heal();
+            if(mon != null) {
+                mon.heal();
+            }
+            
         }
     }
     

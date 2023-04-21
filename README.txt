@@ -1,6 +1,6 @@
 Gradle should just be runnable from the root folder. The build.gradle file is in the app folder for reasons I can't explain, but it still seems to work just fine.
 
-Gameplan is to use a factory to generate codemons, make the factory a singleton, make codemons following the decorator design pattern (to handle evolutions), and have the game cycle between various states as the game switches between exploration, battle, battle menu (healing through this), etc. 
+Gameplan is to use a factory to generate codemons, moves, and trainers, make the factories singletons, make codemons following the decorator design pattern (to handle evolutions), and have the game cycle between various states as the game switches between exploration, battle, battle menu (healing through this), etc. 
 
 Changes I have made that deviate from the requirements:
 -Codemons learn up to 6 moves.

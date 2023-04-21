@@ -62,7 +62,9 @@ public class CleanupPhase implements AbstractPhase {
                 else if(trainers[i] instanceof ComputerEntity) {
                     int totalMoney = 0;
                     for(Codemon mon : trainers[i].getTrainer().getMons()) {
-                        totalMoney += mon.getExp() / 2;
+                        if(mon != null) {
+                            totalMoney += mon.getExp() / 2;
+                        }
                     }
                     acquired.add(new Money(totalMoney));
                 }
@@ -72,9 +74,13 @@ public class CleanupPhase implements AbstractPhase {
     
     private void cleanCombatModifiers() {
         for(TrainerEntity t : trainers) {
-            for(Codemon mon : t.getTrainer().getMons()) {
-                mon.refreshScene();
-                mon.resetTempStats();
+            if(t != null) {
+                for(Codemon mon : t.getTrainer().getMons()) {
+                    if(mon != null) {
+                        mon.refreshScene();
+                        mon.resetTempStats();
+                    }
+                }
             }
         }
     }
@@ -154,11 +160,13 @@ public class CleanupPhase implements AbstractPhase {
     private void checkEvolutions(TrainerEntity t) {
         for(int i = 0; i < t.getTrainer().getMons().length; ++i) {
             Codemon mon = t.getTrainer().getMons()[i];
-            if(mon.canEvolve()) {
-                ui.display(mon.getName() + " is evolving!");
-                EvolvedCodemon e = mon.evolve();
-                t.getTrainer().replaceMon(e, i);
-                ui.display("It became " + mon.getName() + "!");
+            if(mon != null) {
+                if(mon.canEvolve()) {
+                    ui.display(mon.getName() + " is evolving!");
+                    EvolvedCodemon e = mon.evolve();
+                    t.getTrainer().replaceMon(e, i);
+                    ui.display("It became " + mon.getName() + "!");
+                }
             }
         }
     }

@@ -305,7 +305,10 @@ public class Codemon extends Acquirable {
     
     public void refreshScene() {
         for(int i = 0; i < moves.length; ++i) {
-            moves[i].refreshScene();
+            if(moves[i] != null) {
+                moves[i].refreshScene();
+            }
+            
         }
     }
     
@@ -350,7 +353,7 @@ public class Codemon extends Acquirable {
     public String getDescription() {
         String output = "";
         output += this.getName() + ": a lvl. " + this.getLvl() + " " + 
-        this.getType().toString() + "codemon.";
+        this.getType().toString() + " codemon.";
         
         return output;
     }

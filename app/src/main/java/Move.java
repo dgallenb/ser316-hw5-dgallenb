@@ -49,7 +49,14 @@ public class Move {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if(description == "") {
+            this.description = name + ": a DB" + db + " move. AC" + ac + 
+                    ". Usable " + frequency.toString() + ". ";
+        }
+        else {
+            this.description = description;
+        }
+        
     }
 
     public int getDb() {

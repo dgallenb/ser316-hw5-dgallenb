@@ -71,6 +71,16 @@ public class Item extends Acquirable {
         case "XSpeed":
             c.applyCombatStage(3);
             return true; 
+        case "Move Stone":
+            Move m = MoveFactory.getInstance().generateMove(1, c.getType().getTypeNum());
+            return c.addMove(m);
+        case "Mighty Move Stone":
+            m = MoveFactory.getInstance().generateMove(2, c.getType().getTypeNum());
+            return c.addMove(m);
+        case "Epic Move Stone":
+            m = MoveFactory.getInstance().generateMove(3, c.getType().getTypeNum());
+            return c.addMove(m);
+            
         default:
             return false;
         }

@@ -60,7 +60,7 @@ public class EndPhase implements AbstractPhase {
                 t.getTrainer().switchMons(0, newIndex);
             }
         }
-        return this;
+        return nextPhase(acquired);
     }
 
     @Override

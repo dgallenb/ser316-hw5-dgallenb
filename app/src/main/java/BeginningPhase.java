@@ -168,9 +168,11 @@ public class BeginningPhase implements AbstractPhase {
     public void displayPrePhaseDialogue() {
         String s = "";
         for(TrainerEntity t : trainers) {
-            s += t.getTrainer().getName() + " has " + t.getFrontMon().getName();
-            s += " (" + t.getFrontMon().getCurrentHP() + 
-                    "/" + t.getFrontMon().getHp() + ").\n";
+            if( t != null ) {
+                s += t.getTrainer().getName() + " has " + t.getFrontMon().getName();
+                s += " (" + t.getFrontMon().getCurrentHP() + 
+                        "/" + t.getFrontMon().getHp() + ").\n";
+            }
         }
         
         ui.display(s);

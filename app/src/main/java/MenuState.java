@@ -39,10 +39,11 @@ public class MenuState implements GameState {
      * 
      */
     @Override
-    public TrainerEntity[] processState() {
+    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+        this.trainers = trainers;
         handleBaseMenu();
         
-        return trainers;
+        return this.trainers;
     }
     
     public int handleBaseMenu() {

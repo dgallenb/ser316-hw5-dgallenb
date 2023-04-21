@@ -12,7 +12,8 @@ public class ShopState implements GameState {
     }
 
     @Override
-    public TrainerEntity[] processState() {
+    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+        this.trainers = trainers;
         if(weather.isDay()) {
             shopOpen();
         }
@@ -20,7 +21,7 @@ public class ShopState implements GameState {
             shopClosed();
         }
         
-        return trainers;
+        return this.trainers;
     }
    
     public void shopOpen() {

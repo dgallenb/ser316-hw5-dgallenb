@@ -20,7 +20,8 @@ public class ExploreState implements GameState {
     }
 
     @Override
-    public TrainerEntity[] processState() {
+    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+        this.trainers = trainers;
         advanceTime();
         String s = "";
         int choice = exploreMenu();
@@ -40,7 +41,7 @@ public class ExploreState implements GameState {
         case 5: 
             break;
         }
-        
+        ui.display(s);
         return trainers;
     }
     
@@ -126,9 +127,14 @@ public class ExploreState implements GameState {
         else {
             weather.setDay(true);
             for(TrainerEntity t : trainers) {
-                for(Codemon mon : t.getTrainer().getMons()) {
-                    mon.refresh();
-                    mon.healTick();
+                if(t != null) {
+                    for(Codemon mon : t.getTrainer().getMons()) {
+                        if(mon != null) {
+                            mon.refresh();
+                            mon.healTick();
+                        }
+                        
+                    }
                 }
             }
             weather.transition();

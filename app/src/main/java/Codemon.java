@@ -56,6 +56,7 @@ public class Codemon extends Acquirable {
         this.evolve = false;
         this.moves = moves;
         bonusStatChance = new double[] {0, 0, 0, 0};
+        this.name = Utility.getTypedName(type);
     }
     
     public Codemon(Codemon basemon) {
@@ -316,7 +317,9 @@ public class Codemon extends Acquirable {
     
     public void refresh() {
         for(int i = 0; i < moves.length; ++i) {
-            moves[i].refresh();
+            if(moves[i] != null ) {
+                moves[i].refresh();
+            }
         }
     }
     

@@ -13,14 +13,24 @@ public class TextUI implements UI {
 
     @Override
     public int getInt(int min, int max) {
-        int input = s.nextInt();
+        
+        int input = getInt();
         while(true) {
             if((input <= max) && (input >= min)) {
                 break;
             }
-            input = s.nextInt();
+            display("Please input a value in the specified range");
+            input = getInt();
         }
         return input;
+    }
+    
+    private int getInt() {
+        while(!s.hasNextInt()) {
+            s.nextLine();
+            display("Please input a valid value.");
+        }
+        return s.nextInt();
     }
 
     @Override

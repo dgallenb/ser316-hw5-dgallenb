@@ -11,7 +11,7 @@ public class BaseState implements GameState {
     }
     
     @Override
-    public TrainerEntity[] processState() {
+    public TrainerEntity[] processState(TrainerEntity[] trainers) {
         baseMenu();
         return trainers;
     }

@@ -15,13 +15,14 @@ public class GamePlay {
     public GamePlay(HumanTrainerEntity t) {
         trainers = new TrainerEntity[2];
         trainers[0] = t;
+        trainers[1] = null;
         weather = new Weather(0);
+        weather.setDay(false);
         ui = new TextUI();
         baseState = new BaseState(trainers, ui);
         menuState = new MenuState(trainers, ui, weather);
         exploreState = new ExploreState(trainers, ui, weather);
-        battleState = new BattleState(t, t, ui, weather); // dummy constructor, because
-        // battle state needs two trainers to enter it.
+        battleState = new BattleState(trainers, ui, weather); 
         shopState = new ShopState(trainers, ui, weather);
         state = baseState;
         
@@ -31,7 +32,7 @@ public class GamePlay {
     public void play() {
         while(true) {
             
-            trainers = state.processState();
+            trainers = state.processState(trainers);
             
             transition();          
         }

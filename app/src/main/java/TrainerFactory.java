@@ -18,8 +18,9 @@ public class TrainerFactory {
         t.setName(getTrainerName());
         int monCount = Utility.d(3);
         for(int i = 1; i <= monCount; ++i) {
+            int actualTarget = Math.max(1, targetLvl - 1 - i);
             Codemon c = CodemonFactory.getInstance().
-                    generateCodemonWithT1Moves(targetLvl - 1 - i);
+                    generateCodemonWithT1Moves(actualTarget);
             t.addMon(c);
         }
         

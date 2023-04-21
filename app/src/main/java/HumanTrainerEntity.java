@@ -10,7 +10,7 @@ public class HumanTrainerEntity extends TrainerEntity {
     @Override
     public int decideBeginning() {
         String s = "";
-        s += "1. Use item.\n 2. Switch codemon. \n";
+        s += "1. Use item.\n2. Switch codemon. \n";
         s += "3. Focused training. \n4. Inspired training. \n";
         s += "5. Brutal training. \n6. Agility training. \n";
         ui.display(s);

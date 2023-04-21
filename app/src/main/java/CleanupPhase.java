@@ -31,6 +31,7 @@ public class CleanupPhase implements AbstractPhase {
     /**
      * 1. Remove ded trainers
      * 2. If the player is ded, return DeadPhase so the gamestate knows to transition.
+     * 3. Clean up each trainer's temp effects.
      * 3. Award money and items and codemons.
      * 4. Check for evolutions. If needed, perform them.
      */
@@ -38,6 +39,7 @@ public class CleanupPhase implements AbstractPhase {
     public AbstractPhase performPhase() {
         displayPrePhaseDialogue();
         deadCheck();
+        cleanCombatModifiers();
         if(nextPhase != 5) {
             processRewards(trainers[0]);
             checkEvolutions(trainers[0]);
@@ -64,6 +66,15 @@ public class CleanupPhase implements AbstractPhase {
                     }
                     acquired.add(new Money(totalMoney));
                 }
+            }
+        }
+    }
+    
+    private void cleanCombatModifiers() {
+        for(TrainerEntity t : trainers) {
+            for(Codemon mon : t.getTrainer().getMons()) {
+                mon.refreshScene();
+                mon.resetTempStats();
             }
         }
     }

@@ -7,7 +7,7 @@ public class Item extends Acquirable {
     
     public Item() {
         this.quantity = 1;
-        this.name = "Mysterious berry";
+        this.name = "Mysterious Berry";
         this.description = "It probably does something. Who knows?";
     }
     
@@ -42,12 +42,40 @@ public class Item extends Acquirable {
     }
 
     public boolean use(Codemon c) {
-        return true;
+        switch(this.name) {
+        case "Potion":
+            if(c.getCurrentHP() >= c.getHp()) {
+                return false;
+            }
+            c.heal(20);
+            return true;
+        case "Mysterious Berry":
+            if(c.getCurrentHP() >= c.getHp()) {
+                return false;
+            }
+            c.heal(100);
+            return true;
+        case "XAttack":
+            c.applyCombatStage(1);
+            return true;
+        case "XDefend":
+            c.applyCombatStage(2);
+            return true;
+        case "XSpeed":
+            c.applyCombatStage(3);
+            return true; 
+        default:
+            return false;
+        }
     }
     
     public boolean consume() {
         quantity--;
         
         return false;
+    }
+    
+    public String toString() {
+        return this.getName() + " (" + this.getQuantity() + "): " + this.getDescription();
     }
 }

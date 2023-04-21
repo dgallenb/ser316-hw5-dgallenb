@@ -300,6 +300,12 @@ public class Codemon extends Acquirable {
         }
     }
     
+    public void resetTempStats() {
+        for(int j = 0; j < tempStats.length; ++j) {
+            tempStats[j] = 0;
+        }
+    }
+    
     public void refresh() {
         for(int i = 0; i < moves.length; ++i) {
             moves[i].refresh();

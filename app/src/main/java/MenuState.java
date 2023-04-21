@@ -1,10 +1,12 @@
 
 public class MenuState implements GameState {
     protected TrainerEntity player;
+    protected TrainerEntity[] trainers;
     protected UI ui;
     
-    public MenuState(TrainerEntity t, UI ui) {
-        player = t;
+    public MenuState(TrainerEntity[] t, UI ui) {
+        player = t[0];
+        this.trainers = t;
         this.ui = ui;
     }
 
@@ -38,13 +40,12 @@ public class MenuState implements GameState {
     public TrainerEntity[] processState() {
         handleBaseMenu();
         
-        TrainerEntity[] output = new TrainerEntity[1];
-        output[0] = player;
-        return output;
+        return trainers;
     }
     
     public int handleBaseMenu() {
         String s = "";
+        s += player.getTrainer().getName() + ": $" + player.getTrainer().getMoney();
         s += "Menu options: \n" + "1. Codemon\n" + "2. Items\n" + "3. Back";
         ui.display(s);
         int choice = ui.getInt(1, 3);
@@ -132,37 +133,11 @@ public class MenuState implements GameState {
     }
     
     public void handleSwitchMenu() {
-        String s = "";
-        s += "Choose a Codemon: \n";
-        for(int i = 0; i < player.getTrainer().getMons().length; ++i) {
-            if( player.getTrainer().getMons()[i] != null) {
-                s += "" + (i + 1) + ". " + 
-                        player.getTrainer().getMons()[i].getName() + "\n";
-            }
-        }
-        ui.display(s);
-        int choice1 = ui.getInt(1, player.getTrainer().getMonCount());
-        if(player.getTrainer().getMons()[choice1 - 1] == null) {
-            ui.display("Error: ghost codemon detected!");
-            handleSwitchMenu();
-            return;
-        }
-        else {
-            ui.display("Choose another Codemon:");
-            int choice2 = ui.getInt(1, player.getTrainer().getMonCount());
-            while(true) {
-                if((choice2 != choice1) && 
-                        (player.getTrainer().getMons()[choice2 - 1] != null)) {
-                        break;
-                }
-                else {
-                    ui.display("Invalid selection! Choose another Codemon:");
-                    choice2 = ui.getInt(1, player.getTrainer().getMonCount());
-                }
-            
-            }
-            player.getTrainer().switchMons(choice1, choice2);
-        }
+        ((HumanTrainerEntity) player).handleSwitchMenu();
+    }
+    
+    public void handleItemsMenu() {
+        ((HumanTrainerEntity) player).handleItemsMenu();
     }
     
     public void pat(int index) {
@@ -170,71 +145,7 @@ public class MenuState implements GameState {
         ui.display("You pat " + mon.getName() + " on the head. They trill contentedly.\n");
     }
     
-    public void handleItemsMenu() {
-        String s = "";
-        s += "Choose an item: \n";
-        for(int i = 0; i < player.getTrainer().countItems(); ++i) {
-            Item item = player.getTrainer().getItem(i);
-            s += "" + (i + 1) + item.getName() + "\n";
-        }
-        s += "" + (player.getTrainer().countItems() + 1) + ". Back\n";
-        ui.display(s);
-        int choice = ui.getInt(1,  player.getTrainer().countItems() + 1);
-        if(choice == player.getTrainer().countItems() + 1) {
-            handleBaseMenu();
-        }
-        else {
-            handleItemSpecificMenu(choice - 1);
-        }
-    }
     
-    public void handleItemSpecificMenu(int index) {
-        String s = player.getTrainer().getItem(index).toString() + "\n";
-        s += "1. Use\n" + "2. Back";
-        ui.display(s);
-        int choice = ui.getInt(1, 2);
-        if(choice == 1) {
-            handleUseItemMenu(index);
-        }
-        else {
-            handleItemsMenu();
-        }
-    }
-    
-    public void handleUseItemMenu(int index) {
-        String s = "";
-        s += "Choose a Codemon: \n";
-        for(int i = 0; i < player.getTrainer().getMons().length; ++i) {
-            if( player.getTrainer().getMons()[i] != null) {
-                s += "" + (i + 1) + ". " + 
-                        player.getTrainer().getMons()[i].getName() + "\n";
-            }
-        }
-        s += "" + (player.getTrainer().getMonCount() + 1) + ". Back\n";
-        ui.display(s);
-        int choice = ui.getInt(1, player.getTrainer().getMonCount() + 1);
-        if(choice == (player.getTrainer().getMonCount() + 1)) {
-            handleItemSpecificMenu(index);
-        }
-        else {
-            boolean result = player.getTrainer().getItem(index).
-                    use(player.getTrainer().getMons()[choice]);
-            if(result) {
-                player.getTrainer().getItem(index).consume();
-                if(player.getTrainer().getItem(index).getQuantity() < 1) {
-                    player.getTrainer().removeItem(index);
-                }
-                ui.display("Used " + player.getTrainer().getItem(index) + " on " + 
-                        player.getTrainer().getMons()[choice]);                
-            }
-            else {
-                ui.display("You can't use " + player.getTrainer().getItem(index) + " on " + 
-                        player.getTrainer().getMons()[choice]);
-            }
-            handleItemsMenu();
-        }
-        
-    }
     
     /**
      * Returns A, B, C, D, E, or F

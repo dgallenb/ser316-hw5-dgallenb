@@ -76,10 +76,11 @@ public class MoveFactory {
                 break;
             
         }
+        int ac = Utility.d(3) + 1;
         String description = name + ": A DB" + db + " " + type.toString() + 
-                " move. Usable " + frequencyDesc + ".";
+                " move. AC: " + ac + ". Usable " + frequencyDesc + ".";
         // (String name, String description, int db, Frequency frequency, MonType type)
-        return new Move(name, description, db, new Frequency(freq), type);
+        return new Move(name, description, db, ac, new Frequency(freq), type);
     }
     
 }

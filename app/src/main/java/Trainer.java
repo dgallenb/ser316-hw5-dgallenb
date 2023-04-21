@@ -122,6 +122,12 @@ public class Trainer {
         return true;
     }
     
+    public void healAll() {
+        for(Codemon mon : mons) {
+            mon.heal();
+        }
+    }
+    
     /**
      * Reorders mons so that the null slots are all in back
      */

@@ -3,7 +3,6 @@ public class ComputerEntity extends TrainerEntity {
 
     public ComputerEntity(Trainer t) {
         super(t);
-        // TODO Auto-generated constructor stub
     }
 
     /**

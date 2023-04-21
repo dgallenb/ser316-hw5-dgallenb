@@ -9,9 +9,125 @@ public class HumanTrainerEntity extends TrainerEntity {
 
     @Override
     public int decideBeginning() {
-        int input = ui.getInt(0, 11);
+        String s = "";
+        s += "1. Use item.\n 2. Switch codemon. \n";
+        s += "3. Focused training. \n4. Inspired training. \n";
+        s += "5. Brutal training. \n6. Agility training. \n";
+        ui.display(s);
+        int input = ui.getInt(1, 6);
+        switch(input) {
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            return input;
+        case 1:
+            handleItemsMenu();
+            return 1;
+        case 2:
+            handleSwitchMenu();
+            
+        }
         // TODO Auto-generated method stub
         return input;
+    }
+    
+    public void handleSwitchMenu() {
+        String s = "";
+        s += "Choose a Codemon: \n";
+        for(int i = 0; i < getTrainer().getMons().length; ++i) {
+            if(getTrainer().getMons()[i] != null) {
+                s += "" + (i + 1) + ". " + getTrainer().getMons()[i].getName() + "\n";
+            }
+        }
+        ui.display(s);
+        int choice1 = ui.getInt(1, getTrainer().getMonCount());
+        if(getTrainer().getMons()[choice1 - 1] == null) {
+            ui.display("Error: ghost codemon detected!");
+            handleSwitchMenu();
+            return;
+        }
+        else {
+            ui.display("Choose another Codemon:");
+            int choice2 = ui.getInt(1, getTrainer().getMonCount());
+            while(true) {
+                if((choice2 != choice1) && 
+                        (getTrainer().getMons()[choice2 - 1] != null)) {
+                        break;
+                }
+                else {
+                    ui.display("Invalid selection! Choose another Codemon:");
+                    choice2 = ui.getInt(1, getTrainer().getMonCount());
+                }
+            
+            }
+            getTrainer().switchMons(choice1, choice2);
+        }
+    }
+    
+    public void handleItemsMenu() {
+        String s = "";
+        s += "Choose an item: \n";
+        for(int i = 0; i <  getTrainer().countItems(); ++i) {
+            Item item =  getTrainer().getItem(i);
+            s += "" + (i + 1) + item.getName() + "\n";
+        }
+        s += "" + ( getTrainer().countItems() + 1) + ". Back\n";
+        ui.display(s);
+        int choice = ui.getInt(1,   getTrainer().countItems() + 1);
+        if(choice ==  getTrainer().countItems() + 1) {
+            return;
+        }
+        else {
+            handleItemSpecificMenu(choice - 1);
+        }
+    }
+    
+    public void handleItemSpecificMenu(int index) {
+        String s =  getTrainer().getItem(index).toString() + "\n";
+        s += "1. Use\n" + "2. Back";
+        ui.display(s);
+        int choice = ui.getInt(1, 2);
+        if(choice == 1) {
+            handleUseItemMenu(index);
+        }
+        else {
+            handleItemsMenu();
+        }
+    }
+    
+    public void handleUseItemMenu(int index) {
+        String s = "";
+        s += "Choose a Codemon: \n";
+        for(int i = 0; i <  getTrainer().getMons().length; ++i) {
+            if(  getTrainer().getMons()[i] != null) {
+                s += "" + (i + 1) + ". " + 
+                         getTrainer().getMons()[i].getName() + "\n";
+            }
+        }
+        s += "" + ( getTrainer().getMonCount() + 1) + ". Back\n";
+        ui.display(s);
+        int choice = ui.getInt(1,  getTrainer().getMonCount() + 1);
+        if(choice == ( getTrainer().getMonCount() + 1)) {
+            handleItemSpecificMenu(index);
+        }
+        else {
+            boolean result =  getTrainer().getItem(index).
+                    use( getTrainer().getMons()[choice]);
+            if(result) {
+                 getTrainer().getItem(index).consume();
+                if( getTrainer().getItem(index).getQuantity() < 1) {
+                     getTrainer().removeItem(index);
+                }
+                ui.display("Used " +  getTrainer().getItem(index) + " on " + 
+                         getTrainer().getMons()[choice]);                
+            }
+            else {
+                ui.display("You can't use " +  getTrainer().getItem(index) + " on " + 
+                         getTrainer().getMons()[choice]);
+            }
+            handleItemsMenu();
+        }
     }
 
     @Override

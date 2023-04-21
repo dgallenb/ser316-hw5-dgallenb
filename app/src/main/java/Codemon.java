@@ -245,6 +245,14 @@ public class Codemon extends Acquirable {
     }
     
     /**
+     * Heals the pokemon by its tick value (10% of its health)
+     * @return The total amount healed.
+     */
+    public int healTick() {
+        return heal(this.getHp() / 10);
+    }
+    
+    /**
      * 
      * @param index of the codemon's move.
      * @param weather

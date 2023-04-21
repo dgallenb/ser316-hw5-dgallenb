@@ -137,7 +137,7 @@ public class BeginningPhase implements AbstractPhase {
     public int queryUser() {
         int[] choices = new int[trainers.length];
         for(int i = 0; i < trainers.length; ++i) {
-            choices[i] = trainers[i].decideInput(0);
+            choices[i] = trainers[i].decideBeginning();
         }
         
         for(int i = 0; i < choices.length; ++i) {
@@ -172,10 +172,6 @@ public class BeginningPhase implements AbstractPhase {
             s += " (" + t.getFrontMon().getCurrentHP() + 
                     "/" + t.getFrontMon().getHp() + ").\n";
         }
-        
-        s += "1. Use item.\n 2. Switch codemon. \n";
-        s += "3. Focused training. \n4. Inspired training. \n";
-        s += "5. Brutal training. \n6. Agility training. \n";
         
         ui.display(s);
         queryUser();

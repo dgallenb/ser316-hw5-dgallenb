@@ -45,16 +45,16 @@ public class GamePlay {
             state = baseState;
             break;
         case 1:
-            state = menuState;
+            state = exploreState; 
             break;
         case 2: 
-            state = exploreState;
+            state = shopState;
             break;
         case 3: 
-            state = battleState;
+            state = menuState;
             break;
         case 4:
-            state = shopState;
+            state = battleState;
         }
     }
     

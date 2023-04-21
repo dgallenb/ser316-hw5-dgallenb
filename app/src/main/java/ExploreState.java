@@ -98,7 +98,7 @@ public class ExploreState implements GameState {
     }
     
     private void prepWildCodemon(double[] typeTable) {
-        nextState = 3;
+        nextState = 4;
         int typeVal = Utility.rollOnTable(typeTable);
         int lvl = Math.max(trainers[0].getFrontMon().getLvl() - Utility.d(6), 2);
         int exp = Utility.getExpFromLevel(lvl);
@@ -110,7 +110,7 @@ public class ExploreState implements GameState {
     }
     
     private void prepTrainer(int targetLvl) {
-        nextState = 3;
+        nextState = 4;
         Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(targetLvl);
         TrainerEntity player = trainers[0];
         trainers = new TrainerEntity[2];

@@ -47,7 +47,7 @@ public class MenuState implements GameState {
     
     public int handleBaseMenu() {
         String s = "";
-        s += player.getTrainer().getName() + ": $" + player.getTrainer().getMoney();
+        s += player.getTrainer().getName() + ": $" + player.getTrainer().getMoney() + "\n";
         s += "Menu options: \n" + "1. Codemon\n" + "2. Items\n" + "3. Back";
         ui.display(s);
         int choice = ui.getInt(1, 3);
@@ -169,6 +169,11 @@ public class MenuState implements GameState {
         default:
             return "F";
         }
+    }
+
+    @Override
+    public int nextState() {
+        return 0;
     }
 
 }

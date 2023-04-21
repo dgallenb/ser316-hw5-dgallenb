@@ -385,9 +385,11 @@ public class Codemon extends Acquirable {
         int[] output = new int[sum];
         int index = 0;
         for(int i = 0; i < moves.length; ++i) {
-            if(moves[i].isAvailable()) {
-                output[index] = i;
-                ++index;
+            if(moves[i] != null) {
+                if(moves[i].isAvailable()) {
+                    output[index] = i;
+                    ++index;
+                }
             }
         }
         return output;

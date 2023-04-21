@@ -13,6 +13,8 @@ public class BeginningPhase implements AbstractPhase {
         this.trainers[1] = t2;
         this.ui = ui;
         acquired = new ArrayList<Acquirable>();
+        this.nextPhase = 1;
+        this.weather = w;
     }
     
     public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
@@ -21,7 +23,9 @@ public class BeginningPhase implements AbstractPhase {
         this.trainers[0] = t1;
         this.trainers[1] = t2;
         this.ui = ui;
+        this.nextPhase = 1;
         acquired = a;
+        this.weather = w;
     }
     
     public TrainerEntity[] getTrainers() {
@@ -82,35 +86,37 @@ public class BeginningPhase implements AbstractPhase {
             s += "just wants to attack. \n";
             break;
         case 1:
+            // already handled inside the TrainerEntity.
         case 2:
-        case 3:
-        case 4:
-        case 5:
+            // already handled inside the TrainerEntity.
+            /*
             t.getTrainer().switchMons(0, choice);
             s += "switched to " + t.getFrontMon().getName();
             break;
-        case 6:
+            */
+        case 3:
             s += "used focused training.\n";
             t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 0, 1, 0});
             break;
-        case 7:
+        case 4:
             s += "used inspired training. \n";
             t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 1, 0, 0, 0});
             break;
-        case 8:
+        case 5:
             s += "used brutal training. \n";
             t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 0, 0, 1});
             break;
-        case 9:
+        case 6:
             s += "used agility training. \n";
             t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 1, 0, 0});
             break;
-        case 10:
+        case 7:
+            /*
             s += "used a potion.\n";
             int healed = t.getFrontMon().heal(20);
             s += t.getFrontMon().getName() + " healed by " + healed + ".\n";
             break;
-        case 11:
+            */
             s += "used a capture stone.\n";
             if(t instanceof WildEntity) {
                 boolean captureResult = t.getFrontMon().attemptCapture();
@@ -176,7 +182,6 @@ public class BeginningPhase implements AbstractPhase {
         }
         
         ui.display(s);
-        queryUser();
     }
 
 }

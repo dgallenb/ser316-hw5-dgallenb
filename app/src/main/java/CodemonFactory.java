@@ -32,7 +32,7 @@ public class CodemonFactory {
     
     public Codemon generateCodemonWithT1Moves(int monType, int exp) {
         int moves = Utility.d(4);
-        return generateCodemonWithT1Moves(monType, 5, 5, 5, 5, moves, exp);
+        return generateCodemonWithT1Moves(monType, 25, 5, 5, 5, moves, exp);
     }
     
     public Codemon generateCodemonWithT1Moves(int lvl) {

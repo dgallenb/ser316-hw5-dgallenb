@@ -139,7 +139,7 @@ public class BattlePhase implements AbstractPhase {
     public int queryUser() {
         int[] choices = new int[trainers.length];
         for(int i = 0; i < trainers.length; ++i) {
-            choices[i] = trainers[i].decideInput(0);
+            choices[i] = trainers[i].decideInput(1);
         }   
         // Note: kludge time. Assume human player is first in decisions in choices,
         // and that there's only one player out of the two.

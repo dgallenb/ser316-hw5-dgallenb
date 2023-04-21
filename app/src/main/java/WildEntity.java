@@ -3,6 +3,7 @@ public class WildEntity extends TrainerEntity {
 
     public WildEntity(Trainer t) {
         super(t);
+        this.trainer.setName("");
     }
 
     public int decideSwitch() {

@@ -88,6 +88,7 @@ public class Trainer {
         else {
             mons[monCount] = mon;
             ++monCount;
+            //fixMonOrder();
             return true;
         }
     }

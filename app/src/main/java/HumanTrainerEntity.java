@@ -13,13 +13,15 @@ public class HumanTrainerEntity extends TrainerEntity {
         s += "1. Use item.\n2. Switch codemon. \n";
         s += "3. Focused training. \n4. Inspired training. \n";
         s += "5. Brutal training. \n6. Agility training. \n";
+        s += "7. Use a Capture Stone.\n";
         ui.display(s);
-        int input = ui.getInt(1, 6);
+        int input = ui.getInt(1, 7);
         switch(input) {
         case 3:
         case 4:
         case 5:
         case 6:
+        case 7:
             return input;
         case 1:
             handleItemsMenu();
@@ -132,7 +134,16 @@ public class HumanTrainerEntity extends TrainerEntity {
 
     @Override
     public int decideInput(int phase) {
-        // TODO Auto-generated method stub
+        switch(phase) {
+        case 0:
+            return decideBeginning();
+        case 1:
+            return decideBattle();
+        case 2:
+            return forceSwitch();
+        case 3:
+            return 0;
+        }
         return 0;
     }
 

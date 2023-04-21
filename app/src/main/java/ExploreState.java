@@ -7,8 +7,7 @@ public class ExploreState implements GameState {
     protected int mountainExplored;
     protected int cityExplored;
     protected TrainerEntity newFoe;
-    protected boolean day;
-    protected boolean shopNext;
+    protected int nextState;
     
     public ExploreState(TrainerEntity[] trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
@@ -17,16 +16,7 @@ public class ExploreState implements GameState {
         this.forestExplored = 0;
         this.mountainExplored = 0;
         this.cityExplored = 0;
-        day = true;
-        shopNext = false;
-    }
-    
-    public boolean isShopNext() {
-        return shopNext;
-    }
-
-    public void setShopNext(boolean shopNext) {
-        this.shopNext = shopNext;
+        this.nextState = 0;
     }
 
     @Override
@@ -45,10 +35,10 @@ public class ExploreState implements GameState {
             s += exploreCity();
             break;
         case 4:
-            shopNext = true;
+            rest();
             break;
         case 5: 
-            rest();
+            break;
         }
         
         return trainers;
@@ -59,10 +49,12 @@ public class ExploreState implements GameState {
         ui.display("Your codemons returned to full health...but at what cost?");
     }
     
-    public int exploreMenu() {
-        String s = "The weather is " + weather.toString() + "\n";
+    public int exploreMenu() {   
+        String s = "";
+        String dayString = weather.isDay() ? "today" : "tonight";
+        s += "The weather " + dayString + "  is " + weather.toString() + "\n";
         s += "Choose an area to explore:\n";
-        s += "1. Forest\n" + "2. Mountain\n" + "3. City\n" + "4. Shop\n" + "5. Rest\n";
+        s += "1. Forest\n" + "2. Mountain\n" + "3. City\n" + "4. Rest\n" + "5. Back\n";
         ui.display(s);
         return ui.getInt(1, 5);
     }
@@ -106,6 +98,7 @@ public class ExploreState implements GameState {
     }
     
     private void prepWildCodemon(double[] typeTable) {
+        nextState = 3;
         int typeVal = Utility.rollOnTable(typeTable);
         int lvl = Math.max(trainers[0].getFrontMon().getLvl() - Utility.d(6), 2);
         int exp = Utility.getExpFromLevel(lvl);
@@ -117,6 +110,7 @@ public class ExploreState implements GameState {
     }
     
     private void prepTrainer(int targetLvl) {
+        nextState = 3;
         Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(targetLvl);
         TrainerEntity player = trainers[0];
         trainers = new TrainerEntity[2];
@@ -125,12 +119,12 @@ public class ExploreState implements GameState {
     }
     
     public void advanceTime() {
-        if(day) {
-            day = !day;
+        if(weather.isDay()) {
+            weather.setDay(false);
             weather.transition();
         }
-        else if(!day) {
-            day = !day;
+        else {
+            weather.setDay(true);
             for(TrainerEntity t : trainers) {
                 for(Codemon mon : t.getTrainer().getMons()) {
                     mon.refresh();
@@ -142,21 +136,9 @@ public class ExploreState implements GameState {
     }
 
     @Override
-    public void moveState() {
+    public int nextState() {
         // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public String displayMenu() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void executeMenuOption(int option) {
-        // TODO Auto-generated method stub
-
+        return nextState;
     }
 
 }

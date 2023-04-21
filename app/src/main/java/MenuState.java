@@ -3,11 +3,13 @@ public class MenuState implements GameState {
     protected TrainerEntity player;
     protected TrainerEntity[] trainers;
     protected UI ui;
+    protected Weather weather;
     
-    public MenuState(TrainerEntity[] t, UI ui) {
+    public MenuState(TrainerEntity[] t, UI ui, Weather weather) {
         player = t[0];
         this.trainers = t;
         this.ui = ui;
+        this.weather = weather;
     }
 
     /*
@@ -167,24 +169,6 @@ public class MenuState implements GameState {
         default:
             return "F";
         }
-    }
-
-    @Override
-    public void moveState() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public String displayMenu() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void executeMenuOption(int option) {
-        // TODO Auto-generated method stub
-
     }
 
 }

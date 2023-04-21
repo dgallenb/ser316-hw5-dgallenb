@@ -3,6 +3,7 @@ public class Weather {
     // types of weather: clear, cloudy, rainy, windy, stormy, snowy, eclipse
     
     protected int type;
+    protected boolean day;
     
     public Weather(int i) {
         setType(i);
@@ -12,6 +13,14 @@ public class Weather {
         setType(s);
     }
     
+    public boolean isDay() {
+        return day;
+    }
+
+    public void setDay(boolean day) {
+        this.day = day;
+    }
+
     public void setType(int i) {
         if((i < 0) || (i > 6)) {
             type = 0;

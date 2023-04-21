@@ -4,15 +4,17 @@
 
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
     
     public void println(String text) {
         System.out.println(text);
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        
+        Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(5);
+        t.setName("Player");
+        HumanTrainerEntity player = new HumanTrainerEntity(t);
+        GamePlay game = new GamePlay(player);
+        game.play();
     }
 }

@@ -4,6 +4,7 @@ public class BattleState implements GameState {
     protected Weather weather;
     protected UI ui;
     protected AbstractPhase phase;
+    protected int nextState;
     
     /*
      * Steps of a turn:
@@ -23,6 +24,7 @@ public class BattleState implements GameState {
         this.weather = weather;
         this.ui = ui;
         phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
+        this.nextState = 0;
     }
     
     public BattleState(TrainerEntity t1, TrainerEntity t2, UI ui, Weather weather) {
@@ -32,6 +34,7 @@ public class BattleState implements GameState {
         this.weather = weather;
         this.ui = ui;
         phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
+        this.nextState = 0;
     }
 
 
@@ -63,27 +66,8 @@ public class BattleState implements GameState {
         return null;
     }
 
-
     @Override
-    public void moveState() {
-        // TODO Auto-generated method stub
-        
+    public int nextState() {
+        return nextState;
     }
-
-
-    @Override
-    public String displayMenu() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public void executeMenuOption(int option) {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    
-    
 }

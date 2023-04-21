@@ -24,6 +24,10 @@ public class Item extends Acquirable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    
+    public void addQuantity(int quantityAdded) {
+        this.quantity += quantityAdded;
+    }
 
     public String getName() {
         return name;
@@ -42,6 +46,9 @@ public class Item extends Acquirable {
     }
 
     public boolean use(Codemon c) {
+        if(quantity < 1) {
+            return false;
+        }
         switch(this.name) {
         case "Potion":
             if(c.getCurrentHP() >= c.getHp()) {

@@ -41,6 +41,10 @@ public class Trainer {
     public void setMoney(int money) {
         this.money = money;
     }
+    
+    public void addMoney(int moneyAdded) {
+        this.money += moneyAdded;
+    }
 
     public String getName() {
         return name;
@@ -51,7 +55,13 @@ public class Trainer {
     }
     
     public void addItem(Item i) {
-        items.add(i);
+        for(Item item : items) {
+            if(item.getName().equals(i.getName())) {
+                item.addQuantity(i.getQuantity());
+                return;
+            }
+        }
+        items.add(i); // only add if there's not already an item with this name
     }
     
     public Item getItem(int index) {

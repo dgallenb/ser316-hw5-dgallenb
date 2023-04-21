@@ -43,6 +43,11 @@ public class Move {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public String getFullDesc() {
+        return name + ": a " + this.type.toString() + " DB" + db + 
+                " move. AC" + ac + ". Usable " + frequency.toString() + ". ";
+    }
 
     public String getDescription() {
         return description;
@@ -118,6 +123,23 @@ public class Move {
         if(frequency.getTypeNum() != 3) {
             this.available = true;
             return true;
+        }
+        return false;
+    }
+    
+    public boolean equals(Object o) {
+        if(o instanceof Move) {
+            Move i = (Move) o;
+            if(i.getDb() == this.getDb()) {
+                if(i.getType().getTypeNum() == this.type.getTypeNum()) {
+                    if(i.getAc() == this.getAc()) {
+                        if(i.getFrequency().getTypeNum() == 
+                                frequency.getTypeNum()) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
         return false;
     }

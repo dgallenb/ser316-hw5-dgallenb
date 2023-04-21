@@ -56,7 +56,7 @@ public class Trainer {
     
     public void addItem(Item i) {
         for(Item item : items) {
-            if(item.getName().equals(i.getName())) {
+            if(item.equals(i)) {
                 item.addQuantity(i.getQuantity());
                 return;
             }

@@ -6,6 +6,7 @@ public class GamePlay {
     protected GameState exploreState;
     protected GameState battleState;
     protected GameState shopState;
+    protected GameState restState;
     
     protected GameState state;
     protected UI ui;
@@ -24,6 +25,7 @@ public class GamePlay {
         exploreState = new ExploreState(trainers, ui, weather);
         battleState = new BattleState(trainers, ui, weather); 
         shopState = new ShopState(trainers, ui, weather);
+        restState = new RestState(trainers, ui, weather);
         state = baseState;
         
         
@@ -55,7 +57,12 @@ public class GamePlay {
             state = menuState;
             break;
         case 4:
+            state = restState;            
+            break;
+        case 5:
+
             state = battleState;
+            break;
         }
     }
     

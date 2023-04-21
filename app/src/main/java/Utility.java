@@ -36,7 +36,7 @@ public class Utility {
             new String[] {"Occluded", "Dark", "Void", 
                     "Night", "Shadow", "Albedo", "Nebula"}
             };
-        int roll = (int) Math.random() * namePool[t.getTypeNum()].length;
+        int roll = (int) (Math.random() * namePool[t.getTypeNum()].length);
         return namePool[t.getTypeNum()][roll];
     }
     
@@ -46,7 +46,7 @@ public class Utility {
                         "Fang", "Slap", "Kick", "Bite", "Song", 
                         "Call", "Howl", "Drop", "Fall"
                         };
-            int roll = (int) Math.random() * namePool.length;
+            int roll = (int) (Math.random() * namePool.length);
             return namePool[roll];
     }
     

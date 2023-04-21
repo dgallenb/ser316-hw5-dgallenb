@@ -13,6 +13,8 @@ public class App {
         
         Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(5);
         t.setName("Player");
+        t.setMoney(20000);
+        t.addItem(new Item("Capture Stone", "Captures Codemon (probably)", 99));
         HumanTrainerEntity player = new HumanTrainerEntity(t);
         GamePlay game = new GamePlay(player);
         game.play();

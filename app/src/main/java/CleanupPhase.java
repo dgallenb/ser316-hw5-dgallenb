@@ -13,7 +13,7 @@ public class CleanupPhase implements AbstractPhase {
         this.trainers[1] = t2;
         this.ui = ui;
         this.weather = w;
-        this.nextPhase = 4;
+        this.nextPhase = 5;
         acquired = new ArrayList<Acquirable>();
     }
     
@@ -24,7 +24,7 @@ public class CleanupPhase implements AbstractPhase {
         this.trainers[1] = t2;
         this.ui = ui;
         this.weather = w;
-        this.nextPhase = 4;
+        this.nextPhase = 5;
         acquired = a;
     }
 
@@ -40,7 +40,7 @@ public class CleanupPhase implements AbstractPhase {
         displayPrePhaseDialogue();
         deadCheck();
         cleanCombatModifiers();
-        if(nextPhase != 5) {
+        if(nextPhase != 4) {
             processRewards(trainers[0]);
             checkEvolutions(trainers[0]);
         }
@@ -53,17 +53,17 @@ public class CleanupPhase implements AbstractPhase {
         for(int i = trainers.length - 1; i >= 0; --i) {
             if(trainers[i].getTrainer().countLiveMons() < 1) {
                 if(trainers[i] instanceof HumanTrainerEntity) {
-                    nextPhase = 5;
+                    nextPhase = 4;
                     ui.display("You have lost!\n");
                 }
                 else if(trainers[i] instanceof WildEntity) {
-                    // no rewards other than possibly the mon.
+                    nextPhase = 6;
                 }
                 else if(trainers[i] instanceof ComputerEntity) {
                     int totalMoney = 0;
                     for(Codemon mon : trainers[i].getTrainer().getMons()) {
                         if(mon != null) {
-                            totalMoney += mon.getExp() / 2;
+                            totalMoney += 50 + (mon.getExp() / 2);
                         }
                     }
                     acquired.add(new Money(totalMoney));
@@ -112,8 +112,9 @@ public class CleanupPhase implements AbstractPhase {
             boolean added = t.getTrainer().addMon(c);
             if(!added) {
                 s += "But for some reason, you couldn't keep them.\n";
-                ui.display(s);
+                
             }
+            ui.display(s);
             return;
         }
         else {

@@ -7,6 +7,10 @@ public class MoveItem extends Item {
         this.move = move;
     }
     
+    public String getDescription() {
+        return this.description + "Teaches " + move.getFullDesc();
+    }
+    
     public MoveItem(String name, String description, int quantity) {
         super(name, description, quantity);
         switch(name) {
@@ -34,6 +38,16 @@ public class MoveItem extends Item {
         this.move = move;
     }
     
-    
+    public boolean equals(Object o) {
+        if(o instanceof MoveItem) {
+            MoveItem i = (MoveItem) o;
+            if(i.getName().equals(this.getName())) {
+                if(i.getMove().equals(this.getMove())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     
 }

@@ -71,7 +71,10 @@ public class BeginningPhase implements AbstractPhase {
     @Override
     public AbstractPhase performPhase() {
         this.displayPrePhaseDialogue();
-        this.queryUser();
+        if(nextPhase != 6) { // skip combat if a capture succeeds.
+            this.queryUser();
+        }
+        
         return nextPhase(acquired);
         
         
@@ -118,11 +121,11 @@ public class BeginningPhase implements AbstractPhase {
             break;
             */
             s += "used a capture stone.\n";
-            if(t instanceof WildEntity) {
-                boolean captureResult = t.getFrontMon().attemptCapture();
+            if(trainers[1] instanceof WildEntity) {
+                boolean captureResult = trainers[1].getFrontMon().attemptCapture();
                 if(captureResult) {
-                    nextPhase = 3;
-                    this.addAcquired(t.getFrontMon());
+                    nextPhase = 6;
+                    this.addAcquired(trainers[1].getFrontMon());
                     s += "Success!\n";
                 }
                 else {
@@ -147,7 +150,9 @@ public class BeginningPhase implements AbstractPhase {
         }
         
         for(int i = 0; i < choices.length; ++i) {
-            handleUserInput(trainers[i], choices[i]);
+            if(nextPhase != 6) {
+                handleUserInput(trainers[i], choices[i]);
+            }
         }
        
        return 0;
@@ -164,6 +169,12 @@ public class BeginningPhase implements AbstractPhase {
             return new EndPhase(trainers[0], trainers[1], ui, weather, acquired);
         case 3:
             return new CleanupPhase(trainers[0], trainers[1], ui, weather, acquired);
+        case 4:
+            return new DeadPhase(trainers[0], trainers[1], ui, weather, acquired);
+        case 5:
+            return new ReturnPhase(trainers[0], trainers[1], ui, weather, acquired);
+        case 6:
+            return new CapturedPhase(trainers[0], trainers[1], ui, weather, acquired);
         default:
             return new BattlePhase(trainers[0], trainers[1], ui, weather, acquired);
         }

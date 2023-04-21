@@ -56,7 +56,7 @@ public class Codemon extends Acquirable {
         this.evolve = false;
         this.moves = moves;
         bonusStatChance = new double[] {0, 0, 0, 0};
-        this.name = Utility.getTypedName(type);
+        this.name = Utility.getTypedName(type) + " " + Utility.getTypedName(type);
     }
     
     public Codemon(Codemon basemon) {
@@ -148,7 +148,7 @@ public class Codemon extends Acquirable {
     }
     
     public boolean levelUp() {
-        int expectedLevel = Utility.getLvlFromExp(this.getLvl());
+        int expectedLevel = Utility.getLvlFromExp(this.getExp());
         if(expectedLevel > this.getLvl()) {
             performLevelUp();
             levelUp();
@@ -334,7 +334,7 @@ public class Codemon extends Acquirable {
      */
     public Move getMove(int index) {
         if((index < 0) || (index >= moves.length)){
-            return null;
+            return Move.struggle;
         }
         return moves[index];
     }
@@ -361,8 +361,8 @@ public class Codemon extends Acquirable {
     public String getStatDesc() { 
         String output = "";
         output += "HP:  " + this.getCurrentHP() + "/" + this.getHp() +
-                "\nATK: " + this.getAtk() + "\nDEF" + this.getDef() + 
-                "\nSPD: " + this.getSpd();
+                "\nATK: " + this.getAtk() + "\nDEF: " + this.getDef() + 
+                "\nSPD: " + this.getSpd() + "\nEXP: " + this.getExp();
         return output;
     }
     

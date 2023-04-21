@@ -107,6 +107,11 @@ public class Weather {
         return new Weather(type);
     }
     
+    public void advanceTime() {
+        this.day = !day;
+        transition();
+    }
+    
     /**
      * Randomly changes the weather to the next state, as dictated by the table below.
      * @return The string name for the new weather.

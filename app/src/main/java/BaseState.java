@@ -24,8 +24,9 @@ public class BaseState implements GameState {
     public void baseMenu() {
         String s = "";
         s += "Choose an option:\n" + "1. Explore\n" + "2. Shop\n" + "3. Menu\n";
+        s += "4. Rest\n";
         ui.display(s);
-        nextState = ui.getInt(1, 3);
+        nextState = ui.getInt(1, 4);
     }
 
 }

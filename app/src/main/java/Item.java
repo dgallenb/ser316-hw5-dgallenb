@@ -95,4 +95,14 @@ public class Item extends Acquirable {
     public String toString() {
         return this.getName() + " (" + this.getQuantity() + "): " + this.getDescription();
     }
+    
+    public boolean equals(Object o) {
+        if(o instanceof Item) {
+            Item i = (Item) o;
+            if(i.getName().equals(this.getName())) {
+                    return true;
+            }
+        }
+        return false;
+    }
 }

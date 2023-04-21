@@ -81,7 +81,7 @@ public class HumanTrainerEntity extends TrainerEntity {
         s += "Choose an item: \n";
         for(int i = 0; i <  getTrainer().countItems(); ++i) {
             Item item =  getTrainer().getItem(i);
-            s += "" + (i + 1) + item.getName() + "\n";
+            s += "" + (i + 1) + ". " + item.getName() + "\n";
         }
         s += "" + ( getTrainer().countItems() + 1) + ". Back\n";
         ui.display(s);
@@ -130,8 +130,8 @@ public class HumanTrainerEntity extends TrainerEntity {
                 if( getTrainer().getItem(index).getQuantity() < 1) {
                      getTrainer().removeItem(index);
                 }
-                ui.display("Used " +  getTrainer().getItem(index) + " on " + 
-                         getTrainer().getMons()[choice - 1]);                
+                ui.display("Used " +  getTrainer().getItem(index).getName() + " on " + 
+                         getTrainer().getMons()[choice - 1].getName());                
             }
             else {
                 if(getTrainer().getItem(index) instanceof MoveItem) {
@@ -140,8 +140,8 @@ public class HumanTrainerEntity extends TrainerEntity {
                     
                 }
                 else {
-                    ui.display("You can't use " +  getTrainer().getItem(index) + 
-                            " on " + getTrainer().getMons()[choice]);
+                    ui.display("You can't use " +  getTrainer().getItem(index).getName() + 
+                            " on " + getTrainer().getMons()[choice - 1].getName());
                 }
                 
             }
@@ -160,11 +160,11 @@ public class HumanTrainerEntity extends TrainerEntity {
             for(int i = 0; i < c.getMoves().length; ++i) {
                 Move m = c.getMove(i);
                 if(m != null) {
-                    s += "" + (i + 1) + ". " + m.getName() + "\n";
+                    s += "" + (i + 1) + ". " + m.getFullDesc() + "\n";
                     ++count;
                 }
             }
-            s += "" + (count + 1) + ". Cancel\n";
+            s += "" + (count + 1) + ". " + item.getMove().getFullDesc() + " (Cancel)\n";
             ui.display(s);
             int moveSelection = ui.getInt(1, count + 1);
             if(moveSelection == (count + 1)) {
@@ -214,6 +214,10 @@ public class HumanTrainerEntity extends TrainerEntity {
             
         } 
         ui.display(s);
+        if(moveIndices.length < 1) {
+            ui.display("No moves available! Using Struggle");
+            return -1;
+        }
         int index = ui.getInt(1, moveIndices[moveIndices.length - 1] + 1);
         int modifiedIndex = index - 1;
         while(!getFrontMon().getMove(modifiedIndex).isAvailable()) {

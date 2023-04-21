@@ -44,10 +44,18 @@ public class BattleState implements GameState {
         phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
         while(true) {
             if(phase instanceof DeadPhase) {
-                // Do a thing to denote that the player needs to get yeeted out somewhere safe
+                nextState = 4;
+                phase = phase.performPhase();
                 break;
             }
             else if(phase instanceof ReturnPhase) {
+                nextState = 0;
+                phase = phase.performPhase();
+                break;
+            }
+            else if(phase instanceof CapturedPhase) {
+                nextState = 0;
+                phase = phase.performPhase();
                 break;
             }
             else if(phase == null) {
@@ -58,14 +66,17 @@ public class BattleState implements GameState {
             }
         }
         // 
+        /*
         for(TrainerEntity t : trainers) {
             if(t instanceof HumanTrainerEntity) {
-                TrainerEntity[] output = new TrainerEntity[1];
+                TrainerEntity[] output = new TrainerEntity[2];
                 output[0] = t;
                 return output;
             }
         }
         return null;
+        */
+        return this.trainers;
     }
 
     @Override

@@ -1,29 +1,16 @@
 import java.util.ArrayList;
 
-public class DeadPhase implements AbstractPhase {
+public class DeadPhase extends CleanupPhase implements AbstractPhase {
 
-    @Override
-    public AbstractPhase performPhase() {
-        // TODO Auto-generated method stub
-        return null;
+    public DeadPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w) {
+        super(t1, t2, ui, w);
+    }
+    
+    public DeadPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
+            ArrayList<Acquirable> a) {
+        super(t1, t2, ui, w, a);
     }
 
-    @Override
-    public int queryUser() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void displayPrePhaseDialogue() {
-        // TODO Auto-generated method stub
-        
-    }
+ 
 
 }

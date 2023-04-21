@@ -3,11 +3,13 @@ public class ShopState implements GameState {
     protected TrainerEntity[] trainers;
     protected UI ui;
     protected Weather weather;
+    protected int nextState;
     
     public ShopState(TrainerEntity[] trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.ui = ui;
         this.weather = weather;
+        nextState = 0;
         
     }
 
@@ -33,7 +35,9 @@ public class ShopState implements GameState {
         String s = "";
         s += "You have $" + trainers[0].getTrainer().getMoney() + " to spend.\n";
         s += "1. Potion ($200)\n" + "2. Capture Stone ($200)\n" + "3. XAttack ($2000)\n";
-        s += "4. XDefend ($2000)\n" + "5. XSpeed ($2000)\n" + "6. Leave\n";
+        s += "4. XDefend ($2000)\n" + "5. XSpeed ($2000)\n" + "6. Move Stone ($500)\n";
+        s += "7. Mighty Move Stone ($2000)\n" + "8. Epic Move Stone ($5000)\n";
+        s += "9. Leave\n";
         ui.display(s);
         int choice = ui.getInt(1, 9);
         Item item;
@@ -60,15 +64,15 @@ public class ShopState implements GameState {
             itemCost = 2000;
             break;
         case 6:
-            item = new Item("Move Stone", "Teaches a codemon a new move.", 1);
+            item = new MoveItem("Move Stone", "Teaches a codemon a new move.", 1);
             itemCost = 500;
             break;
         case 7:
-            item = new Item("Mighty Move Stone", "Teaches a codemon a stronger move.", 1);
+            item = new MoveItem("Mighty Move Stone", "Teaches a codemon a stronger move.", 1);
             itemCost = 2000;
             break;
         case 8:
-            item = new Item("Epic Move Stone", "Teaches a codemon a powerful move.", 1);
+            item = new MoveItem("Epic Move Stone", "Teaches a codemon a powerful move.", 1);
             itemCost = 5000;
             break;
         case 9:
@@ -83,7 +87,7 @@ public class ShopState implements GameState {
         if(moneyCheck(trainers[0].getTrainer(), itemCost)) {
             trainers[0].getTrainer().addMoney(-1 * itemCost);
             trainers[0].getTrainer().addItem(item);
-            ui.display("You bought a " + item.getName());
+            ui.display("You bought a " + item.getName() + ". ");
             
         }
         else {

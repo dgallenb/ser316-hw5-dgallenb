@@ -15,6 +15,8 @@ public class GamePlay {
     public GamePlay(HumanTrainerEntity t) {
         trainers = new TrainerEntity[2];
         trainers[0] = t;
+        weather = new Weather(0);
+        ui = new TextUI();
         baseState = new BaseState(trainers, ui);
         menuState = new MenuState(trainers, ui, weather);
         exploreState = new ExploreState(trainers, ui, weather);
@@ -22,6 +24,8 @@ public class GamePlay {
         // battle state needs two trainers to enter it.
         shopState = new ShopState(trainers, ui, weather);
         state = baseState;
+        
+        
     }
     
     public void play() {

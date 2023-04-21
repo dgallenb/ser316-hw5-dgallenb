@@ -1,8 +1,10 @@
+import java.util.Scanner;
 
 public class TextUI implements UI {
+    Scanner s;
     
     public TextUI() {
-        
+        s = new Scanner(System.in);
     }
     
     public void display(String s) {
@@ -11,8 +13,14 @@ public class TextUI implements UI {
 
     @Override
     public int getInt(int min, int max) {
-        // TODO Auto-generated method stub
-        return 0;
+        int input = s.nextInt();
+        while(true) {
+            if((input <= max) && (input >= min)) {
+                break;
+            }
+            input = s.nextInt();
+        }
+        return input;
     }
 
     @Override

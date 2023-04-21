@@ -41,6 +41,7 @@ public class BattleState implements GameState {
     @Override
     public TrainerEntity[] processState(TrainerEntity[] trainers) {
         this.trainers = trainers;
+        phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
         while(true) {
             if(phase instanceof DeadPhase) {
                 // Do a thing to denote that the player needs to get yeeted out somewhere safe

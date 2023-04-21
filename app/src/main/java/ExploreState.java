@@ -42,7 +42,7 @@ public class ExploreState implements GameState {
             break;
         }
         ui.display(s);
-        return trainers;
+        return this.trainers;
     }
     
     public void rest() {

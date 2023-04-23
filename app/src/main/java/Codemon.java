@@ -34,14 +34,6 @@ public class Codemon extends Acquirable {
         this.evolve = false;
         tempStats = new int[8];
     }
-    
-    public int[] getTempStats() {
-        return tempStats;
-    }
-
-    public void setTempStats(int[] tempStats) {
-        this.tempStats = tempStats;
-    }
 
     public Codemon(MonType type, int hp, int atk, int def, int spd, Move[] moves, int exp) {
         this.setHp(hp);
@@ -76,6 +68,14 @@ public class Codemon extends Acquirable {
         for(int i = 0; i < baseStatChance.length; ++i) {
             this.bonusStatChance[i] = baseStatChance[i];
         }
+    }
+    
+    public int[] getTempStats() {
+        return tempStats;
+    }
+
+    public void setTempStats(int[] tempStats) {
+        this.tempStats = tempStats;
     }
     
     public Move[] getMoves() {
@@ -187,7 +187,7 @@ public class Codemon extends Acquirable {
     }
 
     public int getAtk() {
-        return atk;
+        return atk + tempStats[1];
     }
 
     public void setAtk(int atk) {

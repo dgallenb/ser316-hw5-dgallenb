@@ -4,83 +4,80 @@
  *
  */
 public class EvolvedCodemon extends Codemon {
-    private Codemon mon;
     
-    protected int hpBoost;
-    protected int atkBoost;
-    protected int defBoost;
-    protected int spdBoost;
+    protected String addedName;
     
     public EvolvedCodemon(Codemon basemon) {
-        this.mon = basemon;
-        this.setHpBoost(20);
-        this.setAtkBoost(10);
-        this.setDefBoost(10);
-        this.setSpdBoost(3);
+        this(basemon, new int[] {20, 5, 5, 5});
     }
     
     public EvolvedCodemon(Codemon basemon, int[] statBoosts) {
-        this.mon = basemon;
-        this.setHpBoost(statBoosts[0]);
-        this.setAtkBoost(statBoosts[1]);
-        this.setDefBoost(statBoosts[2]);
-        this.setSpdBoost(statBoosts[3]);
+        this(basemon, new int[] {20, 5, 5, 5}, true);
     }
     
-    @Override
-    public int getHp() {
-        // TODO Auto-generated method stub
-        return super.getHp();
+    public EvolvedCodemon(Codemon basemon, int[] statBoosts, boolean addType) {
+        this.setHp(basemon.getHp());
+        this.setAtk(basemon.getAtk());
+        this.setDef(basemon.getDef());
+        this.setSpd(basemon.getSpd());
+        this.setCurrentHP(basemon.getCurrentHP());
+        this.type = basemon.getType();
+        bonusStatChance = basemon.getBonusStatChance();
+        this.lvl = basemon.getLvl();
+        this.exp = basemon.getExp();
+        this.evolve = false;
+        tempStats = basemon.getTempStats();
+        this.moves = basemon.getMoves();
+        
+        this.name = basemon.getName();
+        this.addedName = ""; //
+        
+        addType();
     }
-
-    @Override
-    public int getAtk() {
-        // TODO Auto-generated method stub
-        return super.getAtk() + atkBoost;
+    
+    public String getName() {
+        return addedName + " " + this.getName();
     }
-
-    @Override
-    public int getDef() {
-        // TODO Auto-generated method stub
-        return super.getDef() + defBoost;
+    
+    public String getDescription() {
+        String output = "";
+        output += this.getName() + ": a lvl. " + this.getLvl() + " " + 
+        this.getType().toString() + " evolved codemon.";
+        
+        return output;
     }
-
-    @Override
-    public int getSpd() {
-        // TODO Auto-generated method stub
-        return super.getSpd() + spdBoost;
+    
+    public void addType(MonType type) {
+        if(!this.getType().sameMonType(type)) {
+            this.setType(new MonTypeMulti(getType(), type.getTypeNum()));
+            
+        }
     }
-
-    public int getHpBoost() {
-        return hpBoost;
+    
+    protected void addName(MonType type) {
+        if(this.addedName.equals("")) {
+            this.addedName = Utility.getTypedName(this.getType());
+        }
+        else {
+            this.addedName = Utility.getTypedName(this.getType()) + " " + 
+                    addedName;
+        }
     }
-
-    public void setHpBoost(int hpBoost) {
-        this.hpBoost = hpBoost;
+    
+    
+    
+    public void addType() {
+        int count = 0; 
+        for(Move m : getMoves()) {
+            if(m != null) {
+                ++count;
+            }
+        }
+        int typeIndex = Utility.d(count) - 1;
+        if(!getType().sameMonType(getMoves()[typeIndex].getType())) {
+            this.setType(new MonTypeMulti(getType(), 
+                   moves[typeIndex].getType().getTypeNum()));
+        }
+        addName(moves[typeIndex].getType());
     }
-
-    public int getAtkBoost() {
-        return atkBoost;
-    }
-
-    public void setAtkBoost(int atkBoost) {
-        this.atkBoost = atkBoost;
-    }
-
-    public int getDefBoost() {
-        return defBoost;
-    }
-
-    public void setDefBoost(int defBoost) {
-        this.defBoost = defBoost;
-    }
-
-    public int getSpdBoost() {
-        return spdBoost;
-    }
-
-    public void setSpdBoost(int spdBoost) {
-        this.spdBoost = spdBoost;
-    }
-
 }

@@ -56,4 +56,8 @@ public class MonTypeMulti extends MonType {
         return outerTypeMod;
     }
     
+    public String toString() {
+        return super.toString() + "/" + baseType.toString();
+    }
+    
 }

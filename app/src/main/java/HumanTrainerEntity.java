@@ -126,11 +126,12 @@ public class HumanTrainerEntity extends TrainerEntity {
                     use( getTrainer().getMons()[choice - 1]);
             if(result) {
                 getTrainer().getItem(index).consume();
-                if( getTrainer().getItem(index).getQuantity() < 1) {
-                     getTrainer().removeItem(index);
-                }
+                
                 ui.display("Used " +  getTrainer().getItem(index).getName() + " on " + 
-                         getTrainer().getMons()[choice - 1].getName());                
+                         getTrainer().getMons()[choice - 1].getName());     
+                if( getTrainer().getItem(index).getQuantity() < 1) {
+                    getTrainer().removeItem(index);
+               }
             }
             else {
                 if(getTrainer().getItem(index) instanceof MoveItem) {

@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 
 public class ExploreState implements GameState {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected Weather weather;
     protected UI ui;
     protected int forestExplored;
@@ -8,7 +9,7 @@ public class ExploreState implements GameState {
     protected int cityExplored;
     protected int nextState;
     
-    public ExploreState(TrainerEntity[] trainers,  UI ui, Weather weather) {
+    public ExploreState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.weather = weather;
         this.ui = ui;
@@ -19,7 +20,7 @@ public class ExploreState implements GameState {
     }
 
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
         advanceTime();
         String s = "";
@@ -74,7 +75,8 @@ public class ExploreState implements GameState {
             s += "You found a wild Codemon!";
             break;
         case 1:
-            prepTrainer(trainers[0].getFrontMon().getLvl() + lvlMod);
+            prepTrainer(Utility.getLvlFromExp(
+                    trainers.get(0).getTrainer().getAverageExp()) + lvlMod);
             
             s += "You found a trainer ready to battle!";
             break;
@@ -98,13 +100,13 @@ public class ExploreState implements GameState {
     private void prepWildCodemon(double[] typeTable) {
         nextState = 5;
         int typeVal = Utility.rollOnTable(typeTable);
-        int lvl = Math.max(trainers[0].getFrontMon().getLvl() - Utility.d(6), 2);
+        int lvl = Math.max(trainers.get(0).getFrontMon().getLvl() - Utility.d(6), 2);
         int exp = Utility.getExpFromLevel(lvl);
         Codemon mon = CodemonFactory.getInstance().generateCodemonWithT1Moves(typeVal, exp);
         //TrainerEntity player = trainers[0];
         //trainers = new TrainerEntity[2];
         //trainers[0] = player;
-        trainers[1] = new WildEntity(new Trainer(mon));
+        trainers.set(1, new WildEntity(new Trainer(mon)));
     }
     
     private void prepTrainer(int targetLvl) {
@@ -113,7 +115,7 @@ public class ExploreState implements GameState {
         //TrainerEntity player = trainers[0];
         //trainers = new TrainerEntity[2];
         //trainers[0] = player;
-        trainers[1] = new ComputerEntity(t);
+        trainers.set(1, new ComputerEntity(t));
     }
     
     public void advanceTime() {

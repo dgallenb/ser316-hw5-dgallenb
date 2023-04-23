@@ -142,6 +142,21 @@ public class Trainer {
         }
     }
     
+    public int getAverageExp() {
+        int totalExp = 0;
+        int count = 0;
+        for(Codemon m : mons) {
+            if(m != null) {
+                totalExp += m.getExp();
+                ++count;
+            }
+        }
+        if(count == 0) {
+            return 0;
+        }
+        return totalExp / count;
+    }
+    
     /**
      * Reorders mons so that the null slots are all in back
      */

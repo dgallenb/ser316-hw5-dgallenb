@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class ReturnPhase extends CleanupPhase implements AbstractPhase {
     
-    public ReturnPhase(TrainerEntity t1, TrainerEntity t2, UI ui, 
+    public ReturnPhase(ArrayList<TrainerEntity> trainers, UI ui, 
             Weather weather, ArrayList<Acquirable> a) {
-        super(t1, t2, ui, weather, a);
+        super(trainers, ui, weather, a);
     }
 
     @Override

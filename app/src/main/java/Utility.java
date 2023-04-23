@@ -200,25 +200,7 @@ public class Utility {
         return getLevelUpBonus(type, new double[] {0, 0, 0, 0});
     }
     
- // clear beats eclipse, everything else beats clear
-    // cloudy beats rainy, stormy
-    // rainy beats windy, snowy,
-    // windy beats stormy, cloudy
-    // stormy beats snowy, rainy
-    // snowy beats cloudy, windy
-    public static int typeMod(int damage, MonType defType, MonType atkType) {
-        double[][] modMatrix = {
-                new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
-                new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
-                new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
-                new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
-                new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
-                new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
-                new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
-        };
-        double scalar = modMatrix[atkType.getTypeNum()][defType.getTypeNum()];
-        return (int) (damage * scalar);
-    }
+ 
     
     public static int computeExp(TrainerEntity t) {
         int expTotal = 0;

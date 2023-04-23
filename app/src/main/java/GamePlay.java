@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 
 public class GamePlay {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected GameState baseState;
     protected GameState menuState;
     protected GameState exploreState;
@@ -14,9 +15,9 @@ public class GamePlay {
     
     
     public GamePlay(HumanTrainerEntity t) {
-        trainers = new TrainerEntity[2];
-        trainers[0] = t;
-        trainers[1] = null;
+        trainers = new ArrayList<TrainerEntity>();
+        trainers.add(0, t);
+        trainers.add(1, null);
         weather = new Weather(0);
         weather.setDay(false);
         ui = new TextUI();

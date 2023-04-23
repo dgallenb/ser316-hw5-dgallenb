@@ -13,6 +13,9 @@ public class Move {
     public static final Move struggle = new Move(
             "Struggle", "Default move", 4, 4, new Frequency(0), new MonType(0));
     
+    public static final Move wait = new Move(
+            "Wait", "Default move", 0, 0, new Frequency(0), new MonType(0));
+    
     public int getAc() {
         return ac;
     }

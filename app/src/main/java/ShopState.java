@@ -1,11 +1,12 @@
+import java.util.ArrayList;
 
 public class ShopState implements GameState {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected UI ui;
     protected Weather weather;
     protected int nextState;
     
-    public ShopState(TrainerEntity[] trainers,  UI ui, Weather weather) {
+    public ShopState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.ui = ui;
         this.weather = weather;
@@ -14,7 +15,7 @@ public class ShopState implements GameState {
     }
 
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
         if(weather.isDay()) {
             shopOpen();
@@ -33,7 +34,7 @@ public class ShopState implements GameState {
     
     public void shopMenu() {
         String s = "";
-        s += "You have $" + trainers[0].getTrainer().getMoney() + " to spend.\n";
+        s += "You have $" + trainers.get(0).getTrainer().getMoney() + " to spend.\n";
         s += "1. Potion ($200)\n" + "2. Capture Stone ($200)\n" + "3. XAttack ($2000)\n";
         s += "4. XDefend ($2000)\n" + "5. XSpeed ($2000)\n" + "6. Move Stone ($500)\n";
         s += "7. Mighty Move Stone ($2000)\n" + "8. Epic Move Stone ($5000)\n";
@@ -84,9 +85,9 @@ public class ShopState implements GameState {
             itemCost = 200;
             break;
         }
-        if(moneyCheck(trainers[0].getTrainer(), itemCost)) {
-            trainers[0].getTrainer().addMoney(-1 * itemCost);
-            trainers[0].getTrainer().addItem(item);
+        if(moneyCheck(trainers.get(0).getTrainer(), itemCost)) {
+            trainers.get(0).getTrainer().addMoney(-1 * itemCost);
+            trainers.get(0).getTrainer().addItem(item);
             ui.display("You bought a " + item.getName() + ". ");
             
         }

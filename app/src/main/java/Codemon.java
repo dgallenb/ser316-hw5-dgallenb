@@ -271,8 +271,46 @@ public class Codemon extends Acquirable {
         }
     }
     
+    public int attack(Move m, Weather weather) {
+        int index = getIndex(m);
+        if(index >= 0) {
+            try {
+                m.use();
+                int db = moves[index].use();
+                int typedDamage = Utility.dbToDamage(computeDB(db, moves[index].getType()));
+                return computeDamage(typedDamage) + Utility.weatherDamageBonus(type, weather);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+    
+    protected boolean hasMove(Move moveToCheck) {
+        for(Move m : moves) {
+            if(m != null) {
+                if(moveToCheck.equals(m)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    protected int getIndex(Move moveToCheck) {
+        for(int i = 0; i < moves.length; ++i) {
+            if(moves[i] != null) {
+                if(moves[i].equals(moveToCheck)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+    
     public int computeDB(int db, MonType moveType) {
-        if(moveType.equals(type)) {
+        if(moveType.sameMonType(type)) {
             return db + 2;
         }
         return db;
@@ -295,7 +333,7 @@ public class Codemon extends Acquirable {
     public int receiveDamage(int dbDamage, MonType atkType, boolean crit) {
         int damageAfterBlock = dbDamage - getDef();
         damageAfterBlock *= (crit? 2 : 1);
-        int typeModDamage = Utility.typeMod(damageAfterBlock, type, atkType);
+        int typeModDamage = type.getEffectiveDamage(damageAfterBlock, atkType);
         if(typeModDamage > currentHP) {
             return currentHP;
         }

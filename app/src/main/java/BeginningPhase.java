@@ -1,38 +1,34 @@
 import java.util.ArrayList;
 
 public class BeginningPhase implements AbstractPhase {
-    protected TrainerEntity[] trainers; // assumed to be a human player
+    protected ArrayList<TrainerEntity> trainers; // assumed to be a human player
     protected UI ui;
     protected int nextPhase;
     protected ArrayList<Acquirable> acquired;
     protected Weather weather;
     
-    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+    public BeginningPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w) {
+        this.trainers = trainers;
         this.ui = ui;
         acquired = new ArrayList<Acquirable>();
         this.nextPhase = 1;
         this.weather = w;
     }
     
-    public BeginningPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
+    public BeginningPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w,
             ArrayList<Acquirable>a) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+        this.trainers = trainers;
         this.ui = ui;
         this.nextPhase = 1;
         acquired = a;
         this.weather = w;
     }
     
-    public TrainerEntity[] getTrainers() {
+    public ArrayList<TrainerEntity> getTrainers() {
         return trainers;
     }
 
-    public void setTrainers(TrainerEntity[] trainers) {
+    public void setTrainers(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
     }
 
@@ -121,15 +117,30 @@ public class BeginningPhase implements AbstractPhase {
             break;
             */
             s += "used a capture stone.\n";
-            if(trainers[1] instanceof WildEntity) {
-                boolean captureResult = trainers[1].getFrontMon().attemptCapture();
-                if(captureResult) {
-                    nextPhase = 6;
-                    this.addAcquired(trainers[1].getFrontMon());
-                    s += "Success!\n";
+            // determine target
+            // Generally, a multi-trainer battle should not have wild mons.
+            // Target index is not allowed to be zero, as that slot should be
+            // the human trainer and/or primary opponent (ie, target for all 
+            // other trainers).
+            int targetIndex = 1;
+            if(trainers.size() != 2) {
+                targetIndex = 1;
+            }
+            if((targetIndex > 0) && (targetIndex < trainers.size())) {
+                if(trainers.get(targetIndex) instanceof WildEntity) {
+                    boolean captureResult = trainers.get(targetIndex).
+                            getFrontMon().attemptCapture();
+                    if(captureResult) {
+                        nextPhase = 6;
+                        this.addAcquired(trainers.get(targetIndex).getFrontMon());
+                        s += "Success!\n";
+                    }
+                    else {
+                        s += "Failure!\n";
+                    }
                 }
                 else {
-                    s += "Failure!\n";
+                    s += "That's not an acquirable codemon!\n";
                 }
             }
             else {
@@ -144,14 +155,14 @@ public class BeginningPhase implements AbstractPhase {
 
     @Override
     public int queryUser() {
-        int[] choices = new int[trainers.length];
-        for(int i = 0; i < trainers.length; ++i) {
-            choices[i] = trainers[i].decideBeginning();
+        int[] choices = new int[trainers.size()];
+        for(int i = 0; i < trainers.size(); ++i) {
+            choices[i] = trainers.get(i).decideBeginning();
         }
         
         for(int i = 0; i < choices.length; ++i) {
             if(nextPhase != 6) {
-                handleUserInput(trainers[i], choices[i]);
+                handleUserInput(trainers.get(i), choices[i]);
             }
         }
        
@@ -162,21 +173,21 @@ public class BeginningPhase implements AbstractPhase {
     public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
         switch(nextPhase) {
         case 0:
-            return new BeginningPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new BeginningPhase(trainers, ui, weather, acquired);
         case 1:
-            return new BattlePhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new BattlePhase(trainers, ui, weather, acquired);
         case 2:
-            return new EndPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new EndPhase(trainers, ui, weather, acquired);
         case 3:
-            return new CleanupPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new CleanupPhase(trainers, ui, weather, acquired);
         case 4:
-            return new DeadPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new DeadPhase(trainers, ui, weather, acquired);
         case 5:
-            return new ReturnPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new ReturnPhase(trainers, ui, weather, acquired);
         case 6:
-            return new CapturedPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new CapturedPhase(trainers, ui, weather, acquired);
         default:
-            return new BattlePhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new BattlePhase(trainers, ui, weather, acquired);
         }
         
     }

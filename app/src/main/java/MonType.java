@@ -104,13 +104,54 @@ public class MonType {
         return new MonType(type);
     }
     
-    public boolean equals(Object o) {
+    public boolean equals(Codemon o) {
+        /*
         if(o instanceof MonType) {
             return ((MonType) o).getTypeNum() == type;
-        }
+        }*/
         return false;
     }
     
+    /**
+     * Equivalent to montype here. Gets overwritten by the child class that 
+     * handles multityped codemons.
+     * @param m The monType to compare to
+     * @return True if the mon types are the same (or, in a multitype mon,
+     * if one of the types inside each matches). False otherwise.
+     */
+    public boolean sameMonType(MonType m) {
+        return this.equals(m);
+    }
     
+    public int getEffectiveDamage(int damage, MonType atkType) {
+        return (int) (damage * getTypeMod(atkType));
+    }
     
+ // clear beats eclipse, everything else beats clear
+    // cloudy beats rainy, stormy
+    // rainy beats windy, snowy,
+    // windy beats stormy, cloudy
+    // stormy beats snowy, rainy
+    // snowy beats cloudy, windy
+    protected static double typeMod(int defTypeNum, int atkTypeNum) {
+        double[][] modMatrix = {
+                new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
+                new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
+                new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
+                new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
+                new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
+                new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
+                new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
+        };
+        double scalar = modMatrix[atkTypeNum][defTypeNum];
+        return scalar;
+    }
+    
+    protected static double typeMod(MonType defType, MonType atkType) {
+        return typeMod(defType.getTypeNum(), atkType.getTypeNum());
+    }
+    
+    public double getTypeMod(MonType atkType) {
+        return typeMod(this.type, atkType.getTypeNum());
+    }
 }

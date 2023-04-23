@@ -1,27 +1,23 @@
 import java.util.ArrayList;
 
 public class CleanupPhase implements AbstractPhase {
-    protected TrainerEntity[] trainers; // assumed to be a human player
+    protected ArrayList<TrainerEntity> trainers; // assumed to be a human player
     protected UI ui;
     protected int nextPhase;
     protected ArrayList<Acquirable> acquired;
     protected Weather weather;
     
-    public CleanupPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+    public CleanupPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w) {
+        this.trainers = trainers;
         this.ui = ui;
         this.weather = w;
         this.nextPhase = 5;
         acquired = new ArrayList<Acquirable>();
     }
     
-    public CleanupPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
+    public CleanupPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w,
             ArrayList<Acquirable>a) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+        this.trainers = trainers;
         this.ui = ui;
         this.weather = w;
         this.nextPhase = 5;
@@ -41,8 +37,8 @@ public class CleanupPhase implements AbstractPhase {
         deadCheck();
         cleanCombatModifiers();
         if(nextPhase != 4) {
-            processRewards(trainers[0]);
-            checkEvolutions(trainers[0]);
+            processRewards(trainers.get(0));
+            checkEvolutions(trainers.get(0));
         }
         
         return nextPhase(acquired);
@@ -50,18 +46,18 @@ public class CleanupPhase implements AbstractPhase {
     }
     
     private void deadCheck() {
-        for(int i = trainers.length - 1; i >= 0; --i) {
-            if(trainers[i].getTrainer().countLiveMons() < 1) {
-                if(trainers[i] instanceof HumanTrainerEntity) {
+        for(int i = trainers.size() - 1; i >= 0; --i) {
+            if(trainers.get(i).getTrainer().countLiveMons() < 1) {
+                if(trainers.get(i) instanceof HumanTrainerEntity) {
                     nextPhase = 4;
                     ui.display("You have lost!\n");
                 }
-                else if(trainers[i] instanceof WildEntity) {
+                else if(trainers.get(i) instanceof WildEntity) {
                     nextPhase = 6;
                 }
-                else if(trainers[i] instanceof ComputerEntity) {
+                else if(trainers.get(i) instanceof ComputerEntity) {
                     int totalMoney = 0;
-                    for(Codemon mon : trainers[i].getTrainer().getMons()) {
+                    for(Codemon mon : trainers.get(i).getTrainer().getMons()) {
                         if(mon != null) {
                             totalMoney += 50 + (mon.getExp() / 2);
                         }
@@ -192,6 +188,7 @@ public class CleanupPhase implements AbstractPhase {
         String s = "";
         
         s += "The battle has ended. \n";
+        ui.display(s);
     }
 
 }

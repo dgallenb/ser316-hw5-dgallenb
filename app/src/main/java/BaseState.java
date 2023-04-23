@@ -1,17 +1,18 @@
+import java.util.ArrayList;
 
 public class BaseState implements GameState {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected UI ui;
     protected int nextState;
     
-    public BaseState(TrainerEntity[] trainers, UI ui) {
+    public BaseState(ArrayList<TrainerEntity> trainers, UI ui) {
         this.trainers = trainers;
         this.ui = ui;
         
     }
     
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         baseMenu();
         return trainers;
     }

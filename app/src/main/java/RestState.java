@@ -1,11 +1,12 @@
+import java.util.ArrayList;
 
 public class RestState implements GameState {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected UI ui;
     protected int nextState;
     protected Weather weather;
     
-    public RestState(TrainerEntity[] trainers,  UI ui, Weather weather) {
+    public RestState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.weather = weather;
         this.ui = ui;
@@ -13,7 +14,7 @@ public class RestState implements GameState {
     }
 
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
         rest();
         weather.advanceTime();
@@ -27,7 +28,7 @@ public class RestState implements GameState {
     }
     
     public void rest() {
-        trainers[0].getTrainer().healAll();
+        trainers.get(0).getTrainer().healAll();
         ui.display("Your codemons returned to full health...but at what cost?");
     }
 

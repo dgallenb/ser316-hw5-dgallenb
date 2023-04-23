@@ -1,13 +1,14 @@
+import java.util.ArrayList;
 
 public class MenuState implements GameState {
     protected TrainerEntity player;
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected UI ui;
     protected Weather weather;
     
-    public MenuState(TrainerEntity[] t, UI ui, Weather weather) {
-        player = t[0];
-        this.trainers = t;
+    public MenuState(ArrayList<TrainerEntity> trainers, UI ui, Weather weather) {
+        player = trainers.get(0);
+        this.trainers = trainers;
         this.ui = ui;
         this.weather = weather;
     }
@@ -39,7 +40,7 @@ public class MenuState implements GameState {
      * 
      */
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
         handleBaseMenu();
         

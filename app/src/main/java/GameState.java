@@ -1,5 +1,6 @@
+import java.util.ArrayList;
 
 public interface GameState {
-    public TrainerEntity[] processState(TrainerEntity[] trainers);
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers);
     public int nextState();
 }

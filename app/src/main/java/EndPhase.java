@@ -8,27 +8,23 @@ import java.util.ArrayList;
  *
  */
 public class EndPhase implements AbstractPhase {
-    protected TrainerEntity[] trainers; // assumed to be a human player
+    protected ArrayList<TrainerEntity> trainers; // assumed to be a human player
     protected UI ui;
     protected int nextPhase;
     protected ArrayList<Acquirable> acquired;
     protected Weather weather;
     
-    public EndPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+    public EndPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w) {
+        this.trainers = trainers;
         this.ui = ui;
         this.weather = w;
         this.nextPhase = 0;
         acquired = new ArrayList<Acquirable>();
     }
     
-    public EndPhase(TrainerEntity t1, TrainerEntity t2, UI ui, Weather w,
+    public EndPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w,
             ArrayList<Acquirable>a) {
-        this.trainers = new TrainerEntity[2];
-        this.trainers[0] = t1;
-        this.trainers[1] = t2;
+        this.trainers = trainers;
         this.ui = ui;
         this.weather = w;
         this.nextPhase = 0;
@@ -39,8 +35,8 @@ public class EndPhase implements AbstractPhase {
     public AbstractPhase performPhase() {
         String s = "";
         // 1. check for ded mons
-        for(int i = 0; i < trainers.length; ++i) {
-            TrainerEntity t = trainers[i];
+        for(int i = 0; i < trainers.size(); ++i) {
+            TrainerEntity t = trainers.get(i);
             if(t.getTrainer().countLiveMons() < 1) {
                 
                 s += t.getTrainer().getName() + " is out of codemons.\n";
@@ -52,16 +48,16 @@ public class EndPhase implements AbstractPhase {
                     // check exp
                     int dedLvl = t.getFrontMon().getLvl();
                     int significanceFactor = 25; // constant for this game, but varies in PTU
-                    int expToGive = dedLvl * significanceFactor / (trainers.length - 1);
-                    for(int j = 0; j < trainers.length; ++j) {
+                    int expToGive = dedLvl * significanceFactor / (trainers.size() - 1);
+                    for(int j = 0; j < trainers.size(); ++j) {
                         if(i == j) {
                             continue;
                         }
-                        if(trainers[j].getFrontMon().getCurrentHP() > 0) {
-                            trainers[j].getFrontMon().addExp(expToGive);
-                            s +=  trainers[j].getFrontMon().getName() + " gained ";
+                        if(trainers.get(j).getFrontMon().getCurrentHP() > 0) {
+                            trainers.get(j).getFrontMon().addExp(expToGive);
+                            s +=  trainers.get(j).getFrontMon().getName() + " gained ";
                             s += "" + expToGive + " exp";
-                            boolean leveled = trainers[j].getFrontMon().levelUp();
+                            boolean leveled = trainers.get(j).getFrontMon().levelUp();
                             s += leveled ? " and leveled up!\n" : ".\n";
                         }
                     }
@@ -70,16 +66,16 @@ public class EndPhase implements AbstractPhase {
             else if(t.getFrontMon().getCurrentHP() <= 0) {
                 int dedLvl = t.getFrontMon().getLvl();
                 int significanceFactor = 25; // constant for this game, but varies in PTU
-                int expToGive = dedLvl * significanceFactor / (trainers.length - 1);
-                for(int j = 0; j < trainers.length; ++j) {
+                int expToGive = dedLvl * significanceFactor / (trainers.size() - 1);
+                for(int j = 0; j < trainers.size(); ++j) {
                     if(i == j) {
                         continue;
                     }
-                    if(trainers[j].getFrontMon().getCurrentHP() > 0) {
-                        trainers[j].getFrontMon().addExp(expToGive);
-                        s +=  trainers[j].getFrontMon().getName() + " gained ";
+                    if(trainers.get(j).getFrontMon().getCurrentHP() > 0) {
+                        trainers.get(j).getFrontMon().addExp(expToGive);
+                        s +=  trainers.get(j).getFrontMon().getName() + " gained ";
                         s += "" + expToGive + " exp";
-                        boolean leveled = trainers[j].getFrontMon().levelUp();
+                        boolean leveled = trainers.get(j).getFrontMon().levelUp();
                         s += leveled ? " and leveled up!\n" : ".\n";
                     }
                 }
@@ -103,13 +99,13 @@ public class EndPhase implements AbstractPhase {
     public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
         switch(nextPhase) {
         case 0:
-            return new BeginningPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new BeginningPhase(trainers, ui, weather, acquired);
         case 3:
-            return new CleanupPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new CleanupPhase(trainers, ui, weather, acquired);
         case 4:
-            return new DeadPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new DeadPhase(trainers, ui, weather, acquired);
         default:
-            return new BeginningPhase(trainers[0], trainers[1], ui, weather, acquired);
+            return new BeginningPhase(trainers, ui, weather, acquired);
         }
     }
 

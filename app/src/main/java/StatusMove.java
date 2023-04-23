@@ -2,9 +2,10 @@
 public class StatusMove extends Move {
     protected Codemon mon;
     protected int[] statChange;
+    protected String battleDescription;
     
-    public StatusMove(String name, String description, int db, int ac,
-            Frequency frequency, MonType type, Codemon mon) {
+    public StatusMove(String name, String description, String battleDescription,
+            int db, int ac, Frequency frequency, MonType type, Codemon mon) {
         super(name, description, db, ac, frequency, type);
         
     }
@@ -25,6 +26,14 @@ public class StatusMove extends Move {
         this.statChange = statChange;
     }
     
+    public String getBattleDescription() {
+        return battleDescription;
+    }
+
+    public void setBattleDescription(String battleDescription) {
+        this.battleDescription = battleDescription;
+    }
+
     public int use() throws Exception {
         if(!available) {
             throw new Exception("Move Unavailable");

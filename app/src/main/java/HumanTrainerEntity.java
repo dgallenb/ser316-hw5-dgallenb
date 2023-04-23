@@ -9,13 +9,12 @@ public class HumanTrainerEntity extends TrainerEntity {
 
     @Override
     public int decideBeginning() {
-        String s = "";
-        s += "1. Use item.\n2. Switch codemon. \n";
-        s += "3. Focused training. \n4. Inspired training. \n";
-        s += "5. Brutal training. \n6. Agility training. \n";
-        s += "7. Use a Capture Stone.\n";
-        ui.display(s);
-        int input = ui.getInt(1, 7);
+        String[] choices = new String[] {"Use item.", "Switch codemon.",
+                "Focused training.", "Inspired training.", 
+                "Brutal training.", "Agility training.",
+                "Use a Capture Stone."
+        };
+        int input = decideGeneric("", choices);
         switch(input) {
         case 3:
         case 4:
@@ -200,32 +199,46 @@ public class HumanTrainerEntity extends TrainerEntity {
         return 0;
     }
 
+    /**
+     * Returns the index of the move selected by the player. 
+     * -1 means struggle. 
+     * -2 means wait.
+     */
     @Override
     public int decideBattle() {
         String s = "";
         Codemon firstMon = getFrontMon();
         int[] moveIndices = firstMon.getAvailableMoveIndices();
-        
+        int decisionIndex = 0;
         if(moveIndices.length > 0) {
-            s += "Move choices: \n";
+            String[] choices = new String[moveIndices.length + 1];
             for(int i = 0; i < moveIndices.length; ++i) {
-                s += "" + (i + 1) + ". " + firstMon.getMove(moveIndices[i]).getName() + "\n";
+                choices[i] = firstMon.getMove(moveIndices[i]).getName();
             }
-            
+            choices[choices.length - 1] = "Wait";
+            decisionIndex = decideGeneric("Move choices: ", choices);
+            if(decisionIndex == choices.length) {
+                return -2;
+            }
+            else {
+                --decisionIndex;
+            }
         } 
-        ui.display(s);
-        if(moveIndices.length < 1) {
-            ui.display("No moves available! Using Struggle");
-            return -1;
+        else if(moveIndices.length < 1) {
+            String[] choices = new String[] {"Struggle", "Wait"};
+            decisionIndex = decideGeneric("Move choices: ", choices);
+            
+            return (decisionIndex == 1) ? -1 : -2;
         }
-        int index = ui.getInt(1, moveIndices[moveIndices.length - 1] + 1);
-        int modifiedIndex = index - 1;
-        while(!getFrontMon().getMove(modifiedIndex).isAvailable()) {
+        while(!getFrontMon().getMove(decisionIndex).isAvailable()) {
             ui.display("Move unavailable!\n");
-            modifiedIndex = ui.getInt(1, moveIndices[moveIndices.length - 1]) - 1;
+            decisionIndex = ui.getInt(1, moveIndices[moveIndices.length]) - 1;
+            if(decisionIndex == moveIndices.length) {
+                return -2;
+            }
         }
         // TODO Auto-generated method stub
-        return modifiedIndex;
+        return decisionIndex;
     }
 
     @Override
@@ -238,6 +251,16 @@ public class HumanTrainerEntity extends TrainerEntity {
     public int decideCleanup() {
         // TODO Auto-generated method stub
         return 0;
+    }
+    
+    protected int decideGeneric(String preChoiceText, String[] choices) {
+        String s = preChoiceText + "\n";
+        for(int i = 0; i < choices.length; ++i) {
+            String choice = choices[i];
+            s += "" + (i + 1) + ". " + choice + "\n";
+        }
+        ui.display(s);
+        return ui.getInt(1, choices.length);
     }
 
     @Override

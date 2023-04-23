@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 
 public class BattleState implements GameState {
-    protected TrainerEntity[] trainers;
+    protected ArrayList<TrainerEntity> trainers;
     protected Weather weather;
     protected UI ui;
     protected AbstractPhase phase;
@@ -19,29 +20,18 @@ public class BattleState implements GameState {
      * 7.1. If a trainer has a ded mon, they choose a new mon to send out.
      * 
      */
-    public BattleState(TrainerEntity[] trainers,  UI ui, Weather weather) {
+    public BattleState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.weather = weather;
         this.ui = ui;
-        phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
+        phase = new BeginningPhase(trainers, ui, weather);
         this.nextState = 0;
     }
-    
-    public BattleState(TrainerEntity t1, TrainerEntity t2, UI ui, Weather weather) {
-        trainers = new TrainerEntity[2];
-        trainers[0] = t1;
-        trainers[1] = t2;
-        this.weather = weather;
-        this.ui = ui;
-        phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
-        this.nextState = 0;
-    }
-
 
     @Override
-    public TrainerEntity[] processState(TrainerEntity[] trainers) {
+    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
         this.trainers = trainers;
-        phase = new BeginningPhase(trainers[0], trainers[1], ui, weather);
+        phase = new BeginningPhase(trainers, ui, weather);
         while(true) {
             if(phase instanceof DeadPhase) {
                 nextState = 4;

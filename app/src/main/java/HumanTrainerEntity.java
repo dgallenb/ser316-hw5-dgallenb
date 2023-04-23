@@ -232,7 +232,7 @@ public class HumanTrainerEntity extends TrainerEntity {
         }
         while(!getFrontMon().getMove(decisionIndex).isAvailable()) {
             ui.display("Move unavailable!\n");
-            decisionIndex = ui.getInt(1, moveIndices[moveIndices.length]) - 1;
+            decisionIndex = ui.getInt(1, moveIndices[moveIndices.length - 1]) - 1;
             if(decisionIndex == moveIndices.length) {
                 return -2;
             }

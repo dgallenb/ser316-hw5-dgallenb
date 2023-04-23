@@ -36,7 +36,7 @@ public class EvolvedCodemon extends Codemon {
     }
     
     public String getName() {
-        return addedName + " " + this.getName();
+        return addedName + " " + this.name;
     }
     
     public String getDescription() {

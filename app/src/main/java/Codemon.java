@@ -187,7 +187,7 @@ public class Codemon extends Acquirable {
     }
 
     public int getAtk() {
-        return atk + tempStats[1];
+        return atk;
     }
 
     public void setAtk(int atk) {
@@ -197,6 +197,8 @@ public class Codemon extends Acquirable {
     public int getDef() {
         return def;
     }
+    
+    
 
     public void setDef(int def) {
         this.def = def;
@@ -206,8 +208,20 @@ public class Codemon extends Acquirable {
         return spd;
     }
     
+    public int getCurrentAtk() {
+        return this.getAtk() + tempStats[1];
+    }
+    
+    public int getCurrentDef() {
+        return this.getDef() + tempStats[2];
+    }
+    
+    public int getCurrentSpd() {
+        return this.getSpd() + tempStats[3];
+    }
+    
     public int getInitiative() {
-        return this.getSpd() + tempStats[5];
+        return this.getCurrentSpd() + tempStats[5];
     }
 
     public void setSpd(int spd) {
@@ -317,7 +331,7 @@ public class Codemon extends Acquirable {
     }
     
     public int computeDamage(int unmoddedDamage) {
-        return unmoddedDamage + getAtk();
+        return unmoddedDamage + getCurrentAtk();
     }
     
     
@@ -331,7 +345,7 @@ public class Codemon extends Acquirable {
      * @return
      */
     public int receiveDamage(int dbDamage, MonType atkType, boolean crit) {
-        int damageAfterBlock = dbDamage - getDef();
+        int damageAfterBlock = dbDamage - getCurrentDef();
         damageAfterBlock *= (crit? 2 : 1);
         int typeModDamage = type.getEffectiveDamage(damageAfterBlock, atkType);
         if(typeModDamage > currentHP) {

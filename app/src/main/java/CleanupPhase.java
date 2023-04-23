@@ -131,9 +131,13 @@ public class CleanupPhase implements AbstractPhase {
                 s += "" + (i + 1) + ". " + t.getTrainer().getMons()[i].getName() + "\n";
             }
         }
-        s += "" + (t.getTrainer().getMons().length + 1) + c.getName() + "\n";
+        s += "" + (t.getTrainer().getMons().length + 1) + ". "+ c.getName() + "\n";
         ui.display(s);
         int index = ui.getInt(1, t.getTrainer().getMons().length + 1) - 1;
+        if(index == t.getTrainer().getMons().length) {
+            ui.display("You released " + c.getName() + ", never to see them again.");
+            return;
+        }
         while(t.getTrainer().getMons()[index] == null) {
             ui.display("Invalid (and confusing) selection!\n");
             index = ui.getInt(1, t.getTrainer().getMons().length + 1) - 1;

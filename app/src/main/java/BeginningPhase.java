@@ -178,10 +178,10 @@ public class BeginningPhase implements AbstractPhase {
             return new BattlePhase(trainers, ui, weather, acquired);
         case 2:
             return new EndPhase(trainers, ui, weather, acquired);
-        case 3:
-            return new CleanupPhase(trainers, ui, weather, acquired);
+         
         case 4:
             return new DeadPhase(trainers, ui, weather, acquired);
+        case 3:
         case 5:
             return new ReturnPhase(trainers, ui, weather, acquired);
         case 6:

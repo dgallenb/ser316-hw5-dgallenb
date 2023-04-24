@@ -5,12 +5,14 @@ public class ShopState implements GameState {
     protected UI ui;
     protected Weather weather;
     protected int nextState;
+    protected int idiotLimit;
     
     public ShopState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.ui = ui;
         this.weather = weather;
         nextState = 0;
+        idiotLimit = 5;
         
     }
 
@@ -93,6 +95,14 @@ public class ShopState implements GameState {
         }
         else {
             ui.display("You don't have enough money for " + item.getName());
+            if(idiotLimit <= 0) {
+                idiotLimit = 5;
+                ui.display("After throwing a fit, the staff ask you to leave");
+                return;
+            }
+            else {
+                --idiotLimit;
+            }
         }
         shopMenu();
     }

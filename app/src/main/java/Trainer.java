@@ -64,6 +64,10 @@ public class Trainer {
         items.add(i); // only add if there's not already an item with this name
     }
     
+    public int getItemCount() {
+        return items.size();
+    }
+    
     public Item getItem(int index) {
         return items.get(index);
     }
@@ -118,6 +122,17 @@ public class Trainer {
             }
         }
         return sum;
+    }
+    
+    public int lastLiveMonIndex() {
+        for(int i = mons.length - 1; i >= 0; --i) {
+            if (mons[i] != null) {
+                if(mons[i].getCurrentHP() > 0) {
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
     
     public boolean switchMons(int index1, int index2) {

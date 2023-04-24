@@ -44,7 +44,7 @@ public class EndPhase implements AbstractPhase {
                     nextPhase = 4;
                 }
                 else {
-                    nextPhase = 3;
+                    nextPhase = 5;
                     // check exp
                     int dedLvl = t.getFrontMon().getLvl();
                     int significanceFactor = 25; // constant for this game, but varies in PTU
@@ -100,10 +100,14 @@ public class EndPhase implements AbstractPhase {
         switch(nextPhase) {
         case 0:
             return new BeginningPhase(trainers, ui, weather, acquired);
-        case 3:
-            return new CleanupPhase(trainers, ui, weather, acquired);
+        
         case 4:
             return new DeadPhase(trainers, ui, weather, acquired);
+        case 5:
+            return new ReturnPhase(trainers, ui, weather, acquired);
+        case 6:
+            return new CapturedPhase(trainers, ui, weather, acquired);  // not reachable
+                                                                        // from this phase
         default:
             return new BeginningPhase(trainers, ui, weather, acquired);
         }

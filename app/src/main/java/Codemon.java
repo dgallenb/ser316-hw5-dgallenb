@@ -428,6 +428,11 @@ public class Codemon extends Acquirable {
         return output;
     }
     
+    public String getFullDesc() {
+        return getDescription() + "\n" + getStatDesc() + "\n" +
+                getMoveDesc();
+    }
+    
     public int[] getAvailableMoveIndices() {
         int sum = 0;
         for(int i = 0; i < moves.length; ++i) {

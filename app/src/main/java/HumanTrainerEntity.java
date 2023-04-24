@@ -6,6 +6,14 @@ public class HumanTrainerEntity extends TrainerEntity {
         super(t);
         ui = new TextUI();
     }
+    
+    public UI getUI() {
+        return this.ui;
+    }
+    
+    public void setUI(UI ui) {
+        this.ui = ui;
+    }
 
     @Override
     public int decideBeginning() {
@@ -34,6 +42,10 @@ public class HumanTrainerEntity extends TrainerEntity {
     }
     
     public void handleSwitchMenu() {
+        if(trainer.getMonCount() < 2) {
+            ui.display("Switching not available yet.");
+            return;
+        }
         String s = "";
         s += "Choose a Codemon: \n";
         int count = 0;
@@ -218,7 +230,7 @@ public class HumanTrainerEntity extends TrainerEntity {
             }
             choices[choices.length - 1] = "Wait";
             decisionIndex = decideGeneric("Move choices: ", choices);
-            if(decisionIndex == choices.length) {
+            if(decisionIndex >= choices.length) {
                 return -2;
             }
             else {
@@ -276,8 +288,9 @@ public class HumanTrainerEntity extends TrainerEntity {
             }
         }
         ui.display(s);
-        int index = ui.getInt(1, trainer.getMons().length);
-        while((trainer.getMons()[index] == null) || 
+        int index = ui.getInt(1, trainer.lastLiveMonIndex() + 1) - 1;
+        while((index >= trainer.getMons().length) || 
+                (trainer.getMons()[index] == null) || 
                 (trainer.getMons()[index].getCurrentHP() <= 0)) {
             ui.display("Invalid selection.\n");
             index = ui.getInt(1, trainer.getMons().length);

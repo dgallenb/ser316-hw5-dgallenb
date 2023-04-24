@@ -44,6 +44,10 @@ public class Item extends Acquirable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public String getFullDesc() {
+        return name + " (" + quantity + "): " + description;
+    }
 
     public boolean use(Codemon c) {
         if(quantity < 1) {

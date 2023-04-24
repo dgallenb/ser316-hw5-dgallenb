@@ -74,6 +74,9 @@ public class MoveFactory {
             case 3:
                 frequencyDesc = "once per day";
                 break;
+            default:
+                frequencyDesc = "at will";
+                break;
             
         }
         int ac = Utility.d(3) + 1;

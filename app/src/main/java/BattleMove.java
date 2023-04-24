@@ -5,6 +5,7 @@
  *
  */
 public class BattleMove {
+    /*
     private Trainer trainer;
     private Codemon mon;
     private Weather weather;
@@ -48,4 +49,5 @@ public class BattleMove {
     public void setMovePosition(int movePosition) {
         this.movePosition = movePosition;
     }
+    */
 }

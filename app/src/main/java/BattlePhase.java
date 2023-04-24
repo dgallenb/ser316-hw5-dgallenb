@@ -276,6 +276,7 @@ public class BattlePhase implements AbstractPhase {
     
     @Override
     public int queryUser() {
+        /*
         int[] choices = new int[trainers.size()];
         for(int i = 0; i < trainers.size(); ++i) {
             choices[i] = trainers.get(i).decideInput(1);
@@ -290,6 +291,7 @@ public class BattlePhase implements AbstractPhase {
         //String output = this.conductFacepunch(battleMoves[0], battleMoves[1]);
         String output = "";
         ui.display(output);
+        */
         return 0;
     }
     
@@ -329,16 +331,24 @@ public class BattlePhase implements AbstractPhase {
             trainerIndex = index;
         }
         
-        public int compareTo(InitiativePair p2) {
-            if(this.initiative > p2.initiative) {
-                return 1;
-            }
-            else if(this.initiative < p2.initiative) {
-                return -1;
+        public int compareTo(Object o) {
+            if(o instanceof InitiativePair) {
+                InitiativePair p2 = (InitiativePair) o;
+                
+                if(this.initiative > p2.initiative) {
+                    return 1;
+                }
+                else if(this.initiative < p2.initiative) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
             }
             else {
-                return 0;
+                return -1;
             }
+            
         }
     }
 

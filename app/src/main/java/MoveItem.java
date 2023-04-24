@@ -27,7 +27,7 @@ public class MoveItem extends Item {
             move = MoveFactory.getInstance().generateMove(1, Utility.d(7) - 1);
             break;
         }
-        description += "\nMove learned: " + move.getDescription();
+        this.description += "\nMove learned: " + move.getDescription();
     }
 
     public Move getMove() {
@@ -38,16 +38,20 @@ public class MoveItem extends Item {
         this.move = move;
     }
     
-    public boolean equals(Object o) {
-        if(o instanceof MoveItem) {
-            MoveItem i = (MoveItem) o;
-            if(i.getName().equals(this.getName())) {
-                if(i.getMove().equals(this.getMove())) {
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
+    
+    public boolean sameItem(Item i) {
+        if(i instanceof MoveItem) {
+            MoveItem it = (MoveItem) i;
+            if(it.getName().equals(this.getName())) {
+                if(it.getMove().equals(this.getMove())) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
 }

@@ -100,13 +100,25 @@ public class Item extends Acquirable {
         return this.getName() + " (" + this.getQuantity() + "): " + this.getDescription();
     }
     
-    public boolean equals(Object o) {
-        if(o instanceof Item) {
-            Item i = (Item) o;
-            if(i.getName().equals(this.getName())) {
-                    return true;
+    public boolean sameItem(Item i) {
+        if(i instanceof MoveItem) {
+            if(this instanceof MoveItem) {
+                return ((MoveItem) this).sameItem((MoveItem) i);
+            }
+            else {
+                return false;
             }
         }
-        return false;
+        else if(this instanceof MoveItem) {
+            return false;
+        }
+        else {
+            if(i.getName().equals(this.getName())) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
 }

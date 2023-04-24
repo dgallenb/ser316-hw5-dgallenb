@@ -35,10 +35,12 @@ public class HumanTrainerEntity extends TrainerEntity {
             return 1;
         case 2:
             handleSwitchMenu();
+        default:
+            return 3;
             
         }
-        // TODO Auto-generated method stub
-        return input;
+        
+        //return input;
     }
     
     public void handleSwitchMenu() {

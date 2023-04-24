@@ -57,7 +57,7 @@ public class Move {
     }
 
     public void setDescription(String description) {
-        if(description == "") {
+        if(description.equals("")) {
             this.description = name + ": a DB" + db + " move. AC" + ac + 
                     ". Usable " + frequency.toString() + ". ";
         }
@@ -128,6 +128,11 @@ public class Move {
             return true;
         }
         return false;
+    }
+    
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
     }
     
     public boolean equals(Object o) {

@@ -116,6 +116,9 @@ public class GamePlay {
 
             state = battleState;
             break;
+        default:
+            state = baseState;
+            break;
         }
     }
     

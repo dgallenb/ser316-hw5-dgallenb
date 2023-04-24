@@ -116,9 +116,7 @@ public class Weather {
      * Randomly changes the weather to the next state, as dictated by the table below.
      * @return The string name for the new weather.
      */
-    public String transition() {
-        double rng = Math.random();
-        
+    public String transition() {      
         double[][] transitionMatrix =  {
                 new double[] {0.35, 0.29, 0.1, 0.1, 0.05, 0.1, 0.01}, // clear
                 new double[] {0.2, 0.29, 0.2, 0.05, 0.12, 0.13, 0.01}, // cloudy

@@ -1,6 +1,20 @@
 
 public class Utility {
+    
+    protected static double[] rngStabilizer;
+    protected static int stabilizerIndex = 0;
 
+    public static void stabilizeRNG(double[] rolls) {
+        rngStabilizer = new double[rolls.length];
+        for(int i = 0; i < rolls.length; ++i) {
+            rngStabilizer[i] = rolls[i];
+        }
+    }
+    
+    public static void randomizeRNG() {
+        rngStabilizer = null;
+    }
+    
     /**
      * Assumes the table values add up to 1.
      * @param table array of values adding up to 1, representing the probability
@@ -8,7 +22,7 @@ public class Utility {
      * @return the index indicated by the table array that the random number rolled.
      */
     public static int rollOnTable(double[] table) {
-        double rng = Math.random();
+        double rng = rng();
         double sum = 0;
         for(int i = 0; i < table.length; ++i) {
             sum += table[i];
@@ -36,7 +50,7 @@ public class Utility {
             new String[] {"Occluded", "Dark", "Void", 
                     "Night", "Shadow", "Albedo", "Nebula"}
             };
-        int roll = (int) (Math.random() * namePool[t.getTypeNum()].length);
+        int roll = (int) (rng() * namePool[t.getTypeNum()].length);
         return namePool[t.getTypeNum()][roll];
     }
     
@@ -46,7 +60,7 @@ public class Utility {
                         "Fang", "Slap", "Kick", "Bite", "Song", 
                         "Call", "Howl", "Drop", "Fall"
                         };
-            int roll = (int) (Math.random() * namePool.length);
+            int roll = (int) (rng() * namePool.length);
             return namePool[roll];
     }
     
@@ -137,13 +151,13 @@ public class Utility {
     }
     
     public static int d(int dieSize) {
-        return (int) (Math.random() * dieSize + 1);
+        return (int) (rng() * dieSize + 1);
     }
     
     public static int d(int dieCount, int dieSize) {
         int total = 0;
         for(int i = 0; i < dieCount; ++i) {
-            total += (int) (Math.random() * dieSize + 1);
+            total += (int) (rng() * dieSize + 1);
         }
         return total;
     }
@@ -182,7 +196,7 @@ public class Utility {
         };
         
         for(int i = 0; i < totals.length; ++ i) {
-            double rng = Math.random();
+            double rng = rng();
             double stat = statChance[type.getTypeNum()][i];
             double chance = stat;
             if(stat >= 1) {
@@ -194,6 +208,22 @@ public class Utility {
         
         return totals;
         
+    }
+    
+    /**
+     * 
+     * @return Either a random number between 0 and 1, or a value in a predetermined 
+     * sequence (used only so that testing coverage is easier).
+     */
+    private static double rng() {
+        if(rngStabilizer != null) {
+            if(rngStabilizer[stabilizerIndex] >= 1) {
+                rngStabilizer[stabilizerIndex] = rngStabilizer[stabilizerIndex] - 
+                        ((int) rngStabilizer[stabilizerIndex]);
+            }
+            return rngStabilizer[stabilizerIndex++];
+        }
+        return Math.random();
     }
     
     public static int[] getLevelUpBonus(MonType type) {

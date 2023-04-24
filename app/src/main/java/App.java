@@ -13,6 +13,6 @@ public class App {
         
         
         GamePlay game = new GamePlay(new BlindIdiotUI());
-        game.play(100);
+        game.play(50);
     }
 }

@@ -56,7 +56,7 @@ public class Trainer {
     
     public void addItem(Item i) {
         for(Item item : items) {
-            if(item.equals(i)) {
+            if(item.sameItem(i)) {
                 item.addQuantity(i.getQuantity());
                 return;
             }
@@ -136,16 +136,18 @@ public class Trainer {
     }
     
     public boolean switchMons(int index1, int index2) {
-        if((index1 < 0) || (index1 > mons.length) || (mons[index1] == null)) {
-            return false;
+        if((index1 > 0) && (index1 < mons.length) && 
+                (mons[index1] != null)) {
+            if((index2 >= 0) && (index2 < mons.length) && 
+                    (mons[index2] != null)) {
+                Codemon temp = mons[index1];
+                mons[index1] = mons[index2];
+                mons[index2] = temp;
+                return true;
+            }
         }
-        if((index1 < 0) || (index1 > mons.length) || (mons[index1] == null)) {
-            return false;
-        }
-        Codemon temp = mons[index1];
-        mons[index1] = mons[index2];
-        mons[index2] = temp;
-        return true;
+        return false;
+        
     }
     
     public void healAll() {

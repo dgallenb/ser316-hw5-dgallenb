@@ -146,7 +146,9 @@ public class BeginningPhase implements AbstractPhase {
             else {
                 s += "That's not an acquirable codemon!\n";
             }
-            
+        default:
+            s += "just wants to attack. \n";
+            break;
             
         }
         ui.display(s);

@@ -41,6 +41,9 @@ public class ExploreState implements GameState {
         case 4:
             nextState = 0;
             break;
+        default:
+            nextState = 0;
+            break;
         }
         ui.display(s);
         return this.trainers;

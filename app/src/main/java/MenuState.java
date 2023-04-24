@@ -90,7 +90,10 @@ public class MenuState implements GameState {
             handleSwitchMenu();
             break;
         case 3:
+        default:
             handleBaseMenu();
+            
+                
         }
         return;
     }
@@ -131,8 +134,13 @@ public class MenuState implements GameState {
         switch(choice) {
         case 1:
             pat(index); // does nothing of note, then moves to the handleMonMenu.
-        case 2:
             handleMonMenu();
+            break;
+        case 2:
+        default:
+            handleMonMenu();
+            break;
+            
         }
     }
     

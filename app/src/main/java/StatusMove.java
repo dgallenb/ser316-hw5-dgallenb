@@ -45,5 +45,20 @@ public class StatusMove extends Move {
         return db;
     }
 
-    
+    public boolean equals(Object o) {
+        if(o instanceof StatusMove) {
+            StatusMove i = (StatusMove) o;
+            if(i.getDb() == this.getDb()) {
+                if(i.getType().getTypeNum() == this.type.getTypeNum()) {
+                    if(i.getAc() == this.getAc()) {
+                        if(i.getFrequency().getTypeNum() == 
+                                frequency.getTypeNum()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

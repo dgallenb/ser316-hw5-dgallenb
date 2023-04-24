@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * The state in charge of handling visits to the shop.
+ * @author DJ
+ *
+ */
 public class ShopState implements GameState {
     protected ArrayList<TrainerEntity> trainers;
     protected UI ui;
@@ -7,6 +12,12 @@ public class ShopState implements GameState {
     protected int nextState;
     protected int idiotLimit;
     
+    /**
+     * The base constructor for the shop state.
+     * @param trainers The current list of trainers to track (should be only 1).
+     * @param ui The UI to use to get input and send output.
+     * @param weather The current weather in the game.
+     */
     public ShopState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
         this.trainers = trainers;
         this.ui = ui;
@@ -17,16 +28,14 @@ public class ShopState implements GameState {
     }
 
     @Override
-    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
-        this.trainers = trainers;
-        if(weather.isDay()) {
+    public int processState() {
+        if (weather.isDay()) {
             shopOpen();
-        }
-        else {
+        } else {
             shopClosed();
         }
         
-        return this.trainers;
+        return nextState;
     }
    
     public void shopOpen() {
@@ -34,6 +43,9 @@ public class ShopState implements GameState {
         shopMenu();
     }
     
+    /**
+     * Handles the menu for the shop.
+     */
     public void shopMenu() {
         String s = "";
         s += "You have $" + trainers.get(0).getTrainer().getMoney() + " to spend.\n";
@@ -45,62 +57,59 @@ public class ShopState implements GameState {
         int choice = ui.getInt(1, 9);
         Item item;
         int itemCost = 0;
-        switch(choice) {
-        case 1:
-            item = new Item("Potion", "Heals 20HP.", 1);
-            itemCost = 200;
-            break;
-        case 2:
-            item = new Item("Capture Stone", "Captures Codemon (probably)", 1);
-            itemCost = 200;
-            break;
-        case 3:
-            item = new Item("XAttack", "Temporarily increases a Codemon's attack.", 1);
-            itemCost = 2000;
-            break;
-        case 4:
-            item = new Item("XDefend", "Temporarily increases a Codemon's defense.", 1);
-            itemCost = 2000;
-            break;
-        case 5:
-            item = new Item("XSpeed", "Temporarily increases a Codemon's speed.", 1);
-            itemCost = 2000;
-            break;
-        case 6:
-            item = new MoveItem("Move Stone", "Teaches a codemon a new move.", 1);
-            itemCost = 500;
-            break;
-        case 7:
-            item = new MoveItem("Mighty Move Stone", "Teaches a codemon a stronger move.", 1);
-            itemCost = 2000;
-            break;
-        case 8:
-            item = new MoveItem("Epic Move Stone", "Teaches a codemon a powerful move.", 1);
-            itemCost = 5000;
-            break;
-        case 9:
-            ui.display("You leave, knowing you'll return sooner or later.");
-            return;
-
-        default:
-            item = new Item("Mysterious Berry", "It probably does something. Who knows?", 1);
-            itemCost = 200;
-            break;
+        switch (choice) {
+            case 1:
+                item = new Item("Potion", "Heals 20HP.", 1);
+                itemCost = 200;
+                break;
+            case 2:
+                item = new Item("Capture Stone", "Captures Codemon (probably)", 1);
+                itemCost = 200;
+                break;
+            case 3:
+                item = new Item("XAttack", "Temporarily increases a Codemon's attack.", 1);
+                itemCost = 2000;
+                break;
+            case 4:
+                item = new Item("XDefend", "Temporarily increases a Codemon's defense.", 1);
+                itemCost = 2000;
+                break;
+            case 5:
+                item = new Item("XSpeed", "Temporarily increases a Codemon's speed.", 1);
+                itemCost = 2000;
+                break;
+            case 6:
+                item = new MoveItem("Move Stone", "Teaches a codemon a new move.", 1);
+                itemCost = 500;
+                break;
+            case 7:
+                item = new MoveItem("Mighty Move Stone", "Teaches a codemon a stronger move.", 1);
+                itemCost = 2000;
+                break;
+            case 8:
+                item = new MoveItem("Epic Move Stone", "Teaches a codemon a powerful move.", 1);
+                itemCost = 5000;
+                break;
+            case 9:
+                ui.display("You leave, knowing you'll return sooner or later.");
+                return;
+    
+            default:
+                item = new Item("Mysterious Berry", "It probably does something. Who knows?", 1);
+                itemCost = 200;
+                break;
         }
-        if(moneyCheck(trainers.get(0).getTrainer(), itemCost)) {
+        if (moneyCheck(trainers.get(0).getTrainer(), itemCost)) {
             trainers.get(0).getTrainer().addMoney(-1 * itemCost);
             trainers.get(0).getTrainer().addItem(item);
             ui.display("You bought a " + item.getName() + ". ");
-            
-        }
-        else {
+        } else {
             ui.display("You don't have enough money for " + item.getName());
-            if(idiotLimit <= 0) {
+            if (idiotLimit <= 0) {
                 idiotLimit = 5;
                 ui.display("After throwing a fit, the staff ask you to leave");
                 return;
-            }
-            else {
+            } else {
                 --idiotLimit;
             }
         }
@@ -112,13 +121,7 @@ public class ShopState implements GameState {
     }
     
     public void shopClosed() {
-        ui.display("You spend hours staring at the shop window in the dark of the night. " +
-                "You might wish to consider getting a less disturbing hobby.");
+        ui.display("You spend hours staring at the shop window in the dark of the night. "
+            + "You might wish to consider getting a less disturbing hobby.");
     }
-
-    @Override
-    public int nextState() {
-        return 0;
-    }
-
 }

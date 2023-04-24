@@ -9,12 +9,12 @@ public class BlindIdiotUI implements UI {
 
     @Override
     public int getInt(int min, int max) {
-        if(min > max) {
+        if (min > max) {
             int temp = max;
             max = min;
             min = temp;
         }
-        if(min == max) {
+        if (min == max) {
             return min;
         }
         int choice = (int) Utility.d(max) - 1 + min;

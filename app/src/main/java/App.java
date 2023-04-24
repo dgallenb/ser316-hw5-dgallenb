@@ -9,10 +9,14 @@ public class App {
         System.out.println(text);
     }
 
+    /**
+     * Main. You know, the main class.
+     * @param args I forget what this is for.
+     */
     public static void main(String[] args) {
         
-        
         GamePlay game = new GamePlay(new BlindIdiotUI());
+        //GamePlay game = new GamePlay();
         game.play(50);
     }
 }

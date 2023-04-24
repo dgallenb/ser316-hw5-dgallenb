@@ -2,33 +2,31 @@ import java.util.ArrayList;
 
 public class CapturedPhase extends CleanupPhase {
 
-    public CapturedPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w) {
-        super(trainers, ui, w);
+    public CapturedPhase(ArrayList<TrainerEntity> trainers, UI ui) {
+        super(trainers, ui);
     }
     
-    public CapturedPhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w,
+    public CapturedPhase(ArrayList<TrainerEntity> trainers, UI ui,
             ArrayList<Acquirable> a) {
-        super(trainers, ui, w, a);
+        super(trainers, ui, a);
     }
     
     
     protected void processRewards(TrainerEntity t) {
-        while(acquired.size() > 0) {
+        while (acquired.size() > 0) {
             Acquirable a = acquired.remove(0);
-            if(a instanceof Item) {
+            if (a instanceof Item) {
                 awardItem(t, (Item) a);
-            }
-            else if(a instanceof Codemon) {
+            } else if (a instanceof Codemon) {
                 awardCodemon(t, (Codemon) a); 
-            }
-            else {
+            } else {
                 // nothing should be here, but eh.
             }
         }
     }
     
     /**
-     * Unused at the moment, but could be handy down the road
+     * Unused at the moment, but could be handy down the road.
      * @param t The trainer to receive the item.
      * @param i The item to be given.
      */
@@ -41,16 +39,15 @@ public class CapturedPhase extends CleanupPhase {
         String s = "";
         s += "You gained " + c.getName() + ", a " + c.getType().toString();
         s += " codemon.\n";
-        if(t.getTrainer().getMonCount() < t.getTrainer().getMons().length) {
+        if (t.getTrainer().getMonCount() < t.getTrainer().getMonCount()) {
             boolean added = t.getTrainer().addMon(c);
-            if(!added) {
+            if (!added) {
                 s += "But for some reason, you couldn't keep them.\n";
                 
             }
             ui.display(s);
             return;
-        }
-        else {
+        } else {
             s += "But you already have " + t.getTrainer().getMonCount() + " codemon\n";
             ui.display(s);
             releaseMon(t, c);
@@ -63,23 +60,23 @@ public class CapturedPhase extends CleanupPhase {
     private void releaseMon(TrainerEntity t, Codemon c) {
         String s = "";
         s += "Who would you like to release?\n";
-        for(int i = 0; i < t.getTrainer().getMons().length; ++i) {
-            if(t.getTrainer().getMons()[i] != null) {
-                s += "" + (i + 1) + ". " + t.getTrainer().getMons()[i].getName() + "\n";
+        for (int i = 0; i < t.getTrainer().getMonCount(); ++i) {
+            if (t.getTrainer().getMon(i) != null) {
+                s += "" + (i + 1) + ". " + t.getTrainer().getMon(i).getName() + "\n";
             }
         }
-        s += "" + (t.getTrainer().getMons().length + 1) + ". "+ c.getName() + "\n";
+        s += "" + (t.getTrainer().getMonCount() + 1) + ". " + c.getName() + "\n";
         ui.display(s);
-        int index = ui.getInt(1, t.getTrainer().getMons().length + 1) - 1;
-        if(index == t.getTrainer().getMons().length) {
+        int index = ui.getInt(1, t.getTrainer().getMonCount() + 1) - 1;
+        if (index == t.getTrainer().getMonCount()) {
             ui.display("You released " + c.getName() + ", never to see them again.");
             return;
         }
-        while(t.getTrainer().getMons()[index] == null) {
+        while (t.getTrainer().getMon(index) == null) {
             ui.display("Invalid (and confusing) selection!\n");
-            index = ui.getInt(1, t.getTrainer().getMons().length + 1) - 1;
+            index = ui.getInt(1, t.getTrainer().getMonCount() + 1) - 1;
         }
-        Codemon temp = t.getTrainer().getMons()[index];
+        Codemon temp = t.getTrainer().getMon(index);
         
         t.getTrainer().replaceMon(c, index);
         ui.display("You replaced " + temp.getName() + " with " + c.getName());

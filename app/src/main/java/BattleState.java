@@ -20,7 +20,21 @@ public class BattleState implements GameState {
      * 7.1. If a trainer has a ded mon, they choose a new mon to send out.
      * 
      */
+    
+    /**
+     * The base constructor for the battle state.
+     * @param trainers The current list of trainers to track (should be 2).
+     * @param ui The UI to use to get input and send output.
+     * @param weather The current weather in the game.
+     */
     public BattleState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather) {
+        /*
+        this.trainers = new ArrayList<TrainerEntity>();
+        for(int i = 0; i < trainers.size(); ++i) {
+            this.trainers.add(trainers.get(i));
+        }
+        */
+        
         this.trainers = trainers;
         this.weather = weather;
         this.ui = ui;
@@ -29,29 +43,24 @@ public class BattleState implements GameState {
     }
 
     @Override
-    public ArrayList<TrainerEntity> processState(ArrayList<TrainerEntity> trainers) {
-        this.trainers = trainers;
+    public int processState() {
         phase = new BeginningPhase(trainers, ui, weather);
-        while(true) {
-            if(phase instanceof DeadPhase) {
+        while (true) {
+            if (phase instanceof DeadPhase) {
                 nextState = 4;
                 phase = phase.performPhase();
                 break;
-            }
-            else if(phase instanceof ReturnPhase) {
+            } else if (phase instanceof ReturnPhase) {
                 nextState = 0;
                 phase = phase.performPhase();
                 break;
-            }
-            else if(phase instanceof CapturedPhase) {
+            } else if (phase instanceof CapturedPhase) {
                 nextState = 0;
                 phase = phase.performPhase();
                 break;
-            }
-            else if(phase == null) {
+            } else if (phase == null) {
                 break;
-            }
-            else {
+            } else {
                 phase = phase.performPhase();
             }
         }
@@ -66,11 +75,6 @@ public class BattleState implements GameState {
         }
         return null;
         */
-        return this.trainers;
-    }
-
-    @Override
-    public int nextState() {
         return nextState;
     }
 }

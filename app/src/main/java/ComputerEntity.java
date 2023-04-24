@@ -11,13 +11,13 @@ public class ComputerEntity extends TrainerEntity {
      */
     public int decideSwitch() {
         
-        if(trainer.countLiveMons() > 1) {
-            int curHP = trainer.getMons()[0].getCurrentHP();
-            int maxHP = trainer.getMons()[0].getHp();
-            if((curHP * 2 ) < maxHP) {
+        if (trainer.countLiveMons() > 1) {
+            int curHp = trainer.getMon(0).getCurrentHp();
+            int maxHp = trainer.getMon(0).getHp();
+            if ((curHp * 2) < maxHp) {
                 int index = Utility.d(trainer.countLiveMons()) - 1;
-                if(index != 0) {
-                    if(trainer.getMons()[index].getCurrentHP() > curHP) {
+                if (index != 0) {
+                    if (trainer.getMon(index).getCurrentHp() > curHp) {
                         return index;
                     }
                 }
@@ -38,30 +38,30 @@ public class ComputerEntity extends TrainerEntity {
      */
     public int decideBeginning() {
         int switchDecision = decideSwitch();
-        if(switchDecision == 0) {
+        if (switchDecision == 0) {
             return decideTraining();
-        }
-        else {
+        } else {
             return switchDecision;
         }
     }
 
     @Override
     public int decideInput(int phase) {
-        switch(phase) {
-        case 0: // beginning phase
-            return decideBeginning();  
+        switch (phase) {
+            case 0: // beginning phase
+                return decideBeginning();  
+            default:
+                return 0;
         }
-        return 0;
     }
 
     @Override
     public int decideBattle() {
         int[] moves = getFrontMon().getAvailableMoveIndices();
         int moveChoice = -1;
-        int maxDB = 0;
-        for(int i : moves) {
-            if(getFrontMon().predictDB(i) > maxDB) {
+        int maxDb = 0;
+        for (int i : moves) {
+            if (getFrontMon().predictDb(i) > maxDb) {
                 moveChoice = i;
             }
         }
@@ -85,9 +85,9 @@ public class ComputerEntity extends TrainerEntity {
     protected int forceSwitch() {
         int[] liveIndices = new int[trainer.countLiveMons()];
         int count = 0;
-        for(int i = 1; i < trainer.getMons().length; ++i) {
-            if(trainer.getMons()[i] != null) {
-                if(trainer.getMons()[i].getCurrentHP() > 0) {
+        for (int i = 1; i < trainer.getMonCount(); ++i) {
+            if (trainer.getMon(i) != null) {
+                if (trainer.getMon(i).getCurrentHp() > 0) {
                     liveIndices[count] = i;
                     ++count;
                 }

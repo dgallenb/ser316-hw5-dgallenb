@@ -1,10 +1,15 @@
 import java.util.Scanner;
 
+/**
+ * A basic implementation of a UI that sanitizes input values. 
+ * @author DJ
+ *
+ */
 public class TextUI implements UI {
-    Scanner s;
+    Scanner scanner;
     
     public TextUI() {
-        s = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
     
     public void display(String s) {
@@ -15,8 +20,8 @@ public class TextUI implements UI {
     public int getInt(int min, int max) {
         
         int input = getInt();
-        while(true) {
-            if((input <= max) && (input >= min)) {
+        while (true) {
+            if ((input <= max) && (input >= min)) {
                 break;
             }
             display("Please input a value in the specified range");
@@ -26,11 +31,11 @@ public class TextUI implements UI {
     }
     
     private int getInt() {
-        while(!s.hasNextInt()) {
-            s.nextLine();
+        while (!scanner.hasNextInt()) {
+            scanner.nextLine();
             display("Please input a valid value.");
         }
-        return s.nextInt();
+        return scanner.nextInt();
     }
 
     @Override

@@ -18,68 +18,70 @@ public class HumanTrainerEntity extends TrainerEntity {
     @Override
     public int decideBeginning() {
         String[] choices = new String[] {"Use item.", "Switch codemon.",
-                "Focused training.", "Inspired training.", 
-                "Brutal training.", "Agility training.",
-                "Use a Capture Stone."
+            "Focused training.", "Inspired training.", 
+            "Brutal training.", "Agility training.",
+            "Use a Capture Stone."
         };
         int input = decideGeneric("", choices);
-        switch(input) {
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-            return input;
-        case 1:
-            handleItemsMenu();
-            return 1;
-        case 2:
-            handleSwitchMenu();
-        default:
-            return 3;
+        switch (input) {
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return input;
+            case 1:
+                handleItemsMenu();
+                return 1;
+            case 2:
+                handleSwitchMenu();
+                return 2;
+            default:
+                return 3;
             
         }
         
         //return input;
     }
     
+    /**
+     * Handles the switch codemon menu.
+     */
     public void handleSwitchMenu() {
-        if(trainer.getMonCount() < 2) {
+        if (trainer.getMonCount() < 2) {
             ui.display("Switching not available yet.");
             return;
         }
         String s = "";
         s += "Choose a Codemon: \n";
         int count = 0;
-        for(int i = 0; i < getTrainer().getMons().length; ++i) {
-            if(getTrainer().getMons()[i] != null) {
-                s += "" + (i + 1) + ". " + getTrainer().getMons()[i].getName() + "\n";
+        for (int i = 0; i < getTrainer().getMonCount(); ++i) {
+            if (getTrainer().getMon(i) != null) {
+                s += "" + (i + 1) + ". " + getTrainer().getMon(i).getName() + "\n";
                 ++count;
             }
         }
         s += "" + (count + 1) + ". Back\n";
         ui.display(s);
         int choice1 = ui.getInt(1, count + 1);
-        if(choice1 == (count + 1)) {
+        if (choice1 == (count + 1)) {
             return;
         }
-        if(getTrainer().getMons()[choice1 - 1] == null) {
+        if (getTrainer().getMon(choice1 - 1) == null) {
             ui.display("Error: ghost codemon detected!");
             handleSwitchMenu();
             return;
-        }
-        else {
+        } else {
             ui.display("Choose another Codemon:");
             int choice2 = ui.getInt(1, count + 1);
-            if(choice2 == (count + 1)) {
+            if (choice2 == (count + 1)) {
                 return;
             }
-            while(true) {
-                if((choice2 != choice1) && 
-                        (getTrainer().getMons()[choice2 - 1] != null)) {
-                        break;
-                }
-                else {
+            while (true) {
+                if ((choice2 != choice1)
+                        && (getTrainer().getMon(choice2 - 1) != null)) {
+                    break;
+                } else {
                     ui.display("Invalid selection! Choose another Codemon:");
                     choice2 = ui.getInt(1, count + 1);
                 }
@@ -89,73 +91,78 @@ public class HumanTrainerEntity extends TrainerEntity {
         }
     }
     
+    /**
+     * Handles the items menu.
+     */
     public void handleItemsMenu() {
         String s = "";
         s += "Choose an item: \n";
-        for(int i = 0; i <  getTrainer().countItems(); ++i) {
+        for (int i = 0; i <  getTrainer().countItems(); ++i) {
             Item item =  getTrainer().getItem(i);
             s += "" + (i + 1) + ". " + item.getName() + "\n";
         }
-        s += "" + ( getTrainer().countItems() + 1) + ". Back\n";
+        s += "" + (getTrainer().countItems() + 1) + ". Back\n";
         ui.display(s);
         int choice = ui.getInt(1,   getTrainer().countItems() + 1);
-        if(choice ==  getTrainer().countItems() + 1) {
+        if (choice ==  getTrainer().countItems() + 1) {
             return;
-        }
-        else {
+        } else {
             handleItemSpecificMenu(choice - 1);
         }
     }
     
+    /**
+     * Handles the details menu for the item at the specified index.
+     * @param index The index of the item in question.
+     */
     public void handleItemSpecificMenu(int index) {
         String s =  getTrainer().getItem(index).toString() + "\n";
         s += "1. Use\n" + "2. Back";
         ui.display(s);
         int choice = ui.getInt(1, 2);
-        if(choice == 1) {
+        if (choice == 1) {
             handleUseItemMenu(index);
-        }
-        else {
+        } else {
             handleItemsMenu();
         }
     }
     
+    /**
+     * Handles using an item that was in the specified index.
+     * @param index The index of the item to use on a codemon.
+     */
     public void handleUseItemMenu(int index) {
         String s = "";
         s += "Choose a Codemon: \n";
-        for(int i = 0; i <  getTrainer().getMons().length; ++i) {
-            if(  getTrainer().getMons()[i] != null) {
-                s += "" + (i + 1) + ". " + 
-                         getTrainer().getMons()[i].getName() + "\n";
+        for (int i = 0; i < getTrainer().getMonCount(); ++i) {
+            if (getTrainer().getMon(i) != null) {
+                s += "" + (i + 1) + ". "
+                         + getTrainer().getMon(i).getName() + "\n";
             }
         }
-        s += "" + ( getTrainer().getMonCount() + 1) + ". Back\n";
+        s += "" + (getTrainer().getMonCount() + 1) + ". Back\n";
         ui.display(s);
         int choice = ui.getInt(1,  getTrainer().getMonCount() + 1);
-        if(choice == ( getTrainer().getMonCount() + 1)) {
+        if (choice == (getTrainer().getMonCount() + 1)) {
             handleItemSpecificMenu(index);
-        }
-        else {
-            boolean result =  getTrainer().getItem(index).
-                    use( getTrainer().getMons()[choice - 1]);
-            if(result) {
+        } else {
+            boolean result =  getTrainer().getItem(index)
+                    .use(getTrainer().getMon(choice - 1));
+            if (result) {
                 getTrainer().getItem(index).consume();
                 
-                ui.display("Used " +  getTrainer().getItem(index).getName() + " on " + 
-                         getTrainer().getMons()[choice - 1].getName());     
-                if( getTrainer().getItem(index).getQuantity() < 1) {
+                ui.display("Used " +  getTrainer().getItem(index).getName() + " on "
+                         + getTrainer().getMon(choice - 1).getName());     
+                if (getTrainer().getItem(index).getQuantity() < 1) {
                     getTrainer().removeItem(index);
-               }
-            }
-            else {
-                if(getTrainer().getItem(index) instanceof MoveItem) {
-                    overwriteMoveMenu(getTrainer().getMons()[choice - 1], 
-                            (MoveItem) getTrainer().getItem(index));
-                    
                 }
-                else {
-                    ui.display("You can't use " +  getTrainer().getItem(index).getName() + 
-                            " on " + getTrainer().getMons()[choice - 1].getName());
+            } else {
+                if (getTrainer().getItem(index) instanceof MoveItem) {
+                    overwriteMoveMenu(getTrainer().getMon(choice - 1), 
+                            (MoveItem) getTrainer().getItem(index));
+                } else {
+                    ui.display("You can't use " +  getTrainer().getItem(index).getName() 
+                            + " on " + getTrainer().getMon(choice - 1).getName());
                 }
                 
             }
@@ -163,17 +170,23 @@ public class HumanTrainerEntity extends TrainerEntity {
         }
     }
     
+    /**
+     * Handles the menu for overwriting a codemon's move.
+     * @param c The codemon learning a new move.
+     * @param item The item that prompted learning the move.
+     * @return True if the move was learned, false otherwise.
+     */
     public boolean overwriteMoveMenu(Codemon c, MoveItem item) {
-        ui.display("That codemon can't learn another move. " +
-                "Would you like to erase a move?\n1. Yes\n2. No.");
+        ui.display("That codemon can't learn another move. "
+                + "Would you like to erase a move?\n1. Yes\n2. No.");
         int choice = ui.getInt(1, 2);
-        if(choice == 1) {
+        if (choice == 1) {
             String s = "";
             s += "Select a move to overwrite.\n";
             int count = 0;
-            for(int i = 0; i < c.getMoves().length; ++i) {
+            for (int i = 0; i < c.getMoveCount(); ++i) {
                 Move m = c.getMove(i);
-                if(m != null) {
+                if (m != null) {
                     s += "" + (i + 1) + ". " + m.getFullDesc() + "\n";
                     ++count;
                 }
@@ -181,37 +194,36 @@ public class HumanTrainerEntity extends TrainerEntity {
             s += "" + (count + 1) + ". " + item.getMove().getFullDesc() + " (Cancel)\n";
             ui.display(s);
             int moveSelection = ui.getInt(1, count + 1);
-            if(moveSelection == (count + 1)) {
+            if (moveSelection == (count + 1)) {
                 return false;
-            }
-            else {
+            } else {
                 c.overrideMove(item.getMove(), moveSelection - 1);
                 item.consume();
-                if( item.getQuantity() < 1) {
-                     getTrainer().removeItem(item);
+                if (item.getQuantity() < 1) {
+                    getTrainer().removeItem(item);
                 }
                 ui.display("Move overwritten");
                 return true;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     @Override
     public int decideInput(int phase) {
-        switch(phase) {
-        case 0:
-            return decideBeginning();
-        case 1:
-            return decideBattle();
-        case 2:
-            return forceSwitch();
-        case 3:
-            return 0;
+        switch (phase) {
+            case 0:
+                return decideBeginning();
+            case 1:
+                return decideBattle();
+            case 2:
+                return forceSwitch();
+            case 3:
+                return 0;
+            default:
+                return 0;
         }
-        return 0;
     }
 
     /**
@@ -225,30 +237,28 @@ public class HumanTrainerEntity extends TrainerEntity {
         Codemon firstMon = getFrontMon();
         int[] moveIndices = firstMon.getAvailableMoveIndices();
         int decisionIndex = 0;
-        if(moveIndices.length > 0) {
+        if (moveIndices.length > 0) {
             String[] choices = new String[moveIndices.length + 1];
-            for(int i = 0; i < moveIndices.length; ++i) {
+            for (int i = 0; i < moveIndices.length; ++i) {
                 choices[i] = firstMon.getMove(moveIndices[i]).getName();
             }
             choices[choices.length - 1] = "Wait";
             decisionIndex = decideGeneric("Move choices: ", choices);
-            if(decisionIndex >= choices.length) {
+            if (decisionIndex >= choices.length) {
                 return -2;
-            }
-            else {
+            } else {
                 --decisionIndex;
             }
-        } 
-        else if(moveIndices.length < 1) {
+        } else { // moveIndices.length < 1)
             String[] choices = new String[] {"Struggle", "Wait"};
             decisionIndex = decideGeneric("Move choices: ", choices);
             
             return (decisionIndex == 1) ? -1 : -2;
         }
-        while(!getFrontMon().getMove(decisionIndex).isAvailable()) {
+        while (!getFrontMon().getMove(decisionIndex).isAvailable()) {
             ui.display("Move unavailable!\n");
             decisionIndex = ui.getInt(1, moveIndices[moveIndices.length - 1]) - 1;
-            if(decisionIndex == moveIndices.length) {
+            if (decisionIndex == moveIndices.length) {
                 return -2;
             }
         }
@@ -270,7 +280,7 @@ public class HumanTrainerEntity extends TrainerEntity {
     
     protected int decideGeneric(String preChoiceText, String[] choices) {
         String s = preChoiceText + "\n";
-        for(int i = 0; i < choices.length; ++i) {
+        for (int i = 0; i < choices.length; ++i) {
             String choice = choices[i];
             s += "" + (i + 1) + ". " + choice + "\n";
         }
@@ -282,20 +292,21 @@ public class HumanTrainerEntity extends TrainerEntity {
     protected int forceSwitch() {
         String s = "";
         s += "Switch to a new Codemon: \n";
-        for(int i = 1; i < trainer.getMons().length; ++i) {
-            if(trainer.getMons()[i] != null) {
-                if(trainer.getMons()[i].getCurrentHP() > 0) {
-                    s += "" + i + ". " + trainer.getMons()[i].getName() + "\n";
+        for (int i = 0; i < getTrainer().getMonCount(); ++i) {
+            Codemon mon = getTrainer().getMon(i);
+            if (mon != null) {
+                if (mon.getCurrentHp() > 0) {
+                    s += "" + i + ". " + getTrainer().getMon(i).getName() + "\n";
                 }
             }
         }
         ui.display(s);
         int index = ui.getInt(1, trainer.lastLiveMonIndex() + 1) - 1;
-        while((index >= trainer.getMons().length) || 
-                (trainer.getMons()[index] == null) || 
-                (trainer.getMons()[index].getCurrentHP() <= 0)) {
+        while ((index >= trainer.getMonCount())
+                || (trainer.getMon(index) == null)
+                || (trainer.getMon(index).getCurrentHp() <= 0)) {
             ui.display("Invalid selection.\n");
-            index = ui.getInt(1, trainer.getMons().length);
+            index = ui.getInt(1, trainer.getMonCount());
         }
         return index;
     }

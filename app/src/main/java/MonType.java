@@ -1,4 +1,8 @@
-
+/**
+ * Encapsulation of a codemon type. There are seven.
+ * @author DJ
+ *
+ */
 public class MonType {
     // types: quartz, agate, sapphire, topaz, opal, peridot, onyx
     protected int type;
@@ -11,15 +15,15 @@ public class MonType {
         setType(s);
     }
     
-    public void setType(int i) {
-        if((i < 0) || (i > 6)) {
+    protected void setType(int i) {
+        if ((i < 0) || (i > 6)) {
             type = 0;
         }
         type = i;
     }
     
-    public void setType(String s) {
-        switch(s) {
+    protected void setType(String s) {
+        switch (s) {
             case "QUARTZ":
             case "quartz":
             case "Quartz":
@@ -78,25 +82,28 @@ public class MonType {
         return type;
     }
     
+    /**
+     * Converts the codemon type into a string.
+     * @return A string representation of the type.
+     */
     public String toString() {
-        switch(type) {
-        
-        case 0:
-            return "QUARTZ";
-        case 1:
-            return "AGATE";
-        case 2: 
-            return "SAPPHIRE";
-        case 3:
-            return "TOPAZ";
-        case 4:
-            return "OPAL";
-        case 5:
-            return "PERIDOT";
-        case 6:
-            return "ONYX";
-        default:
-            return "QUARTZ";
+        switch (type) {
+            case 0:
+                return "QUARTZ";
+            case 1:
+                return "AGATE";
+            case 2: 
+                return "SAPPHIRE";
+            case 3:
+                return "TOPAZ";
+            case 4:
+                return "OPAL";
+            case 5:
+                return "PERIDOT";
+            case 6:
+                return "ONYX";
+            default:
+                return "QUARTZ";
         }
     }
     
@@ -104,20 +111,12 @@ public class MonType {
         return new MonType(type);
     }
     
-    public boolean equals(Codemon o) {
-        /*
-        if(o instanceof MonType) {
-            return ((MonType) o).getTypeNum() == type;
-        }*/
-        return false;
-    }
-    
     /**
      * Equivalent to montype here. Gets overwritten by the child class that 
      * handles multityped codemons.
      * @param m The monType to compare to
      * @return True if the mon types are the same (or, in a multitype mon,
-     * if one of the types inside each matches). False otherwise.
+     *      if one of the types inside each matches). False otherwise.
      */
     public boolean sameMonType(MonType m) {
         return this.equals(m);
@@ -127,21 +126,27 @@ public class MonType {
         return (int) (damage * getTypeMod(atkType));
     }
     
- // clear beats eclipse, everything else beats clear
+    // clear beats eclipse, everything else beats clear
     // cloudy beats rainy, stormy
     // rainy beats windy, snowy,
     // windy beats stormy, cloudy
     // stormy beats snowy, rainy
     // snowy beats cloudy, windy
+    /**
+     * Returns the scalar to multiply damage by for effective/ineffective moves.
+     * @param defTypeNum The number indicator for the defender's type.
+     * @param atkTypeNum The number indicator for the defender's type.
+     * @return A scalar to multiply damage by.
+     */
     protected static double typeMod(int defTypeNum, int atkTypeNum) {
         double[][] modMatrix = {
-                new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
-                new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
-                new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
-                new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
-                new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
-                new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
-                new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
+            new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
+            new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
+            new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
+            new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
+            new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
+            new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
+            new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
         };
         double scalar = modMatrix[atkTypeNum][defTypeNum];
         return scalar;

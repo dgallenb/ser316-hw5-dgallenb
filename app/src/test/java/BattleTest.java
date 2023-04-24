@@ -1,0 +1,85 @@
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+public class BattleTest {
+    ArrayList<TrainerEntity> trainers;
+    Weather weather;
+    UI ui;
+    
+    
+    @Before
+    public void setUp() throws Exception {
+        Utility.stabilizeRng(new double[] {0.95, 0.05, 0.95, 0.05});
+        ui = new TextUI();
+        weather = new Weather(0);
+        trainers = new ArrayList<TrainerEntity>();
+        
+        //TrainerEntity t1 = new
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Utility.randomizeRng();
+    }
+    
+    @Test
+    public void basicCodemonConstructorTest() {
+        Trainer t1 = new Trainer();
+        Move[] moveset1 = new Move[6];
+        moveset1[0] = new Move("Base", "Base description", 10, 2, new Frequency(0), new MonType(0));
+        Move[] moveset3 = new Move[6];
+        for(int i = 0; i < moveset3.length; ++i) {
+            moveset3[i] = new Move("Base", "Base description", 10, 2, new Frequency(0), new MonType(0));
+        }
+        MonType type1 = new MonType(0);
+        Codemon c1 = new Codemon(type1, 30, 6, 6, 6, moveset3, 0);
+        Codemon c2 = new Codemon();
+        c2.addMove(new Move("Added Move", "Desc", 9, 2, new Frequency(1), new MonType(1)));
+        
+        assertEquals(c1.getHp(), 30);
+        assertEquals(c1.getAtk(), 6);
+        assertEquals(c1.getDef(), 6);
+        assertEquals(c1.getSpd(), 6);
+        assertEquals(c1.getType().getTypeNum(), 0);
+        assertEquals(c1.getMove(0).getName(), "Base");
+        assertEquals(c1.getMove(0).getDescription(), "Base description");
+        assertEquals(c1.getMove(0).getDb(), 10);
+        assertEquals(c1.getMove(0).getAc(), 2);
+        assertEquals(c1.getMove(0).getType().getTypeNum(), 0);
+    }
+    
+    @Test
+    public void moveConstructorTest() {
+        Move move1 = new Move("Base", "Base description", 10, 2, new Frequency(0), new MonType(0));
+        Move move2 = new Move();
+        
+        assertEquals("Base", move1.getName());
+        assertEquals("Base description", move1.getDescription());
+        assertEquals(10, move1.getDb());
+        assertEquals(2, move1.getAc());
+        assertEquals(true, move1.isAvailable());
+        assertEquals(0, move1.getType().getTypeNum());
+        
+        assertEquals("Struggle", move2.getName());
+        assertEquals("Default move", move2.getDescription());
+        assertEquals(4, move2.getDb());
+        assertEquals(4, move2.getAc());
+        assertEquals(true, move2.isAvailable());
+        assertEquals(0, move2.getType().getTypeNum());
+    }
+    /*
+    @Test 
+    public void codemonConstructorTest1() {
+        
+    }
+    
+    @Test 
+    public void beginningPhaseCheck {
+        //BattleState(ArrayList<TrainerEntity> trainers,  UI ui, Weather weather)
+    }
+    */
+}

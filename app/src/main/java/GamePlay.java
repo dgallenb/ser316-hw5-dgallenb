@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/**
+ * The class responsible for playing the actual game.
+ * @author DJ
+ *
+ */
 public class GamePlay {
     protected ArrayList<TrainerEntity> trainers;
     protected GameState baseState;
@@ -13,10 +18,17 @@ public class GamePlay {
     protected UI ui;
     protected Weather weather;
     
+    /**
+     * Starts the game with a text UI.
+     */
     public GamePlay() {
         this(new TextUI());
     }
     
+    /**
+     * Starts the game with the specified UI.
+     * @param ui The UI to use for all interactions.
+     */
     public GamePlay(UI ui) {
         Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(5);
         t.setName("Player");
@@ -41,6 +53,11 @@ public class GamePlay {
         state = baseState;
     }
     
+    /**
+     * Starts the game with the specified player and UI.
+     * @param t The representation of the player, hooked up to a UI.
+     * @param ui The UI to use for all other interactions.
+     */
     public GamePlay(HumanTrainerEntity t, UI ui) {
         trainers = new ArrayList<TrainerEntity>();
         trainers.add(0, t);
@@ -57,27 +74,48 @@ public class GamePlay {
         state = baseState;
     }
     
+    /**
+     * Plays the game for predetermined number of state transitions.
+     * @param limit The maximum number of transitions to perform.
+     */
     public void play(int limit) {
         
-        while(limit > 0) {
-            trainers = state.processState(trainers);
+        while (limit > 0) {
+            int nextState = state.processState();
             
-            transition();    
+            transition(nextState);    
             --limit;
         }
         ui.display(getFullTrainerInfo());
     }
     
+    /**
+     * Plays out the game.
+     */
+    public void play() {
+        while (true) {     
+            int nextState = state.processState();
+            
+            transition(nextState);    
+        }
+    }
+    
+    /**
+     * Retrieves the full info of the player at the end of the game.
+     * @return A string representing the player's "progress".
+     */
     public String getFullTrainerInfo() {
         Trainer t = trainers.get(0).getTrainer();
         String output = "Trainer: " + t.getName() + ", $" + t.getMoney();
         output += "\n\nItems:\n";
-        for(int i = 0; i < t.getItemCount(); ++i) {
+        for (int i = 0; i < t.getItemCount(); ++i) {
             output += t.getItem(i).getFullDesc() + "\n";
         }
         output += "\n\nCodemons:\n";
-        for(Codemon c : t.getMons()) {
-            if(c != null) {
+        for (int i = 0; i < t.getMonCount(); ++i) {
+            Codemon c = t.getMon(i);
+            
+            if (c != null) {
                 output += c.getFullDesc();
                 output += "\n";
             }
@@ -86,39 +124,34 @@ public class GamePlay {
         return output;
     }
     
-    public void play() {
-        while(true) {     
-            trainers = state.processState(trainers);
-            
-            transition();    
-        }
-    }
+    /**
+     * Moves to the next state based on the indicated integer.
+     * @param nextState The indicator for the next state to move to.
+     */
+    public void transition(int nextState) {
+        switch (nextState) {
+            case 0:
+                state = baseState;
+                break;
+            case 1:
+                state = exploreState; 
+                break;
+            case 2: 
+                state = shopState;
+                break;
+            case 3: 
+                state = menuState;
+                break;
+            case 4:
+                state = restState;            
+                break;
+            case 5:
     
-    public void transition() {
-        int nextState = state.nextState();
-        switch(nextState) {
-        case 0:
-            state = baseState;
-            break;
-        case 1:
-            state = exploreState; 
-            break;
-        case 2: 
-            state = shopState;
-            break;
-        case 3: 
-            state = menuState;
-            break;
-        case 4:
-            state = restState;            
-            break;
-        case 5:
-
-            state = battleState;
-            break;
-        default:
-            state = baseState;
-            break;
+                state = battleState;
+                break;
+            default:
+                state = baseState;
+                break;
         }
     }
     

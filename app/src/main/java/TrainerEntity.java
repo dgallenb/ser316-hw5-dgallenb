@@ -28,7 +28,7 @@ public abstract class TrainerEntity {
      */
     public abstract int decideBeginning();
     
-    /** options are: 0-5: use move in index i.
+    /** Options are: 0-5: use move in index i.
      *  -1: struggle. Hidden, only used if no other moves are available.
      * @return decision indicator.
      */
@@ -39,14 +39,14 @@ public abstract class TrainerEntity {
     public abstract int decideCleanup();
     
     /**
-     * Phase indicator is 0 for beginning, 1 for attack choice, 2 is for end, 3 for cleanup
-     * @param phase
-     * @return
+     * Phase indicator is 0 for beginning, 1 for attack choice, 2 is for end, 3 for cleanup.
+     * @param phase The integer indicator for the current phase.
+     * @return The integer representing the trainer's decision.
      */
     public abstract int decideInput(int phase);
     
     public Codemon getFrontMon() {
-        return this.getTrainer().getMons()[0];
+        return this.getTrainer().getMon(0);
     }
 
     protected abstract int forceSwitch();

@@ -211,13 +211,13 @@ public class Utility {
      */
     public static int weatherDamageBonus(MonType type, Weather weather) {
         int[][] damageMatrix = {
-            new int[] {5, 0, 0, 0, 0, 0, -5}, 
+            new int[] {5, 0, 0, 0, 0, 0, 5}, 
             new int[] {0, 5, 0, 0, 0, 0, -5}, 
             new int[] {0, 0, 5, 0, 0, 0, -5}, 
             new int[] {0, 0, 0, 5, 0, 0, -5}, 
             new int[] {0, 0, 0, 0, 5, 0, -5}, 
             new int[] {0, 0, 0, 0, 0, 5, -5}, 
-            new int[] {5, 0, 0, 0, 0, 0, 15}
+            new int[] {0, 0, 0, 0, 0, 0, 15}
         };
         return damageMatrix[type.getTypeNum()][weather.getTypeNum()];
     }
@@ -244,7 +244,7 @@ public class Utility {
         
         for (int i = 0; i < totals.length; ++ i) {
             double rng = rng();
-            double stat = statChance[type.getTypeNum()][i];
+            double stat = statChance[type.getTypeNum()][i] + scalarMods[i];
             double chance = stat;
             if (stat >= 1) {
                 chance = stat - ((int) stat);

@@ -87,6 +87,7 @@ public class Codemon extends Acquirable {
         this.setType(basemon.getType());
         this.setExp(basemon.getExp());
         this.setLvl(basemon.getLvl());
+        moves = new Move[MAXMOVES];
         for (int i = 0; i < moves.length; ++i) {
             moves[i] = basemon.getMove(i);
         }
@@ -298,7 +299,21 @@ public class Codemon extends Acquirable {
         this.currentHp = currentHp;
     }
     
+    /**
+     * Get current accuracy. Currently affected by Focused training.
+     * @return Current accuracy bonus.
+     */
+    public int getAccuracy() {
+        return tempStats[6];
+    }
     
+    /**
+     * Get the current bonus to critical threat range. Brutal Training.
+     * @return the bonus to critical threat range.
+     */
+    public int getCritRange() {
+        return tempStats[7];
+    }
     
     /**
      * Heal the mon by X (or to full, if given no argument).
@@ -597,16 +612,18 @@ public class Codemon extends Acquirable {
      * @return The mon's current evasion.
      */
     public int computeEvade() {
-        int spdEvade = this.getSpd() / 5;
-        int defEvade = this.getDef() / 5;
-        return Math.max(spdEvade, defEvade) + tempStats[5];
+        int spdEvade = this.getCurrentSpd() / 5;
+        int defEvade = this.getCurrentDef() / 5;
+        return Math.max(spdEvade, defEvade) + tempStats[4];
     }
     
+    /*
     /**
      * Applies the specified stat changes as temporary changes.
      * @param changes The array of stat changes to make temporarily.
      * @return True if the stat changes were applied, false otherwise.
      */
+    /*
     public boolean applyStatChange(int[] changes) {
         if (changes.length != tempStats.length) {
             return false;
@@ -615,6 +632,39 @@ public class Codemon extends Acquirable {
             tempStats[i] += changes[i];
         }
         return true;
+    }
+    */
+    
+    /**
+     * Adds the input value to temporary evasion.
+     * @param val The amount to add.
+     */
+    public void addEvade(int val) {
+        tempStats[4] += val;
+    }
+    
+    /**
+     * Adds the input value to temporary initiative bonus.
+     * @param val The amount to add.
+     */
+    public void addInitiative(int val) {
+        tempStats[5] += val;
+    }
+    
+    /**
+     * Adds the input value to temporary accuracy.
+     * @param val The amount to add.
+     */
+    public void addAccuracy(int val) {
+        tempStats[6] += val;
+    }
+    
+    /**
+     * Adds the input value to temporary crit range.
+     * @param val The amount to add.
+     */
+    public void addCritRange(int val) {
+        tempStats[7] += val;
     }
     
     /**
@@ -632,7 +682,7 @@ public class Codemon extends Acquirable {
                 tempStats[2] += Math.max(this.getDef() / 5, 1);
                 return true;
             case 3: // Spd
-                tempStats[2] += Math.max(this.getSpd() / 5, 1);
+                tempStats[3] += Math.max(this.getSpd() / 5, 1);
                 return true;
             default:
                 return false;

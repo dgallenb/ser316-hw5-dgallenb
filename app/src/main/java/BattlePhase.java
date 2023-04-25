@@ -212,7 +212,7 @@ public class BattlePhase implements AbstractPhase {
         
         // check if the attack hit.
         int toHit = move.getAc() + defMon.computeEvade();
-        int roll = Utility.d(20) + atkMon.getTempStat(6);
+        int roll = Utility.d(20) + atkMon.getAccuracy();
         
         if (attacker.getTrainer().getName().contains("Wild")) {
             output += "Wild ";
@@ -241,7 +241,7 @@ public class BattlePhase implements AbstractPhase {
             }
         } else if (roll >= toHit) {
             boolean crit = (Utility.d(20)
-                    + atkMon.getTempStat(7)) >= 20;
+                    + atkMon.getCritRange()) >= 20;
             output += (crit ? "Critical hit! " : "");
             int damageReceived = defMon.receiveDamage(damageSent, atkType, crit);
             output += "It dealt " + damageReceived + " damage.\n";

@@ -35,8 +35,10 @@ public class Weather {
     public void setType(int i) {
         if ((i < 0) || (i > 6)) {
             type = 0;
+        } else {
+            type = i; 
         }
-        type = i;
+        
     }
     
     /**

@@ -10,7 +10,7 @@ public class SystemTest {
     Weather weather;
     UI ui;
     
-        
+    @Before 
     public void setUp() throws Exception {
         //Utility.stabilizeRng(new double[] {0.95, 0.05, 0.95, 0.05});
         ui = new PredictableUI();

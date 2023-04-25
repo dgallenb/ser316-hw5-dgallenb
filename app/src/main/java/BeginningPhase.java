@@ -104,19 +104,19 @@ public class BeginningPhase implements AbstractPhase {
                 */
             case 3:
                 s += "used focused training.\n";
-                t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 0, 1, 0});
+                t.getFrontMon().addAccuracy(1);
                 break;
             case 4:
                 s += "used inspired training. \n";
-                t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 1, 0, 0, 0});
+                t.getFrontMon().addEvade(1);
                 break;
             case 5:
                 s += "used brutal training. \n";
-                t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 0, 0, 1});
+                t.getFrontMon().addCritRange(1);
                 break;
             case 6:
                 s += "used agility training. \n";
-                t.getFrontMon().applyStatChange(new int[] {0, 0, 0, 0, 0, 1, 0, 0});
+                t.getFrontMon().addInitiative(4);
                 break;
             case 7:
                 /*

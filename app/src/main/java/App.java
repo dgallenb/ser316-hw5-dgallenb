@@ -34,9 +34,19 @@ public class App {
         BeginningPhase phase = new BeginningPhase(trainers, ui, weather);
         AbstractPhase nextPhase = phase.performPhase();
         AbstractPhase np1 = nextPhase.performPhase();
-        
+        np1.getClass();
         int nextState = battle.processState();
         
+        Trainer tr = trainers.get(0).getTrainer();
+        tr.addMon(monFac.generateCodemonWithT1Moves(10));
+        tr.addMon(monFac.generateCodemonWithT1Moves(10));
+        tr.addMon(monFac.generateCodemonWithT1Moves(10));
+        tr.addMon(monFac.generateCodemonWithT1Moves(10));
+        tr.addMon(monFac.generateCodemonWithT1Moves(10));
+        MenuState menu = new MenuState(trainers, ui, weather);
+        menu.handleDetailedDescriptionMenu(0, -1);
+        menu.handleDetailedDescriptionMenu(1, -1);
+        menu.handleDetailedDescriptionMenu(2, -1);
         GamePlay game = new GamePlay(new PredictableUI());
         //GamePlay game = new GamePlay(new BlindIdiotUI());
         //GamePlay game = new GamePlay();

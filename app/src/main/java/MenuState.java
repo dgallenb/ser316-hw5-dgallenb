@@ -66,7 +66,7 @@ public class MenuState implements GameState {
         int choice = ui.getInt(1, 3);
         switch (choice) {
             case 1:
-                handleMonMenu();
+                handleMonMenu(0);
                 break;
             case 2:
                 handleItemsMenu();
@@ -81,8 +81,9 @@ public class MenuState implements GameState {
     
     /**
      * Handles the basic codemon menu.
+     * @param forcedChoice Added for testing. Ends loop if this is negative.
      */
-    public void handleMonMenu() {
+    public void handleMonMenu(int forcedChoice) {
         String s = "";
         s += "Codemon: \n";
         for (int i = 0; i < player.getTrainer().getMonCount(); ++i) {
@@ -95,10 +96,12 @@ public class MenuState implements GameState {
         ui.display(s);
         
         int choice = ui.getInt(1, 3);
-        
+        if(forcedChoice < 0) {
+            return;
+        }
         switch (choice) {
             case 1:
-                handleDetailedMonMenu();
+                handleDetailedMonMenu(0);
                 break;
             case 2:
                 handleSwitchMenu();
@@ -113,8 +116,9 @@ public class MenuState implements GameState {
     
     /**
      * Handles the detailed mon menu.
+     * @param forcedChoice Added for testing. Ends loop if this is -1.
      */
-    public void handleDetailedMonMenu() {
+    public void handleDetailedMonMenu(int forcedChoice) {
         String s = "";
         s += "Choose a Codemon: \n";
         for (int i = 0; i < player.getTrainer().getMonCount(); ++i) {
@@ -126,14 +130,20 @@ public class MenuState implements GameState {
         s += "" + (player.getTrainer().getMonCount() + 1) + ". Back\n";
         ui.display(s);
         int choice = ui.getInt(1, player.getTrainer().getMonCount() + 1);
+        if (forcedChoice == -7) {
+            return;
+        }
+        else if(forcedChoice < 0) {
+            choice = -1 * forcedChoice;
+        }
         if (choice == (player.getTrainer().getMonCount() + 1)) {
-            handleMonMenu();
+            handleMonMenu(forcedChoice);
             return;
         } else if (player.getTrainer().getMon(choice - 1) == null) {
             ui.display("Error: ghost codemon detected!");
-            handleDetailedMonMenu();
+            handleDetailedMonMenu(forcedChoice);
         } else {
-            handleDetailedDescriptionMenu(choice - 1);
+            handleDetailedDescriptionMenu(choice - 1, forcedChoice);
         }
         
     }
@@ -141,25 +151,38 @@ public class MenuState implements GameState {
     /**
      * Handles the detailed description menu for the codemon at the specified index.
      * @param index The index of the codemon to give more details about.
+     * @param forcedChoice Added for testing. Ends loop if this is -1.
      */
-    public void handleDetailedDescriptionMenu(int index) {
+    public void handleDetailedDescriptionMenu(int index, int forcedChoice) {
         String s = "";
         Codemon mon = player.getTrainer().getMon(index);
-        s += mon.getDescription() + "\n" + mon.getStatDesc() + "\n" + mon.getMoveDesc() + "\n";
-        s += "Options: \n" + "1. Pat\n" + "2. Back\n";
-        ui.display(s);
-        int choice = ui.getInt(1, 2);
-        switch (choice) {
-            case 1:
-                pat(index); // does nothing of note, then moves to the handleMonMenu.
-                handleMonMenu();
-                break;
-            case 2:
-            default:
-                handleMonMenu();
-                break;
-            
+        if (mon != null) {
+            s += mon.getDescription() + "\n" + mon.getStatDesc();
+            s += "\n" + mon.getMoveDesc() + "\n";
+            s += "Options: \n" + "1. Pat\n" + "2. Back\n";
+            ui.display(s);
+            int choice = ui.getInt(1, 2);
+            if(forcedChoice < 0) {
+                choice = -1 * forcedChoice;
+            }
+            switch (choice) {
+                case 1:
+                    pat(index); // does nothing of note, then moves to the handleMonMenu.
+                    handleMonMenu(forcedChoice);
+                    break;
+                case 2:
+                    handleMonMenu(forcedChoice);
+                    break;
+                default:
+                    handleMonMenu(forcedChoice);
+                    break;
+                
+            }
+        } else {
+            handleMonMenu(forcedChoice);
         }
+        
+        
     }
     
     public void handleSwitchMenu() {

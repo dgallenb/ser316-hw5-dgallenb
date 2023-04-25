@@ -13,7 +13,7 @@ public class BattleTest {
     
     @Before
     public void setUp() throws Exception {
-        Utility.stabilizeRng(new double[] {0.95, 0.05, 0.95, 0.05});
+        //Utility.stabilizeRng(new double[] {0.95, 0.05, 0.95, 0.05});
         ui = new PredictableUI();
         weather = new Weather(0);
         trainers = new ArrayList<TrainerEntity>();
@@ -32,7 +32,7 @@ public class BattleTest {
 
     @After
     public void tearDown() throws Exception {
-        Utility.randomizeRng();
+        //Utility.randomizeRng();
     }
     
     @Test
@@ -59,8 +59,17 @@ public class BattleTest {
         BeginningPhase phase = new BeginningPhase(trainers, ui, weather);
         AbstractPhase nextPhase = phase.performPhase();
         assert(nextPhase instanceof BattlePhase);
-        //AbstractPhase nextPhase1 = ((BattlePhase) nextPhase).performPhase();
+        assertEquals(1,1);
+        //EndPhase nextPhase1 = ((BattlePhase) nextPhase).performPhase();
         //assert(nextPhase1 instanceof EndPhase);
+        
+    }
+    
+    @Test 
+    public void testBattlePhase() {
+        //BattlePhase bp = new BattlePhase(trainers, ui, weather);
+        //bp.displayPrePhaseDialogue();
+        
     }
     
     

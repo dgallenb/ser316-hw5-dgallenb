@@ -116,15 +116,21 @@ public class HumanTrainerEntity extends TrainerEntity {
      * @param index The index of the item in question.
      */
     public void handleItemSpecificMenu(int index) {
-        String s =  getTrainer().getItem(index).toString() + "\n";
-        s += "1. Use\n" + "2. Back";
-        ui.display(s);
-        int choice = ui.getInt(1, 2);
-        if (choice == 1) {
-            handleUseItemMenu(index);
+        Item item = getTrainer().getItem(index);
+        if (item != null) {
+            String s = item.toString() + "\n";
+            s += "1. Use\n" + "2. Back";
+            ui.display(s);
+            int choice = ui.getInt(1, 2);
+            if (choice == 1) {
+                handleUseItemMenu(index);
+            } else {
+                handleItemsMenu();
+            }
         } else {
             handleItemsMenu();
         }
+        
     }
     
     /**

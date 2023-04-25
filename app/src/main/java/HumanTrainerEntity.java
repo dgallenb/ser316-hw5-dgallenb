@@ -66,9 +66,9 @@ public class HumanTrainerEntity extends TrainerEntity {
         s += "" + (count + 1) + ". Back\n";
         ui.display(s);
         int choice1 = ui.getInt(1, count + 1);
-        if(forcedChoice1 != 0) {
+        if (forcedChoice1 != 0) {
             choice1 = forcedChoice1;
-            if(forcedChoice1 == -7) {
+            if (forcedChoice1 == -7) {
                 choice1 = 0;
             }
         }
@@ -82,8 +82,8 @@ public class HumanTrainerEntity extends TrainerEntity {
         } else {
             ui.display("Choose another Codemon:");
             int choice2 = ui.getInt(1, count + 1);
-            if(forcedChoice2 != 0) {
-                if(forcedChoice2 == -7) {
+            if (forcedChoice2 != 0) {
+                if (forcedChoice2 == -7) {
                     choice2 = 0;
                 } else {
                     choice2 = forcedChoice2;

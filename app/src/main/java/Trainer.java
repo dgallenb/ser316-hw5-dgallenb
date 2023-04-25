@@ -124,9 +124,17 @@ public class Trainer {
         return items.remove(item);
     }
     
+    /**
+     * Removes the item at the specified index.
+     * @param index The index of the item to remove.
+     * @return True if the item was removed, false otherwise.
+     */
     public boolean removeItem(int index) {
-        Item i = items.remove(index);
-        return i != null;
+        if ((index >= 0) && (index < items.size())) {
+            Item i = items.remove(index);
+            return i != null;
+        }
+        return false;
     }
     
     public int countItems() {

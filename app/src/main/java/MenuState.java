@@ -96,7 +96,7 @@ public class MenuState implements GameState {
         ui.display(s);
         
         int choice = ui.getInt(1, 3);
-        if(forcedChoice < 0) {
+        if (forcedChoice < 0) {
             return;
         }
         switch (choice) {
@@ -132,8 +132,7 @@ public class MenuState implements GameState {
         int choice = ui.getInt(1, player.getTrainer().getMonCount() + 1);
         if (forcedChoice == -7) {
             return;
-        }
-        else if(forcedChoice < 0) {
+        } else if (forcedChoice < 0) {
             choice = -1 * forcedChoice;
         }
         if (choice == (player.getTrainer().getMonCount() + 1)) {
@@ -162,7 +161,7 @@ public class MenuState implements GameState {
             s += "Options: \n" + "1. Pat\n" + "2. Back\n";
             ui.display(s);
             int choice = ui.getInt(1, 2);
-            if(forcedChoice < 0) {
+            if (forcedChoice < 0) {
                 choice = -1 * forcedChoice;
             }
             switch (choice) {

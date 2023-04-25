@@ -1,6 +1,11 @@
 Gradle should just be runnable from the root folder. The build.gradle file is in the app folder for reasons I can't explain, but it still seems to work just fine.
 
-Gameplan is to use a factory to generate codemons, moves, and trainers, make the factories singletons, make codemons following the decorator design pattern (to handle evolutions), and have the game cycle between various states as the game switches between exploration, battle, battle menu (healing through this), etc. 
+Patterns used:
+-State: The game cycles between BaseState, ExploreState, MenuState, BattleState, ShopState, and RestState, depending on the inputs given. States are stored in the GamePlay.java file, if you want to see the implementation. 
+-Factory: CodemonFactory.java and MoveFactory.java are both factories that produce new objects on demand.
+-Singleton: Both factories are singletons, because I don't need more than one instance of those ever.
+-Decorator: The MonTypeMulti and EvolvedCodemon classes are both decorators on MonType and Codemon (respectively).
+-Template: This was designed later and is a bit looser an implementation, but DeadPhase, ReturnPhase, and CapturedPhase are all templated off CleanupPhase, and each handle the actual cleanup postbattle differently, depending on the needs of the game.
 
 Changes I have made that deviate from the requirements:
 -Codemons learn up to 6 moves.

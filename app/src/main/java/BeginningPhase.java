@@ -186,7 +186,7 @@ public class BeginningPhase implements AbstractPhase {
     @Override
     public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
         switch (nextPhase) {
-        /*
+            /*
             case 0:
                 return new BeginningPhase(trainers, ui, weather, acquired);
                 */

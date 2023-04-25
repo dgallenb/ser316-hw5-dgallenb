@@ -50,8 +50,6 @@ public class BattleTest {
         BattleState battle = new BattleState(trainers, ui, weather);
         
         int nextState = battle.processState();
-        
-        assertEquals(1,1);
     }
     
     @Test

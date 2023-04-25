@@ -18,24 +18,10 @@ public class App {
      * @param args I forget what this is for.
      */
     public static void main(String[] args) {
-        UI ui = new PredictableUI();
-        Weather weather = new Weather(0);
-        ArrayList<TrainerEntity> trainers = new ArrayList<TrainerEntity>();
-        CodemonFactory monFac = CodemonFactory.getInstance();
-        Trainer t = new Trainer(monFac.generateCodemonWithT1Moves(10));
-        HumanTrainerEntity te = new HumanTrainerEntity(t);
-        te.setUI(ui);
-        Trainer t1 = new Trainer(monFac.generateCodemonWithT1Moves(5));
-        ComputerEntity te1 = new ComputerEntity(t1);
-        trainers.add(te);
-        trainers.add(te1);
         
-        HumanTrainerEntity he = (HumanTrainerEntity) trainers.get(0);
-        he.getTrainer().addMon(monFac.generateCodemonWithT1Moves(10));
-        he.handleSwitchMenu(-1, -7);
         
-        GamePlay game = new GamePlay(new PredictableUI());
-        //GamePlay game = new GamePlay(new BlindIdiotUI());
+        //GamePlay game = new GamePlay(new PredictableUI());
+        GamePlay game = new GamePlay(new BlindIdiotUI());
         //GamePlay game = new GamePlay();
         game.play(50);
     }

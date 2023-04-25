@@ -137,7 +137,6 @@ public class ExploreState implements GameState {
     
     /** 
      * Creates a wild codemon to battle the player in the next phase.
-     * @param targetLvl The level to target when generating codemons.
      */
     public void prepWildCodemon(double[] typeTable) {
         nextState = 5;

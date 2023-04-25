@@ -4,7 +4,7 @@ import java.util.Comparator;
 public class BattlePhase implements AbstractPhase {
     protected ArrayList<TrainerEntity> trainers; // assumed to be a human player
     protected UI ui;
-    protected int nextPhase;
+    //protected int nextPhase;
     protected ArrayList<Acquirable> acquired;
     protected Weather weather;
     
@@ -17,7 +17,7 @@ public class BattlePhase implements AbstractPhase {
     public BattlePhase(ArrayList<TrainerEntity> trainers, UI ui, Weather w) {
         this.trainers = trainers;
         this.ui = ui;
-        this.nextPhase = 2;
+        //this.nextPhase = 2;
         this.weather = w;
         acquired = new ArrayList<Acquirable>();
     }
@@ -33,7 +33,7 @@ public class BattlePhase implements AbstractPhase {
             ArrayList<Acquirable> a) {
         this.trainers = trainers;
         this.ui = ui;
-        this.nextPhase = 2;
+        //this.nextPhase = 2;
         this.weather = w;
         acquired = a;
     }
@@ -326,6 +326,10 @@ public class BattlePhase implements AbstractPhase {
         return 0;
     }
     
+    /**
+     * Grabs all user choices in one handy place.
+     * @return The array of user choices.
+     */
     public int[] queryUsers() {
         int[] choices = new int[trainers.size()];
         for (int i = 0; i < trainers.size(); ++i) {

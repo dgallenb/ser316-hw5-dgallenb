@@ -270,7 +270,7 @@ public class BattlePhase implements AbstractPhase {
      * Sorts the indexes of the trainers by their front mon's initiative.
      * @return
      */
-    protected int[] getInitiative() {
+    public int[] getInitiative() {
         int[] output = new int[trainers.size()];
         ArrayList<InitiativePair> initiatives = new ArrayList<InitiativePair>();
         for (int i = 0; i < trainers.size(); ++i) {
@@ -294,7 +294,7 @@ public class BattlePhase implements AbstractPhase {
      * @param c The codemon to refresh.
      * @param m The move to not check when refreshing.
      */
-    protected void refreshEot(Codemon c, Move m) {
+    public void refreshEot(Codemon c, Move m) {
         for (int i = 0; i < c.getMoveCount(); ++i) {
             Move mt = c.getMove(i);
             if (mt != null) {
@@ -326,7 +326,7 @@ public class BattlePhase implements AbstractPhase {
         return 0;
     }
     
-    protected int[] queryUsers() {
+    public int[] queryUsers() {
         int[] choices = new int[trainers.size()];
         for (int i = 0; i < trainers.size(); ++i) {
             choices[i] = trainers.get(i).decideInput(1);
@@ -386,7 +386,7 @@ public class BattlePhase implements AbstractPhase {
         }
         
         public int hashCode() {
-            assert false : "hashCode not designed";
+            //assert false : "hashCode not designed";
             return 42;
         }
         

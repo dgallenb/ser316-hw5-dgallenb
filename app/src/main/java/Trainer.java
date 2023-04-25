@@ -251,9 +251,10 @@ public class Trainer {
         return totalExp / count;
     }
     
-    /**
+    /*
      * Reorders mons so that the null slots are all in back.
      */
+    /*
     private void fixMonOrder() {
         int index1 = 0;
         int index2 = index1;
@@ -273,5 +274,6 @@ public class Trainer {
             }
         }
     }
+    */
     
 }

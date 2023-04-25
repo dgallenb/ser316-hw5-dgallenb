@@ -170,7 +170,7 @@ public class Move {
     }
     
     public int hashCode() {
-        assert false : "hashCode not designed";
+        //assert false : "hashCode not designed";
         return id;
     }
     

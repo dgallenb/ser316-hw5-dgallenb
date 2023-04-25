@@ -31,10 +31,10 @@ public class HumanTrainerEntity extends TrainerEntity {
             case 7:
                 return input;
             case 1:
-                handleItemsMenu();
+                handleItemsMenu(0);
                 return 1;
             case 2:
-                handleSwitchMenu();
+                handleSwitchMenu(0, 0);
                 return 2;
             default:
                 return 3;
@@ -46,8 +46,10 @@ public class HumanTrainerEntity extends TrainerEntity {
     
     /**
      * Handles the switch codemon menu.
+     * @param forcedChoice1 Leave at 0. Used only to force inputs via testing.
+     * @param forcedChoice2 Leave at 0. Used only to force inputs via testing.
      */
-    public void handleSwitchMenu() {
+    public void handleSwitchMenu(int forcedChoice1, int forcedChoice2) {
         if (trainer.getMonCount() < 2) {
             ui.display("Switching not available yet.");
             return;
@@ -64,16 +66,29 @@ public class HumanTrainerEntity extends TrainerEntity {
         s += "" + (count + 1) + ". Back\n";
         ui.display(s);
         int choice1 = ui.getInt(1, count + 1);
+        if(forcedChoice1 != 0) {
+            choice1 = forcedChoice1;
+            if(forcedChoice1 == -7) {
+                choice1 = 0;
+            }
+        }
         if (choice1 == (count + 1)) {
             return;
         }
         if (getTrainer().getMon(choice1 - 1) == null) {
             ui.display("Error: ghost codemon detected!");
-            handleSwitchMenu();
+            handleSwitchMenu(forcedChoice1 + 1, forcedChoice2);
             return;
         } else {
             ui.display("Choose another Codemon:");
             int choice2 = ui.getInt(1, count + 1);
+            if(forcedChoice2 != 0) {
+                if(forcedChoice2 == -7) {
+                    choice2 = 0;
+                } else {
+                    choice2 = forcedChoice2;
+                }
+            }
             if (choice2 == (count + 1)) {
                 return;
             }
@@ -93,8 +108,9 @@ public class HumanTrainerEntity extends TrainerEntity {
     
     /**
      * Handles the items menu.
+     * @param forcedChoice Leave at 0. Used only in testing.
      */
-    public void handleItemsMenu() {
+    public void handleItemsMenu(int forcedChoice) {
         String s = "";
         s += "Choose an item: \n";
         for (int i = 0; i <  getTrainer().countItems(); ++i) {
@@ -104,31 +120,46 @@ public class HumanTrainerEntity extends TrainerEntity {
         s += "" + (getTrainer().countItems() + 1) + ". Back\n";
         ui.display(s);
         int choice = ui.getInt(1,   getTrainer().countItems() + 1);
+        if (forcedChoice != 0) {
+            if (forcedChoice == -7) {
+                choice = 0;
+            } else {
+                choice = forcedChoice;
+            }
+        }
         if (choice ==  getTrainer().countItems() + 1) {
             return;
         } else {
-            handleItemSpecificMenu(choice - 1);
+            handleItemSpecificMenu(choice - 1, 0);
         }
     }
     
     /**
      * Handles the details menu for the item at the specified index.
      * @param index The index of the item in question.
+     * @param forcedChoice Leave at 0. Used in testing.
      */
-    public void handleItemSpecificMenu(int index) {
+    public void handleItemSpecificMenu(int index, int forcedChoice) {
         Item item = getTrainer().getItem(index);
         if (item != null) {
             String s = item.toString() + "\n";
             s += "1. Use\n" + "2. Back";
             ui.display(s);
             int choice = ui.getInt(1, 2);
+            if (forcedChoice != 0) {
+                if (forcedChoice == -7) {
+                    choice = 0;
+                } else {
+                    choice = forcedChoice;
+                }
+            }
             if (choice == 1) {
                 handleUseItemMenu(index);
             } else {
-                handleItemsMenu();
+                handleItemsMenu(0);
             }
         } else {
-            handleItemsMenu();
+            handleItemsMenu(0);
         }
         
     }
@@ -150,7 +181,7 @@ public class HumanTrainerEntity extends TrainerEntity {
         ui.display(s);
         int choice = ui.getInt(1,  getTrainer().getMonCount() + 1);
         if (choice == (getTrainer().getMonCount() + 1)) {
-            handleItemSpecificMenu(index);
+            handleItemSpecificMenu(index, 0);
         } else {
             boolean result =  getTrainer().getItem(index)
                     .use(getTrainer().getMon(choice - 1));
@@ -172,7 +203,7 @@ public class HumanTrainerEntity extends TrainerEntity {
                 }
                 
             }
-            handleItemsMenu();
+            handleItemsMenu(0);
         }
     }
     

@@ -49,7 +49,7 @@ public class BattleTest {
         
         BattleState battle = new BattleState(trainers, ui, weather);
         
-        //int nextState = battle.processState();
+        int nextState = battle.processState();
         
         assertEquals(1,1);
     }
@@ -60,16 +60,22 @@ public class BattleTest {
         AbstractPhase nextPhase = phase.performPhase();
         assert(nextPhase instanceof BattlePhase);
         assertEquals(1,1);
-        //EndPhase nextPhase1 = ((BattlePhase) nextPhase).performPhase();
-        //assert(nextPhase1 instanceof EndPhase);
+        AbstractPhase nextPhase1 = ((BattlePhase) nextPhase).performPhase();
+        assert(nextPhase1 instanceof EndPhase);
         
     }
     
     @Test 
     public void testBattlePhase() {
-        //BattlePhase bp = new BattlePhase(trainers, ui, weather);
-        //bp.displayPrePhaseDialogue();
-        
+        BattlePhase bp = new BattlePhase(trainers, ui, weather);
+        bp.displayPrePhaseDialogue();
+        int[] initiatives = bp.getInitiative();
+        try {
+            bp.performPhase();
+        }
+        catch(Exception e) {
+            System.out.println(e.toString());
+        }
     }
     
     

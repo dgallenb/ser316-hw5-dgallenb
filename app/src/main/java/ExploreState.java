@@ -139,7 +139,7 @@ public class ExploreState implements GameState {
      * Creates a wild codemon to battle the player in the next phase.
      * @param targetLvl The level to target when generating codemons.
      */
-    private void prepWildCodemon(double[] typeTable) {
+    public void prepWildCodemon(double[] typeTable) {
         nextState = 5;
         int typeVal = Utility.rollOnTable(typeTable);
         int lvl = Math.max(trainers.get(0).getFrontMon().getLvl() - Utility.d(6), 2);
@@ -155,7 +155,7 @@ public class ExploreState implements GameState {
      * Creates a trainer to battle the player in the next phase.
      * @param targetLvl The level to target when generating codemons.
      */
-    private void prepTrainer(int targetLvl) {
+    public void prepTrainer(int targetLvl) {
         nextState = 5;
         Trainer t = TrainerFactory.getInstance().generateTrainerWithCodemonT1(targetLvl);
         //TrainerEntity player = trainers[0];

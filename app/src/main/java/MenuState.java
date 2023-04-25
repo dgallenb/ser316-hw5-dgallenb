@@ -186,11 +186,11 @@ public class MenuState implements GameState {
     }
     
     public void handleSwitchMenu() {
-        ((HumanTrainerEntity) player).handleSwitchMenu();
+        ((HumanTrainerEntity) player).handleSwitchMenu(0, 0);
     }
     
     public void handleItemsMenu() {
-        ((HumanTrainerEntity) player).handleItemsMenu();
+        ((HumanTrainerEntity) player).handleItemsMenu(0);
     }
     
     public void pat(int index) {

@@ -13,3 +13,5 @@ Changes I have made that deviate from the requirements:
 If you want to know which types are better against which, figure it out yourself (or check SUPERSECRETNOTES.txt)
 
 Known defects: applying training orders (focused, inspired, brutal, agile) gives a bonus for the rest of the battle to the mon, not just a 1-round bonus.
+
+Screencast: https://youtu.be/WgnIUXZIpNA

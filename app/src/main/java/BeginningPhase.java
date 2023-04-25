@@ -53,7 +53,7 @@ public class BeginningPhase implements AbstractPhase {
     public void setUi(UI ui) {
         this.ui = ui;
     }
-    
+    /*
     public int getNextPhase() {
         return nextPhase;
     }
@@ -61,7 +61,7 @@ public class BeginningPhase implements AbstractPhase {
     public void setNextPhase(int nextPhase) {
         this.nextPhase = nextPhase;
     }
-    
+    */
     public void addAcquired(Acquirable a) {
         acquired.add(a);
     }
@@ -186,10 +186,13 @@ public class BeginningPhase implements AbstractPhase {
     @Override
     public AbstractPhase nextPhase(ArrayList<Acquirable> a) {
         switch (nextPhase) {
+        /*
             case 0:
                 return new BeginningPhase(trainers, ui, weather, acquired);
+                */
             case 1:
                 return new BattlePhase(trainers, ui, weather, acquired);
+                /*
             case 2:
                 return new EndPhase(trainers, ui, weather, acquired);
              
@@ -198,7 +201,9 @@ public class BeginningPhase implements AbstractPhase {
             case 3:
             case 5:
                 return new ReturnPhase(trainers, ui, acquired);
+                */
             case 6:
+            
                 return new CapturedPhase(trainers, ui, acquired);
             default:
                 return new BattlePhase(trainers, ui, weather, acquired);

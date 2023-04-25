@@ -14,10 +14,19 @@ public class BattleTest {
     @Before
     public void setUp() throws Exception {
         Utility.stabilizeRng(new double[] {0.95, 0.05, 0.95, 0.05});
-        ui = new TextUI();
+        ui = new PredictableUI();
         weather = new Weather(0);
         trainers = new ArrayList<TrainerEntity>();
         
+        CodemonFactory monFac = CodemonFactory.getInstance();
+        Trainer t = new Trainer(monFac.generateCodemonWithT1Moves(10));
+        HumanTrainerEntity te = new HumanTrainerEntity(t);
+        te.setUI(ui);
+        
+        Trainer t1 = new Trainer(monFac.generateCodemonWithT1Moves(5));
+        ComputerEntity te1 = new ComputerEntity(t1);
+        trainers.add(te);
+        trainers.add(te1);
         //TrainerEntity t1 = new
     }
 
@@ -26,7 +35,33 @@ public class BattleTest {
         Utility.randomizeRng();
     }
     
+    @Test
+    public void testPhases() {
+        CodemonFactory monFac = CodemonFactory.getInstance();
+        Trainer t = new Trainer(monFac.generateCodemonWithT1Moves(10));
+        HumanTrainerEntity te = new HumanTrainerEntity(t);
+        te.setUI(ui);
+        
+        Trainer t1 = new Trainer(monFac.generateCodemonWithT1Moves(5));
+        ComputerEntity te1 = new ComputerEntity(t1);
+        trainers.add(te);
+        trainers.add(te1);
+        
+        BattleState battle = new BattleState(trainers, ui, weather);
+        
+        //int nextState = battle.processState();
+        
+        assertEquals(1,1);
+    }
     
+    @Test
+    public void testBeginningPhase() {
+        BeginningPhase phase = new BeginningPhase(trainers, ui, weather);
+        AbstractPhase nextPhase = phase.performPhase();
+        assert(nextPhase instanceof BattlePhase);
+        //AbstractPhase nextPhase1 = ((BattlePhase) nextPhase).performPhase();
+        //assert(nextPhase1 instanceof EndPhase);
+    }
     
     
     

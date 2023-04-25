@@ -12,7 +12,7 @@ public class PredictableUI implements UI {
     @Override
     public void display(String s) {
         // TODO Auto-generated method stub
-        //System.out.println(s);
+        System.out.println(s);
     }
 
     @Override

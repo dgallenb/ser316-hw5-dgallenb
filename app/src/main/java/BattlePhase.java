@@ -206,13 +206,15 @@ public class BattlePhase implements AbstractPhase {
             move = atkMon.getMove(index);
             refreshEot(atkMon, move);
         }
-        int damageSent = atkMon.attack(move, weather);
+        int damageSent = atkMon.attack(index, weather);
         
         MonType atkType = move.getType();
         
         // check if the attack hit.
         int toHit = move.getAc() + defMon.computeEvade();
-        int roll = Utility.d(20) + atkMon.getAccuracy();
+        int roll = Utility.d(20) + atkMon.getAccuracy() 
+            + (attacker.getTrainer().isFocused() ? 1 : 0)
+            - (defender.getTrainer().isInspired() ? 1 : 0);
         
         if (attacker.getTrainer().getName().contains("Wild")) {
             output += "Wild ";
@@ -240,8 +242,9 @@ public class BattlePhase implements AbstractPhase {
                         + "But in the end it has to be this way\n";
             }
         } else if (roll >= toHit) {
-            boolean crit = (Utility.d(20)
-                    + atkMon.getCritRange()) >= 20;
+            int critRoll = Utility.d(20) + atkMon.getCritRange()
+                + (attacker.getTrainer().isBrutal() ? 1 : 0);
+            boolean crit = move.isCrit(critRoll);
             output += (crit ? "Critical hit! " : "");
             int damageReceived = defMon.receiveDamage(damageSent, atkType, crit);
             output += "It dealt " + damageReceived + " damage.\n";
@@ -252,6 +255,7 @@ public class BattlePhase implements AbstractPhase {
         } else {
             output += " But it missed!\n";
         }
+        attacker.getTrainer().refreshEoTsExcept(moveChoice);
         return output;
     }
     
@@ -275,7 +279,8 @@ public class BattlePhase implements AbstractPhase {
         ArrayList<InitiativePair> initiatives = new ArrayList<InitiativePair>();
         for (int i = 0; i < trainers.size(); ++i) {
             initiatives.add(new InitiativePair(
-                    trainers.get(i).getFrontMon().getInitiative(), i));
+                    (trainers.get(i).getTrainer().isAgile() ? 4 : 0)
+                    + trainers.get(i).getFrontMon().getInitiative(), i));
         }
         Comparator<InitiativePair> initComparator = new Comparator<InitiativePair>() {
             public int compare(InitiativePair o1, InitiativePair o2) {
@@ -299,7 +304,7 @@ public class BattlePhase implements AbstractPhase {
             Move mt = c.getMove(i);
             if (mt != null) {
                 if (!mt.equals(m)) {
-                    mt.refreshEot();
+                    mt.refresh(new Frequency(1));
                 }
             }
         }

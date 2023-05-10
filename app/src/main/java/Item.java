@@ -101,8 +101,7 @@ public class Item extends Acquirable {
                 return c.addMove(m);
             case "Epic Move Stone":
                 m = MoveFactory.getInstance().generateMove(3, c.getType().getTypeNum());
-                return c.addMove(m);
-                
+                return c.addMove(m);                              
             default:
                 return false;
         }

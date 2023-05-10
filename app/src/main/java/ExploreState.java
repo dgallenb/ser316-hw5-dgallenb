@@ -91,7 +91,7 @@ public class ExploreState implements GameState {
         int result = Utility.rollOnTable(encounterTable);
         switch (result) {
             case 0:          
-                prepWildCodemon(typeTable);
+                prepWildCodemon(typeTable, lvlMod);
                 s += "You found a wild Codemon!";
                 break;
             case 1:
@@ -112,7 +112,7 @@ public class ExploreState implements GameState {
     public String exploreForest() {
         double[] encounterTable = new double[] {0.7, 0.3}; 
         double[] typeTable = new double[] {0.25, 0.15, 0.2, 0.2, 0.08, 0.1, 0.02};
-        return explore(encounterTable, typeTable, -2);
+        return explore(encounterTable, typeTable, 15);
     }
     
     /**
@@ -138,10 +138,10 @@ public class ExploreState implements GameState {
     /** 
      * Creates a wild codemon to battle the player in the next phase.
      */
-    public void prepWildCodemon(double[] typeTable) {
+    public void prepWildCodemon(double[] typeTable, int lvlMod) {
         nextState = 5;
         int typeVal = Utility.rollOnTable(typeTable);
-        int lvl = Math.max(trainers.get(0).getFrontMon().getLvl() - Utility.d(6), 2);
+        int lvl = Math.max(trainers.get(0).getFrontMon().getLvl() - Utility.d(6) + lvlMod, 2);
         int exp = Utility.getExpFromLevel(lvl);
         Codemon mon = CodemonFactory.getInstance().generateCodemonWithT1Moves(typeVal, exp);
         //TrainerEntity player = trainers[0];

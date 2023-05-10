@@ -1,4 +1,5 @@
 
+
 public class Codemon extends Acquirable {
     protected Move[] moves;
     protected MonType type;
@@ -374,7 +375,7 @@ public class Codemon extends Acquirable {
      * @param weather The current weather.
      * @return Damage to be dealt. 
      */
-    public int attack(Move m, Weather weather) {
+    /*public int attack(int index, Weather weather) {
         int index = getIndex(m);
         if (index >= 0) {
             try {
@@ -389,7 +390,7 @@ public class Codemon extends Acquirable {
         }
         return 0;
     }
-    
+    */
     /*
     protected boolean hasMove(Move moveToCheck) {
         for (Move m : moves) {
@@ -455,6 +456,9 @@ public class Codemon extends Acquirable {
     public int receiveDamage(int dbDamage, MonType atkType, boolean crit) {
         int damageAfterBlock = dbDamage - getCurrentDef();
         damageAfterBlock *= (crit ? 2 : 1);
+        if(damageAfterBlock < 1) {
+            damageAfterBlock = 1;
+        }
         int typeModDamage = type.getEffectiveDamage(damageAfterBlock, atkType);
         if (typeModDamage > currentHp) {
             return currentHp;
@@ -469,7 +473,7 @@ public class Codemon extends Acquirable {
     public void refreshScene() {
         for (int i = 0; i < moves.length; ++i) {
             if (moves[i] != null) {
-                moves[i].refreshScene();
+                moves[i].refresh(new Frequency(2));
             }
             
         }
@@ -490,7 +494,7 @@ public class Codemon extends Acquirable {
     public void refresh() {
         for (int i = 0; i < moves.length; ++i) {
             if (moves[i] != null) {
-                moves[i].refresh();
+                moves[i].refresh(new Frequency(3));
             }
         }
     }

@@ -11,6 +11,12 @@ public class Trainer {
     protected int monCount;
     protected int money;
     protected ArrayList<Item> items;
+    protected boolean focused;
+    protected boolean inspired;
+    protected boolean agile;
+    protected boolean brutal;
+    
+    
     public static final int MAXCODEMONS = 6;
     
     /**
@@ -21,6 +27,10 @@ public class Trainer {
         name = "Trainer";
         monCount = 0;
         items = new ArrayList<Item>();
+        focused = false;
+        inspired = false;
+        agile = false;
+        brutal = false;
     }
     
     /**
@@ -32,6 +42,10 @@ public class Trainer {
         name = "Trainer";
         mons[0] = mon;
         monCount = 1;
+        focused = false;
+        inspired = false;
+        agile = false;
+        brutal = false;
         items = new ArrayList<Item>();
     }
 
@@ -225,7 +239,57 @@ public class Trainer {
             }
         }
         return false;
-        
+    }
+    
+    public boolean isFocused() {
+        return focused;
+    }
+    
+    public boolean isAgile() {
+        return agile;
+    }
+    
+    public boolean isBrutal() {
+        return brutal;
+    }
+    
+    public boolean isInspired() {
+        return inspired;
+    }
+    
+    public void focus() {
+        focused = true;
+    }
+    
+    public void inspire() {
+        inspired = true;
+    }
+    
+    public void brutal() {
+        brutal = true;
+    }
+    
+    public void agile() {
+        agile = true;
+    }
+    
+    public void resetTraining() {
+        focused = false;
+        inspired = false;
+        agile = false;
+        brutal = false;
+    }
+    
+    /**
+     * Refreshes all EoT moves except the one used.
+     * @param index The index of the move used this turn.
+     */
+    public void refreshEoTsExcept(int index) {
+        for(int i = 0; i < this.getMon(0).getMoveCount(); ++i) {
+            if(i != index) {
+                this.getMon(0).getMove(i).refresh(new Frequency(1));
+            }
+        }
     }
     
     /**

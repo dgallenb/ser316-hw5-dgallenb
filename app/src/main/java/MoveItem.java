@@ -44,6 +44,17 @@ public class MoveItem extends Item {
         this.move = move;
     }
     
+    public boolean use(Codemon c) {
+        if(quantity < 1) {
+            return false;
+        }
+        boolean output = c.addMove(move);
+        if(output) {
+            quantity -= 1;
+        }
+        return output;
+    }
+    
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;

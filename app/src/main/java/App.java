@@ -17,7 +17,7 @@ public class App {
     public static void main(String[] args) {
         
         
-        GamePlay game = new GamePlay(new BlindIdiotUI());
+        GamePlay game = new GamePlay(new TextUI());
         //GamePlay game = new GamePlay();
         game.play(50);
     }

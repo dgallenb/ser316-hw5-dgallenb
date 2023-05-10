@@ -11,10 +11,11 @@ public class MonType {
         setType(i);
     }
     
+    /*
     public MonType(String s) {
         setType(s);
     }
-    
+    */
     protected void setType(int i) {
         if ((i < 0) || (i > 6)) {
             type = 0;
@@ -22,6 +23,7 @@ public class MonType {
         type = i;
     }
     
+    /*
     protected void setType(String s) {
         switch (s) {
             case "QUARTZ":
@@ -77,7 +79,7 @@ public class MonType {
                 type = 0;
         }
     }
-    
+    */
     public int getTypeNum() {
         return type;
     }
@@ -89,21 +91,43 @@ public class MonType {
     public String toString() {
         switch (type) {
             case 0:
-                return "QUARTZ";
+                return "Normal";
             case 1:
-                return "AGATE";
+                return "Fire";
             case 2: 
-                return "SAPPHIRE";
+                return "Water";
             case 3:
-                return "TOPAZ";
+                return "Electric";
             case 4:
-                return "OPAL";
+                return "Grass";
             case 5:
-                return "PERIDOT";
+                return "Ice";
             case 6:
-                return "ONYX";
+                return "Fighting";
+            case 7:
+                return "Poison";
+            case 8:
+                return "Ground";
+            case 9:
+                return "Flying";
+            case 10:
+                return "Psychic";
+            case 11:
+                return "Bug";
+            case 12:
+                return "Rock";
+            case 13:
+                return "Ghost";
+            case 14:
+                return "Dragon";
+            case 15:
+                return "Dark";
+            case 16:
+                return "Steel";
+            case 17:
+                return "Fairy";
             default:
-                return "QUARTZ";
+                return "Normal";
         }
     }
     
@@ -139,14 +163,32 @@ public class MonType {
      * @return A scalar to multiply damage by.
      */
     protected static double typeMod(int defTypeNum, int atkTypeNum) {
+        double superEffective = 1.5;
+        double ineffective = 0.5;
+        double e = superEffective;
+        double i = ineffective;
         double[][] modMatrix = {
-            new double[] {1, 1, 1, 1, 1, 1, 2}, // clear
-            new double[] {1.25, 1, 1.5, 0.5, 1.5, 0.5, 0.5}, // cloudy
-            new double[] {1.25, 0.5, 1, 1.5, 0.5, 1.5, 0.5}, // rainy
-            new double[] {1.25, 1.5, 0.5, 1, 1.5, 0.5, 0.5}, // windy
-            new double[] {1.25, 0.5, 1.5, 0.5, 1, 1.5, 0.5}, // stormy
-            new double[] {1.25, 1.5, 0.5, 1.5, 0.5, 1, 0.5}, // snowy
-            new double[] {0.5, 1.4, 1.4, 1.4, 1.4, 1.4, 0.5} // eclipse
+                // NOR, FIR, WAT, ELE, GRA,   ICE, FIG, POI, GRO, FLY,   
+                // PSY, BUG, ROC, GHO, DRA,   DAR, STE, FAI
+            new double[] {1, 1, 1, 1, 1,  1, 1, 1, 1, 1,   1, 1, i, 0, 1,   1, i, 1}, // normal
+            new double[] {1, i, i, 1, e,  e, 1, 1, 1, 1,   1, e, i, 1, i,   1, e, 1}, // fire
+            new double[] {1, e, i, 1, i,  1, 1, 1, e, 1,   1, 1, e, 1, i,   1, 1, 1}, // water
+            new double[] {1, 1, e, i, i,  1, 1, 1, 0, e,   1, 1, 1, 1, i,   1, 1, 1}, // electric
+            new double[] {1, i, e, 1, i,  1, 1, i, e, i,   1, i, e, 1, i,   1, 1, 1}, // grass
+            new double[] {1, i, i, 1, e,  i, 1, 1, e, e,   1, 1, 1, 1, e,   1, i, 1}, // ice
+            new double[] {e, 1, 1, 1, 1,  e, 1, i, 1, i,   i, i, e, 0, 1,   e, e, i}, // fighting
+            new double[] {1, 1, 1, 1, e,  1, 1, i, i, 1,   1, 1, i, i, 1,   1, 0, i}, // poison
+            new double[] {1, e, 1, e, i,  1, 1, e, 1, 0,   1, i, e, 1, 1,   1, e, 1}, // ground
+            new double[] {1, 1, 1, i, e,  1, e, 1, 1, 1,   1, e, i, 1, 1,   1, i, 1}, // flying
+            new double[] {1, 1, 1, 1, 1,  1, e, e, 1, 1,   i, 1, 1, 1, 1,   0, i, 1}, // psychic
+            new double[] {1, i, 1, 1, e,  1, i, i, 1, i,   e, 1, 1, i, 1,   e, i, i}, // bug
+            new double[] {1, e, 1, 1, 1,  e, i, 1, i, e,   1, e, 1, 1, 1,   1, i, 1}, // rock
+            new double[] {0, 1, 1, 1, 1,  1, 1, 1, 1, 1,   e, 1, 1, e, 1,   i, 1, 1}, // ghost
+            new double[] {1, 1, 1, 1, 1,  1, 1, 1, 1, 1,   1, 1, 1, 1, e,   1, i, 0}, // dragon
+            new double[] {1, 1, 1, 1, 1,  1, i, 1, 1, 1,   e, 1, 1, e, 1,   i, 1, i}, // dark
+            new double[] {1, i, i, i, 1,  i, 1, 1, 1, 1,   1, 1, e, 1, 1,   1, i, e}, // steel
+            new double[] {1, i, 1, 1, 1,  1, e, i, 1, 1,   1, 1, 1, 1, e,   e, i, 1}  // fairy
+            
         };
         double scalar = modMatrix[atkTypeNum][defTypeNum];
         return scalar;

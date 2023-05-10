@@ -3,7 +3,9 @@
  * @author DJ
  *
  */
-public class Move {
+
+
+public class Move implements AbstractMove {
     protected String name;
     protected String description;
     protected int db;
@@ -97,10 +99,6 @@ public class Move {
         return db;
     }
 
-    public void setDb(int db) {
-        this.db = db;
-    }
-
     public Frequency getFrequency() {
         return frequency;
     }
@@ -136,33 +134,8 @@ public class Move {
         return db;
     }
     
-    /**
-     * Refreshes the move regardless of frequency.
-     * @return
-     */
-    public boolean refresh() {
-        this.available = true;
-        return true;
-    }
-    
-    /**
-     * Refreshes all moves with scene or every-other-turn frequency.
-     * @return True if the move was able to be refreshed, false otherwise.
-     */
-    public boolean refreshScene() {
-        if (frequency.getTypeNum() != 3) {
-            this.available = true;
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * Refreshes all moves with every-other-turn frequency.
-     * @return True if the move was able to be refreshed, false otherwise.
-     */
-    public boolean refreshEot() {
-        if (frequency.getTypeNum() == 2) {
+    public boolean refresh(Frequency f) {
+        if(f.getTypeNum() >= frequency.getTypeNum()) {
             this.available = true;
             return true;
         }
@@ -184,6 +157,11 @@ public class Move {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isCrit(int roll) {
+        return (roll >= 20);
     }
 }
 

@@ -14,6 +14,8 @@ public class EndPhase implements AbstractPhase {
     protected ArrayList<Acquirable> acquired;
     protected Weather weather;
     
+    public static final int SIGNIFICANCE_FACTOR = 0;
+    
     /**
      * Constructor.
      * @param trainers The trainers involved in the battle.
@@ -47,7 +49,10 @@ public class EndPhase implements AbstractPhase {
     @Override
     public AbstractPhase performPhase() {
         String s = "";
-        // 1. check for ded mons
+        // 1. Reset training effects
+        clearTraining();
+        
+        // 2. check for ded mons
         for (int i = 0; i < trainers.size(); ++i) {
             TrainerEntity t = trainers.get(i);
             if (t.getTrainer().countLiveMons() < 1) {
@@ -65,19 +70,13 @@ public class EndPhase implements AbstractPhase {
                         if (i == j) {
                             continue;
                         }
-                        if (trainers.get(j).getFrontMon().getCurrentHp() > 0) {
-                            trainers.get(j).getFrontMon().addExp(expToGive);
-                            s +=  trainers.get(j).getFrontMon().getName() + " gained ";
-                            s += "" + expToGive + " exp";
-                            boolean leveled = trainers.get(j).getFrontMon().levelUp();
-                            s += leveled ? " and leveled up!\n" : ".\n";
-                        }
+                        s += awardExp(trainers.get(j).getFrontMon(), expToGive);
                     }
                 }
             } else if (t.getFrontMon().getCurrentHp() <= 0) {
                 int dedLvl = t.getFrontMon().getLvl();
-                int significanceFactor = 25; // constant for this game, but varies in PTU
-                int expToGive = dedLvl * significanceFactor / (trainers.size() - 1);
+                
+                int expToGive = dedLvl * SIGNIFICANCE_FACTOR / (trainers.size() - 1);
                 for (int j = 0; j < trainers.size(); ++j) {
                     if (i == j) {
                         continue;
@@ -102,6 +101,24 @@ public class EndPhase implements AbstractPhase {
         }
         ui.display(s);
         return nextPhase(acquired);
+    }
+    
+    public void clearTraining() {
+        for(TrainerEntity t : trainers) {
+            t.getTrainer().resetTraining();
+        }
+    }
+    
+    public String awardExp(Codemon mon, int expToGive) {
+        String s = "";
+        if (mon.getCurrentHp() > 0) {
+            mon.addExp(expToGive);
+            s +=   mon.getName() + " gained ";
+            s += "" + expToGive + " exp";
+            boolean leveled =  mon.levelUp();
+            s += leveled ? " and leveled up!\n" : ".\n";
+        }
+        return s;
     }
 
     @Override

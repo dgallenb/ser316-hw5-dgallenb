@@ -22,8 +22,8 @@ public class MoveFactory {
     }
     
     public Move generateMove(String name, String description, 
-            int db, int ac, int moveType, int frequency) {
-        return new Move(name, description, db, ac,
+            int db, int ac, int moveCat, int moveType, int frequency) {
+        return new Move(name, description, db, ac, new MoveCategory(moveCat),
                 new Frequency(frequency), new MonType(moveType));
     }
     
@@ -51,15 +51,29 @@ public class MoveFactory {
             new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
         };
+        double b = 0.05; // just to shorten the width of the matrix below
+        double t = 1 - 17 * b;
                   
         double[][] transitionMatrix =  {
-            new double[] {0.5, 0.08, 0.08, 0.08, 0.08, 0.08, 0.1}, // clear
-            new double[] {0.2, 0.5, 0.07, 0.07, 0.07, 0.07, 0.02}, // cloudy
-            new double[] {0.2, 0.07, 0.5, 0.07, 0.07, 0.07, 0.02}, // rainy
-            new double[] {0.2, 0.07, 0.07, 0.5, 0.07, 0.07, 0.02}, // windy
-            new double[] {0.2, 0.07, 0.07, 0.07, 0.5, 0.07, 0.02}, // stormy
-            new double[] {0.2, 0.07, 0.07, 0.07, 0.07, 0.5, 0.02}, // snowy
-            new double[] {0.05, 0.09, 0.09, 0.09, 0.09, 0.09, 0.5} // eclipse
+            new double[] {t, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b}, // normal
+            new double[] {b, t, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b}, // fire
+            new double[] {b, b, t, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b}, // water
+            new double[] {b, b, b, t, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b}, // electric
+            new double[] {b, b, b, b, t,  b, b, b, b, b,  b, b, b, b, b,  b, b, b}, // grass
+            new double[] {b, b, b, b, b,  t, b, b, b, b,  b, b, b, b, b,  b, b, b}, // ice
+            new double[] {b, b, b, b, b,  b, t, b, b, b,  b, b, b, b, b,  b, b, b}, // fighting
+            new double[] {b, b, b, b, b,  b, b, t, b, b,  b, b, b, b, b,  b, b, b}, // poison
+            new double[] {b, b, b, b, b,  b, b, b, t, b,  b, b, b, b, b,  b, b, b}, // ground
+            new double[] {b, b, b, b, b,  b, b, b, b, t,  b, b, b, b, b,  b, b, b}, // flying
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  t, b, b, b, b,  b, b, b}, // psychic
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, t, b, b, b,  b, b, b}, // bug
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, t, b, b,  b, b, b}, // rock
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, b, t, b,  b, b, b}, // ghost
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, b, b, t,  b, b, b}, // dragon
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  t, b, b}, // dark
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, t, b}, // steel
+            new double[] {b, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, t} // fairy
+            
         };
             
         int db = Utility.rollOnTable(dbDistribution[tier]);
@@ -104,7 +118,8 @@ public class MoveFactory {
         String description = name + ": A DB" + db + " " + type.toString()
                 + " move. AC: " + ac + ". Usable " + frequencyDesc + ".";
         // (String name, String description, int db, Frequency frequency, MonType type)
-        return new Move(name, description, db, ac, new Frequency(freq), type);
+        return new Move(name, description, db, ac, 
+                new MoveCategory(Utility.d(2)), new Frequency(freq), type);
     }
     
     /**

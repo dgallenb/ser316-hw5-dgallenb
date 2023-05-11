@@ -8,6 +8,8 @@ public class Utility {
     
     private static double[] rngStabilizer;
     private static int stabilizerIndex = -1;
+    
+    public static final int STAT_LIST_LENGTH = 8;
 
     /**
      * Removes randomness from random number generation and instead cycles through 
@@ -254,7 +256,12 @@ public class Utility {
      * @param scalarMods Some evolved codemon will increase odds of stat increases.
      * @return The total bonus to each stat that a codemon gets.
      */
-    public static int[] getLevelUpBonus(MonType type, double[] scalarMods) {
+    public static int[] getLevelUpBonus(int[] baseStats, int[] statSpread, double[] scalarMods) {
+        int[] totals = {1, 0, 0, 0, 0, 0};
+        
+        
+        return totals;
+        /*
         int[] totals = {0, 0, 0, 0};
         double[][] statChance = {
             new double[] {4.5, 0.7, 1.1, 0.2}, 
@@ -278,18 +285,19 @@ public class Utility {
         }
         
         return totals;
-        
+        */
     }
     
-    /**
+    /*
      * Returns the bonus values to provide to a codemon on level up that doesn't specify 
      *      extra bonuses.
      * @param type The codemon's type.
      * @return An array of the bonuses to give to the codemon for leveling up.
      */
-    public static int[] getLevelUpBonus(MonType type) {
+    /*public static int[] getLevelUpBonus(MonType type) {
         return getLevelUpBonus(type, new double[] {0, 0, 0, 0});
     }
+    */
     
     /**
      * The core random number generator for the class. 

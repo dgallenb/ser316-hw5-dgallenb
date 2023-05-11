@@ -35,7 +35,7 @@ public class GamePlay {
         t.setMoney(20000);
         t.addItem(new Item("Capture Stone", "Captures Codemon (probably)", 99));
         HumanTrainerEntity player = new HumanTrainerEntity(t);
-        Move m = new Move("Low DB Test", "Test", 1, 2, new Frequency(0), new MonType(0));
+        Move m = new Move("Low DB Test", "Test", 1, 2, new MoveCategory(0), new Frequency(0), new MonType(0));
         MoveItem mi = new MoveItem("Low DB Item", "Testing", m, 1);
         t.addItem(mi);
         player.setUI(ui);

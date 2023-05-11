@@ -74,12 +74,14 @@ public class ReturnPhase extends CleanupPhase implements AbstractPhase {
         for (int i = 0; i < t.getTrainer().getMonCount(); ++i) {
             Codemon mon = t.getTrainer().getMon(i);
             if (mon != null) {
+                /*
                 if (mon.canEvolve()) {
                     ui.display(mon.getName() + " is evolving!");
                     EvolvedCodemon e = mon.evolve();
                     t.getTrainer().replaceMon(e, i);
                     ui.display("It became " + e.getName() + "!");
                 }
+                */
             }
         }
     }

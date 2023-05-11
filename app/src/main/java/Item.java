@@ -85,13 +85,13 @@ public class Item extends Acquirable {
                 c.heal(100);
                 return true;
             case "XAttack":
-                c.applyCombatStage(1);
+                c.applyCombatStage(1, 1);
                 return true;
             case "XDefend":
-                c.applyCombatStage(2);
+                c.applyCombatStage(2, 1);
                 return true;
             case "XSpeed":
-                c.applyCombatStage(3);
+                c.applyCombatStage(5, 1);
                 return true; 
             case "Move Stone":
                 Move m = MoveFactory.getInstance().generateMove(1, c.getType().getTypeNum());

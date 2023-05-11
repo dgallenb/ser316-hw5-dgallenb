@@ -33,10 +33,7 @@ public class EvolvedCodemon extends Codemon {
      *      chosen from the codemon's moves.
      */
     public EvolvedCodemon(Codemon basemon, int[] statBoosts, boolean addType) {
-        this.setHp(basemon.getHp());
-        this.setAtk(basemon.getAtk());
-        this.setDef(basemon.getDef());
-        this.setSpd(basemon.getSpd());
+
         this.setCurrentHp(basemon.getCurrentHp());
         this.type = basemon.getType();
         for (int i = 0; i < bonusStatChance.length; ++i) {
@@ -44,8 +41,9 @@ public class EvolvedCodemon extends Codemon {
         }
         this.lvl = basemon.getLvl();
         this.exp = basemon.getExp();
-        this.evolve = false;
-        this.tempStats = new int[8];
+        //this.evolve = false;
+        //this.tempStats = new int[8];
+        this.stats = basemon.copyCodemonStats();
         
         for (int i = 0; i < moves.length; ++i) {
             moves[i] = basemon.getMove(i);

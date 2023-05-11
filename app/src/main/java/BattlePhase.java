@@ -211,7 +211,7 @@ public class BattlePhase implements AbstractPhase {
         MonType atkType = move.getType();
         
         // check if the attack hit.
-        int toHit = move.getAc() + defMon.computeEvade();
+        int toHit = move.getAc() + defMon.computeEvade(move.getCategory());
         int roll = Utility.d(20) + atkMon.getAccuracy() 
             + (attacker.getTrainer().isFocused() ? 1 : 0)
             - (defender.getTrainer().isInspired() ? 1 : 0);

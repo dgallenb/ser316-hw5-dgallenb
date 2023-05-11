@@ -12,14 +12,18 @@ public class Move implements AbstractMove {
     protected Frequency frequency;
     protected boolean available;
     protected MonType type;
+    protected MoveCategory category;
+
     protected int ac;
     protected int id;
     
     public static final Move struggle = new Move(
-            "Struggle", "Default move", 4, 4, new Frequency(0), new MonType(0));
+            "Struggle", "Default move", 4, 4, new MoveCategory(0), 
+            new Frequency(0), new MonType(0));
     
     public static final Move wait = new Move(
-            "Wait", "Default move", 0, 0, new Frequency(0), new MonType(0));
+            "Wait", "Default move", 0, 0, new MoveCategory(0), 
+            new Frequency(0), new MonType(0));
 
     /**
      * Default constructor. Makes a copy of the move Struggle.
@@ -45,7 +49,7 @@ public class Move implements AbstractMove {
      * @param frequency How often the move may be used.
      * @param type The codemon type of the move.
      */
-    public Move(String name, String description, int db, int ac,
+    public Move(String name, String description, int db, int ac, MoveCategory category,
             Frequency frequency, MonType type) {
         this.name = name;
         this.description = description;
@@ -70,6 +74,14 @@ public class Move implements AbstractMove {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public MoveCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(MoveCategory category) {
+        this.category = category;
     }
     
     public String getFullDesc() {

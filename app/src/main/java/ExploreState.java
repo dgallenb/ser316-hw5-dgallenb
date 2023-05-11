@@ -110,8 +110,10 @@ public class ExploreState implements GameState {
      * @return Returns a string to display as a result of that exploration.
      */
     public String exploreForest() {
-        double[] encounterTable = new double[] {0.7, 0.3}; 
-        double[] typeTable = new double[] {0.25, 0.15, 0.2, 0.2, 0.08, 0.1, 0.02};
+        double[] encounterTable = new double[] {0.9, 0.1}; 
+        double b = 0.05; // just to shorten the width of the matrix below
+        double t = 1 - 17 * b;
+        double[] typeTable = new double[] {t, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b};
         return explore(encounterTable, typeTable, 15);
     }
     
@@ -120,8 +122,10 @@ public class ExploreState implements GameState {
      * @return Returns a string to display as a result of that exploration.
      */
     public String exploreMountain() {
-        double[] encounterTable = new double[] {0.7, 0.3}; 
-        double[] typeTable = new double[] {0.25, 0.05, 0.05, 0.1, 0.25, 0.25, 0.05};
+        double[] encounterTable = new double[] {0.6, 0.4}; 
+        double b = 0.05; // just to shorten the width of the matrix below
+        double t = 1 - 17 * b;
+        double[] typeTable = new double[] {t, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b};
         return explore(encounterTable, typeTable, -1);
     }
     
@@ -131,7 +135,9 @@ public class ExploreState implements GameState {
      */
     public String exploreCity() {
         double[] encounterTable = new double[] {0.2, 0.8}; 
-        double[] typeTable = new double[] {0.25, 0.05, 0.05, 0.1, 0.25, 0.25, 0.05};
+        double b = 0.05; // just to shorten the width of the matrix below
+        double t = 1 - 17 * b;
+        double[] typeTable = new double[] {t, b, b, b, b,  b, b, b, b, b,  b, b, b, b, b,  b, b, b};
         return explore(encounterTable, typeTable, 0);
     }
     

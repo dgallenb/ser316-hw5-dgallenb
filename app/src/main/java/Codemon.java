@@ -5,20 +5,12 @@ public class Codemon extends Acquirable {
     protected MonType type;
     protected String name;
     
-    protected int hp;
-    protected int atk;
-    protected int def;
-    protected int spd;
-    
-    protected int[] tempStats; // holds one-battle-only buffs/debuffs.
-    // hp, atk, def, spd, evade, initiative, accuracy, crit range bonus
-    // hp changes should probably not be a thing for mid-battle stuff.
+    protected CodemonStats stats;
+
     protected int exp;
     protected int lvl;
-    protected boolean evolve;
+    //protected boolean evolve;
     protected double[] bonusStatChance;
-
-    protected int currentHp;
     
     public static final int MAXMOVES = 6;
     
@@ -28,17 +20,13 @@ public class Codemon extends Acquirable {
     public Codemon() {
         moves = new Move[MAXMOVES];
         this.name = "Default";
-        this.setHp(50);
-        this.setAtk(5);
-        this.setDef(5);
-        this.setSpd(5);
-        this.setCurrentHp(this.getHp());
+
         this.type = new MonType(0);
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.lvl = 1;
         this.exp = 0;
-        this.evolve = false;
-        tempStats = new int[8];
+        //this.evolve = false;
+        stats = new CodemonStats(12, 5, 5, 5, 5, 5, this.getLvl());
     }
 
     /**
@@ -51,14 +39,10 @@ public class Codemon extends Acquirable {
      * @param moves The codemon's starting moves.
      * @param exp The codemon's starting exp.
      */
-    public Codemon(MonType type, int hp, int atk, int def, int spd, Move[] moves, int exp) {
-        this.setHp(hp);
-        this.setAtk(atk);
-        this.setDef(def);
-        this.setSpd(spd);
-        this.setCurrentHp(this.getHp());
-        this.setType(type);
+    public Codemon(MonType type, int hp, int atk, int def, int satk, int sdef, int spd, 
+            Move[] moves, int exp) {
         
+        this.setType(type);
         this.setExp(exp);
         this.lvl = 1;
         this.moves = new Move[MAXMOVES];
@@ -66,9 +50,9 @@ public class Codemon extends Acquirable {
         for (int i = 0; i < moves.length; ++i) {
             this.moves[i] = moves[i];
         }
-        tempStats = new int[8];
+        stats = new CodemonStats(hp, atk, def, satk, sdef, spd, this.getLvl());
         
-        this.evolve = false;
+        //this.evolve = false;
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.name = Utility.getTypedName(type) + " " + Utility.getTypedName(type);
         this.levelUp();
@@ -80,11 +64,6 @@ public class Codemon extends Acquirable {
      * @param basemon The codemon to copy.
      */
     public Codemon(Codemon basemon) {
-        this.setHp(basemon.getHp());
-        this.setAtk(basemon.getAtk());
-        this.setDef(basemon.getDef());
-        this.setSpd(basemon.getSpd());
-        this.setCurrentHp(basemon.getCurrentHp());
         this.setType(basemon.getType());
         this.setExp(basemon.getExp());
         this.setLvl(basemon.getLvl());
@@ -94,20 +73,24 @@ public class Codemon extends Acquirable {
         }
         
         bonusStatChance = new double[] {0, 0, 0, 0};
-        tempStats = new int[8];
-        this.evolve = basemon.canEvolve();
+        stats = basemon.copyCodemonStats();
+        //this.evolve = basemon.canEvolve();
         
         for (int i = 0; i < bonusStatChance.length; ++i) {
             this.bonusStatChance[i] = basemon.getBonusStatChance(i);
         }
     }
     
+    public CodemonStats copyCodemonStats() {
+        return stats.duplicate();
+    }
+    
     public int getTempStat(int i) {
-        return tempStats[i];
+        return stats.getTempStat(i);
     }
 
     public void setTempStat(int tempStat, int index) {
-        this.tempStats[index] = tempStat;
+        stats.setTempStat(tempStat, index);
     }
     
     /**
@@ -159,6 +142,7 @@ public class Codemon extends Acquirable {
         return true;
     }
     
+    /*
     public boolean canEvolve() {
         return evolve;
     }
@@ -166,7 +150,8 @@ public class Codemon extends Acquirable {
     public void setEvolve(boolean canEvolve) {
         this.evolve = canEvolve;
     }
-
+    */
+    
     public MonType getType() {
         return type;
     }
@@ -221,16 +206,12 @@ public class Codemon extends Acquirable {
      * Ignores whether the mon should level up, and just applies stat changes.
      */
     public void performLevelUp() {
-        if (lvl % 15 == 0) {
+        /*if (lvl % 15 == 0) {
             evolve = true;
         }
+        */
         ++lvl;
-        int[] levelUpBonuses = Utility.getLevelUpBonus(type, bonusStatChance);
-        this.setHp(this.getHp() + levelUpBonuses[0]);
-        this.heal(levelUpBonuses[0]);
-        this.setAtk(this.getAtk() + levelUpBonuses[1]);
-        this.setDef(this.getDef() + levelUpBonuses[2]);
-        this.setSpd(this.getSpd() + levelUpBonuses[3]);
+        stats.levelUp();
     }
 
     
@@ -243,69 +224,102 @@ public class Codemon extends Acquirable {
     }
 
     public int getHp() {
-        return hp;
+        return stats.getMaxHp();
     }
 
+    // TODO check if this is needed
+    /*
     public void setHp(int hp) {
         this.hp = hp;
     }
+    */
 
     public int getAtk() {
-        return atk;
+        return stats.getAtk();
+    }
+    
+    public int getDef() {
+        return stats.getDef();
     }
 
+    public int getSatk() {
+        return stats.getSatk();
+    }
+    
+    public int getSdef() {
+        return stats.getSdef();
+    }
+    
+    /*
     public void setAtk(int atk) {
         this.atk = atk;
     }
-
-    public int getDef() {
-        return def;
+    
+    public void setSatk(int satk) {
+        this.satk = satk;
+    }
+    
+    public void setSdef(int sdef) {
+        this.sdef = sdef;
     }
     
     
-
+    
     public void setDef(int def) {
         this.def = def;
     }
-
+    */
+    
     public int getSpd() {
-        return spd;
+        return stats.getSpd();
     }
     
     public int getCurrentAtk() {
-        return this.getAtk() + tempStats[1];
+        return stats.getCurrentAtk();
     }
     
     public int getCurrentDef() {
-        return this.getDef() + tempStats[2];
+        return stats.getCurrentDef();
+    }
+    
+    public int getCurrentSatk() {
+        return stats.getCurrentSatk();
+    }
+    
+    public int getCurrentSdef() {
+        return stats.getCurrentSdef();
     }
     
     public int getCurrentSpd() {
-        return this.getSpd() + tempStats[3];
+        return stats.getCurrentSpd();
     }
     
     public int getInitiative() {
-        return this.getCurrentSpd() + tempStats[5];
+        return stats.getInitiative();
     }
 
+    /*
     public void setSpd(int spd) {
         this.spd = spd;
     }
+    */
 
     public int getCurrentHp() {
-        return currentHp;
+        return stats.getCurrentHp();
     }
 
+    // TODO check if this is needed
     public void setCurrentHp(int currentHp) {
-        this.currentHp = currentHp;
+        stats.setCurrentHp(currentHp);;
     }
+    
     
     /**
      * Get current accuracy. Currently affected by Focused training.
      * @return Current accuracy bonus.
      */
     public int getAccuracy() {
-        return tempStats[6];
+        return stats.getAccuracy();
     }
     
     /**
@@ -313,7 +327,7 @@ public class Codemon extends Acquirable {
      * @return the bonus to critical threat range.
      */
     public int getCritRange() {
-        return tempStats[7];
+        return stats.getCritRange();
     }
     
     /**
@@ -460,8 +474,8 @@ public class Codemon extends Acquirable {
             damageAfterBlock = 1;
         }
         int typeModDamage = type.getEffectiveDamage(damageAfterBlock, atkType);
-        if (typeModDamage > currentHp) {
-            return currentHp;
+        if (typeModDamage > stats.getCurrentHp()) {
+            return stats.getCurrentHp();
         }
         
         return typeModDamage;
@@ -483,9 +497,7 @@ public class Codemon extends Acquirable {
      * Reset all temporary stats to 0.
      */
     public void resetTempStats() {
-        for (int j = 0; j < tempStats.length; ++j) {
-            tempStats[j] = 0;
-        }
+        stats.resetTempStats();
     }
     
     /**
@@ -607,7 +619,7 @@ public class Codemon extends Acquirable {
      * @return A new codemon.
      */
     public EvolvedCodemon evolve() {
-        this.setEvolve(false);
+        //this.setEvolve(false);
         return new EvolvedCodemon(this);
     }
     
@@ -615,10 +627,8 @@ public class Codemon extends Acquirable {
      * Calculates the mon's evasion (1/5th of their defense or speed, whichever is higher).
      * @return The mon's current evasion.
      */
-    public int computeEvade() {
-        int spdEvade = this.getCurrentSpd() / 5;
-        int defEvade = this.getCurrentDef() / 5;
-        return Math.max(spdEvade, defEvade) + tempStats[4];
+    public int computeEvade(MoveCategory cat) {
+        return stats.computeEvade(cat);
     }
     
     /*
@@ -644,7 +654,7 @@ public class Codemon extends Acquirable {
      * @param val The amount to add.
      */
     public void addEvade(int val) {
-        tempStats[4] += val;
+        stats.addEvade(val);
     }
     
     /**
@@ -652,7 +662,7 @@ public class Codemon extends Acquirable {
      * @param val The amount to add.
      */
     public void addInitiative(int val) {
-        tempStats[5] += val;
+        stats.addInitiative(val);
     }
     
     /**
@@ -660,7 +670,7 @@ public class Codemon extends Acquirable {
      * @param val The amount to add.
      */
     public void addAccuracy(int val) {
-        tempStats[6] += val;
+        stats.addAccuracy(val);
     }
     
     /**
@@ -668,7 +678,7 @@ public class Codemon extends Acquirable {
      * @param val The amount to add.
      */
     public void addCritRange(int val) {
-        tempStats[7] += val;
+        stats.addCritRange(val);
     }
     
     /**
@@ -677,20 +687,8 @@ public class Codemon extends Acquirable {
      * @param index The index of the stat to boost.
      * @return true if the stat was increased, false otherwise.
      */
-    public boolean applyCombatStage(int index) {
-        switch (index) { 
-            case 1: // Atk
-                tempStats[1] += Math.max(this.getAtk() / 5, 1);
-                return true;
-            case 2: // Def
-                tempStats[2] += Math.max(this.getDef() / 5, 1);
-                return true;
-            case 3: // Spd
-                tempStats[3] += Math.max(this.getSpd() / 5, 1);
-                return true;
-            default:
-                return false;
-        }
+    public boolean applyCombatStage(int index, int stages) {
+        return stats.applyCombatStage(index, stages);
     }
     
     /**

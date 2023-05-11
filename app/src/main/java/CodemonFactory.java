@@ -36,7 +36,7 @@ public class CodemonFactory {
      * @return A new codemon.
      */
     public Codemon generateCodemonWithT1Moves(int monType, 
-            int baseHp, int baseAtk, int baseDef, int baseSpd, 
+            int baseHp, int baseAtk, int baseDef, int baseSatk, int baseSdef, int baseSpd, 
             int movesKnown, int exp) {
         Move[] moves = new Move[6];
         for (int i = 0; i < movesKnown; ++i) {
@@ -49,15 +49,15 @@ public class CodemonFactory {
             exp = 0;
         }
         return new Codemon(new MonType(monType), 
-                baseHp, baseAtk, baseDef, baseSpd, moves, exp);
+                baseHp, baseAtk, baseDef, baseSatk, baseSdef, baseSpd, moves, exp);
     }
     
     public Codemon generateCodemonWithT1Moves(int monType, int exp) {
         int moves = Utility.d(4);
-        return generateCodemonWithT1Moves(monType, 25, 5, 5, 5, moves, exp);
+        return generateCodemonWithT1Moves(monType, 25, 5, 5, 5, 5, 5, moves, exp);
     }
     
     public Codemon generateCodemonWithT1Moves(int lvl) {
-        return generateCodemonWithT1Moves(Utility.d(7) - 1, Utility.getExpFromLevel(lvl));
+        return generateCodemonWithT1Moves(Utility.d(18) - 1, Utility.getExpFromLevel(lvl));
     }
 }

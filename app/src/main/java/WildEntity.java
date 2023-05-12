@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Wild Entity behavior defined here. Wild codemons always attack, never switch, 
  * and never use training orders. Moves chosen at random.
@@ -89,6 +91,11 @@ public class WildEntity extends TrainerEntity {
     @Override
     protected int forceSwitch() {
         // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int decideTarget(List<TrainerEntity> targets) {
         return 0;
     }
      

@@ -6,6 +6,7 @@ public class CodemonStats {
     
     protected int currentHp;
     protected int maxHp;
+    protected int lvl;
     
     public static final int STAT_LENGTH = 6;
     
@@ -23,6 +24,7 @@ public class CodemonStats {
         baseStats[4] = bsdef;
         baseStats[5] = bspd;
         
+        this.lvl = lvl;
         maxHp = 3 * baseStats[0] + lvl + 10;
         currentHp = maxHp;
         
@@ -32,14 +34,20 @@ public class CodemonStats {
     public CodemonStats(int[] baseStats, int[] curStats) {
         this.baseStats = new int[STAT_LENGTH];
         this.addedStats = new int[STAT_LENGTH];
-        
+        int addedTotal = 0; 
         if((this.baseStats.length == baseStats.length) 
                 && (this.addedStats.length == curStats.length)) {
             for(int i = 0; i < STAT_LENGTH; ++i) {
                 this.baseStats[i] = baseStats[i];
                 this.addedStats[i] = curStats[i];
+                addedTotal += curStats[i];
             }
         }
+        this.lvl = addedTotal - 9;
+        maxHp = 3 * (baseStats[0] + curStats[0]) + lvl + 10;
+        currentHp = maxHp;
+        
+        tempStats = new int[Utility.STAT_LIST_LENGTH];
     }
     
     public int getHp() {
@@ -235,7 +243,8 @@ public class CodemonStats {
         int indexOfStat = statIndices.get(Utility.d(statIndices.size()) - 1);
         addedStats[indexOfStat] += 1;
         
-        maxHp += 1 + (indexOfStat == 0 ? 3 : 0);
+        ++lvl;
+        maxHp = 3 * (baseStats[0] + addedStats[0]) + lvl + 10;
         
     }
     

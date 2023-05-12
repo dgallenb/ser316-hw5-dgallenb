@@ -56,6 +56,7 @@ public class Codemon extends Acquirable {
         bonusStatChance = new double[] {0, 0, 0, 0};
         this.name = Utility.getTypedName(type) + " " + Utility.getTypedName(type);
         this.levelUp();
+        this.heal();
         
     }
     
@@ -374,6 +375,26 @@ public class Codemon extends Acquirable {
         try {
             int db = moves[index].use();
             int typedDamage = Utility.dbToDamage(computeDb(db, moves[index].getType()));
+            return computeDamage(typedDamage) + Utility.weatherDamageBonus(type, weather);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
+    public int attack(Move move, Weather weather) {
+        try {
+            int index = this.getIndex(move);
+            int db = 0;
+            if(index >= 0) {
+                db = moves[index].use();
+            }
+            else {
+                db = move.use();
+            }
+            
+            int typedDamage = Utility.dbToDamage(computeDb(db, move.getType()));
             return computeDamage(typedDamage) + Utility.weatherDamageBonus(type, weather);
         } catch (Exception e) {
             // TODO Auto-generated catch block

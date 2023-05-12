@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class ComputerEntity extends TrainerEntity {
 
@@ -95,6 +96,12 @@ public class ComputerEntity extends TrainerEntity {
         }
         
         return liveIndices[Utility.d(liveIndices.length) - 1];
+    }
+
+    @Override
+    public int decideTarget(List<TrainerEntity> targets) {
+        // TODO add more detail to this
+        return 0;
     }
 
 }

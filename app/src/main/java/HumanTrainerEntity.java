@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class HumanTrainerEntity extends TrainerEntity {
     protected UI ui;
@@ -338,13 +339,24 @@ public class HumanTrainerEntity extends TrainerEntity {
             }
         }
         ui.display(s);
-        int index = ui.getInt(1, trainer.lastLiveMonIndex() + 1) - 1;
+        int index = ui.getInt(1, trainer.lastLiveMonIndex() + 1);
         while ((index >= trainer.getMonCount())
                 || (trainer.getMon(index) == null)
                 || (trainer.getMon(index).getCurrentHp() <= 0)) {
             ui.display("Invalid selection.\n");
             index = ui.getInt(1, trainer.getMonCount());
         }
+        return index;
+    }
+
+    @Override
+    public int decideTarget(List<TrainerEntity> targets) {
+        String[] choices = new String[targets.size()];
+        for(int i = 0; i < targets.size(); ++i) {
+            choices[i] = "" + (i + 1) + ". " + targets.get(i).getFrontMon().getName();
+        }
+
+        int index = decideGeneric("Choose target: ",choices) - 1;
         return index;
     }
 

@@ -9,7 +9,7 @@ public class Utility {
     private static double[] rngStabilizer;
     private static int stabilizerIndex = -1;
     
-    public static final int STAT_LIST_LENGTH = 8;
+    public static final int STAT_LIST_LENGTH = 10;
 
     /**
      * Removes randomness from random number generation and instead cycles through 
@@ -245,7 +245,8 @@ public class Utility {
             new int[] {0, 0, 0, 0, 0, 5, -5}, 
             new int[] {0, 0, 0, 0, 0, 0, 15}
         };
-        return damageMatrix[type.getTypeNum()][weather.getTypeNum()];
+        //return damageMatrix[type.getTypeNum()][weather.getTypeNum()];
+        return 0;
     }
     
     /**

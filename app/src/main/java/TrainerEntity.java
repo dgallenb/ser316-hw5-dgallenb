@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Behavioral class. Various inherited versions that dictate behavior.
  * Human will prompt UI for stoof. Computer will make maybe-not-dumb choices.
@@ -33,6 +35,8 @@ public abstract class TrainerEntity {
      * @return decision indicator.
      */
     public abstract int decideBattle();
+    
+    public abstract int decideTarget(List<TrainerEntity> targets);
     
     public abstract int decideEnd();
     

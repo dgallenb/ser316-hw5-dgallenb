@@ -47,7 +47,8 @@ public class BattlePhase implements AbstractPhase {
         this.displayPrePhaseDialogue();
         //this.queryUser();
         int[] choices = queryUsers();
-        String displayText = runThroughInitiative(choices);
+        int[] targets = queryTargets();
+        String displayText = runThroughInitiative(choices, targets);
         ui.display(displayText);
         return nextPhase(acquired);       
     }
@@ -160,28 +161,35 @@ public class BattlePhase implements AbstractPhase {
      * @param choices The integer choices the trainers selected.
      * @return A string describing the punching.
      */
-    public String runThroughInitiative(int[] choices) {
+    public String runThroughInitiative(int[] choices, int[] targets) {
         String output = "";
-        int[] initiativeOrder = getInitiative();
-        for (int i = 0; i < initiativeOrder.length; ++i) {
-            int targetInit = initiativeOrder[i];
-            int target = 0;
-            if (targetInit == 0) {
-                target = choosePlayerTarget();
-            }
-            int moveChoice = choices[targetInit];
-            
-            if (trainers.get(targetInit).getFrontMon().getCurrentHp() > 0) {
-                if (trainers.get(target).getFrontMon().getCurrentHp() > 0) {
-                    output += fight(moveChoice, 
-                            trainers.get(targetInit), trainers.get(target));
+        ArrayList<BattleData> initiativeOrder = getInitiatives(choices, targets);
+        for (int i = 0; i < initiativeOrder.size(); ++i) {
+            TrainerEntity attacker = initiativeOrder.get(i).getTrainer();
+            TrainerEntity target = initiativeOrder.get(i).getTarget();
+            int moveIndex = initiativeOrder.get(i).getMoveIndex();
+           
+            if (attacker.getFrontMon().getCurrentHp() > 0) {
+                if (target.getFrontMon().getCurrentHp() > 0) {
+                    output += fight(moveIndex, attacker, target);
                 }
             }
-            
         }
 
         return output;
     }
+    
+    /*
+    public TrainerEntity chooseTarget(int trainerIndex) {
+        ArrayList<TrainerEntity> targets = new ArrayList<TrainerEntity>();
+        for(int i = 0; i < trainers.size(); ++i) {
+            if(i != trainerIndex) {
+                targets.add(trainers.get(i));
+            }
+        }
+        return trainers.get(trainerIndex).decideTarget(targets);
+    }
+    */
     
     /**
      * Makes the two trainer entities fight. 
@@ -198,6 +206,7 @@ public class BattlePhase implements AbstractPhase {
         Codemon atkMon = attacker.getFrontMon();
         Codemon defMon = defender.getFrontMon();
         Move move;
+        
         if (index == -1) {
             move = Move.struggle;
         } else if (index == -2) {
@@ -206,7 +215,7 @@ public class BattlePhase implements AbstractPhase {
             move = atkMon.getMove(index);
             refreshEot(atkMon, move);
         }
-        int damageSent = atkMon.attack(index, weather);
+        int damageSent = atkMon.attack(move, weather);
         
         MonType atkType = move.getType();
         
@@ -274,24 +283,29 @@ public class BattlePhase implements AbstractPhase {
      * Sorts the indexes of the trainers by their front mon's initiative.
      * @return
      */
-    public int[] getInitiative() {
+    public ArrayList<BattleData> getInitiatives(int[] moveChoices, int[] targetIndices) {
         int[] output = new int[trainers.size()];
-        ArrayList<InitiativePair> initiatives = new ArrayList<InitiativePair>();
+        ArrayList<BattleData> initiatives = new ArrayList<BattleData>();
         for (int i = 0; i < trainers.size(); ++i) {
-            initiatives.add(new InitiativePair(
+            
+            initiatives.add(new BattleData(
                     (trainers.get(i).getTrainer().isAgile() ? 4 : 0)
-                    + trainers.get(i).getFrontMon().getInitiative(), i));
+                    + trainers.get(i).getFrontMon().getInitiative(), 
+                    trainers.get(i), trainers.get(targetIndices[i]), 
+                    moveChoices[i]));
         }
-        Comparator<InitiativePair> initComparator = new Comparator<InitiativePair>() {
-            public int compare(InitiativePair o1, InitiativePair o2) {
+        Comparator<BattleData> initComparator = new Comparator<BattleData>() {
+            public int compare(BattleData o1, BattleData o2) {
                 return o1.compareTo(o2);
             }
         };
         initiatives.sort(initComparator);
+        /*
         for (int j = 0; j < initiatives.size(); ++j) {
             output[j] = initiatives.get(j).trainerIndex;
         }
-        return output;
+        */
+        return initiatives;
     }
     
     /**
@@ -337,11 +351,32 @@ public class BattlePhase implements AbstractPhase {
      */
     public int[] queryUsers() {
         int[] choices = new int[trainers.size()];
+        
         for (int i = 0; i < trainers.size(); ++i) {
             choices[i] = trainers.get(i).decideInput(1);
         }
         return choices;
     }
+    
+    
+    public int[] queryTargets() {
+        if(trainers.size() == 2) { // should be the default anyways
+            int[] output = {1, 0};
+            return output;
+        }
+        ArrayList<TrainerEntity> targetList = new ArrayList<TrainerEntity>();
+        int[] targets = new int[trainers.size()];
+        for(TrainerEntity t : trainers) {
+            targetList.add(t);
+        }
+        for(int i = 0; i < trainers.size(); ++i) {
+            TrainerEntity t = targetList.remove(i);
+            targets[i] = trainers.get(i).decideTarget(targetList);
+            targetList.add(i, t);
+        }
+        return targets;
+    }
+    
 
     /**
      * Always transitions to end phase.
@@ -362,6 +397,7 @@ public class BattlePhase implements AbstractPhase {
         //ui.display(s);
     }
     
+    /*
     public class InitiativePair {
         int initiative;
         int trainerIndex;
@@ -377,6 +413,8 @@ public class BattlePhase implements AbstractPhase {
          * @return 0 if they're initiatives and equal, 1 if this one has higher 
          *      initiative, -1 if this initiative pair is slower.
          */
+    
+    /*
         public int compareTo(Object o) {
             if (o instanceof InitiativePair) {
                 InitiativePair p2 = (InitiativePair) o;
@@ -403,6 +441,7 @@ public class BattlePhase implements AbstractPhase {
          * Equals.
          * @return True if the initiative pairs have the same initiative, false otherwise.
          */
+    /*
         public boolean equals(Object o) {
             if (o instanceof InitiativePair) {
                 InitiativePair p2 = (InitiativePair) o;
@@ -413,5 +452,5 @@ public class BattlePhase implements AbstractPhase {
             return false;
         }
     }
-
+*/
 }

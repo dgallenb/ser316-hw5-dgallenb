@@ -58,6 +58,9 @@ public class Move implements AbstractMove {
         this.frequency = frequency.copy();
         this.available = true;
         this.type = type.copy();
+        this.category = category;
+        id = name.hashCode() + 100 * db + 1000 * ac
+                + 10 * frequency.getTypeNum() + type.getTypeNum();
     }
     
     public int getAc() {

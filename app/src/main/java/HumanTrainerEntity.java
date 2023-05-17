@@ -359,5 +359,4 @@ public class HumanTrainerEntity extends TrainerEntity {
         int index = decideGeneric("Choose target: ",choices) - 1;
         return index;
     }
-
 }

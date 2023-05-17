@@ -7,7 +7,7 @@ import java.util.List;
  * @author DJ
  *
  */
-public abstract class TrainerEntity {
+public abstract class TrainerEntity implements Affectable {
     protected Trainer trainer;
     
     public TrainerEntity(Trainer t) {
@@ -54,5 +54,18 @@ public abstract class TrainerEntity {
     }
 
     protected abstract int forceSwitch();
+    
+    public int affect(AbstractMoveEffect e) {
+        if(e instanceof MoveEffectCodemon) {
+            
+        }
+        else if(e instanceof MoveEffectTrainer) {
+            
+        }
+        else if(e instanceof MoveEffectEnvironment) {
+            
+        }
+        return 0;
+    }
 
 }

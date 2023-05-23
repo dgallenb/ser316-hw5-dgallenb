@@ -4,7 +4,13 @@ public class MoveEffectCodemon extends MoveEffectConcrete {
     protected boolean hit;
     protected boolean canMiss;
 
-    public MoveEffectCodemon() {
+    public MoveEffectCodemon(Affectable e) {
+        super(e);
+    }
+
+    @Override
+    public void applyEffect() {
+        // TODO Auto-generated method stub
         
     }
 }
